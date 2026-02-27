@@ -206,8 +206,13 @@ def main():
         .stDeployButton                   { display: none !important; }
         #MainMenu                         { display: none !important; }
         footer                            { display: none !important; }
+        [data-testid='stSidebarNav']          { display: none !important; }
+        [data-testid='stSidebarNavItems']     { display: none !important; }
+        [data-testid='stSidebarNavSeparator'] { display: none !important; }
         [data-testid='stSidebar'] > div:first-child { padding-top: 0 !important; }
+        section[data-testid='stSidebar'] > div { padding-top: 0 !important; }
         [data-testid='stSidebarContent'] { padding-top: 0 !important; }
+        [data-testid='stSidebarContent'] > div:first-child { padding-top: 0 !important; margin-top: 0 !important; }
         </style>""",
         unsafe_allow_html=True,
     )
@@ -265,7 +270,7 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.markdown("**Thèmes**")
+        st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
         theme_query = None
         for label, tq in THEMES.items():
             if st.button(label, use_container_width=True):
