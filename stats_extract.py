@@ -33,6 +33,35 @@ THEME_PATTERNS = {
 }
 
 
+# ── Extraction des horaires ────────────────────────────────────────────────────
+def parse_horaires(text):
+    """Extrait heure début, heure fin et durée en minutes."""
+    # Heure début : première occurrence dans les 1000 premiers caractères
+    m_start = re.search(r'[àa]\s*(\d{1,2})[hH](\d{0,2})', text[:1000])
+    # Heure fin : "levée à HHhMM" n'importe où dans le texte
+    m_end = re.search(r'lev[eé]e?\s+[àa]\s+(\d{1,2})[hH](\d{0,2})', text, re.IGNORECASE)
+
+    heure_debut = heure_fin = duree_minutes = None
+
+    if m_start:
+        h  = int(m_start.group(1))
+        mn = int(m_start.group(2)) if m_start.group(2) else 0
+        heure_debut = f"{h:02d}:{mn:02d}"
+        debut_min   = h * 60 + mn
+
+    if m_end:
+        h  = int(m_end.group(1))
+        mn = int(m_end.group(2)) if m_end.group(2) else 0
+        heure_fin = f"{h:02d}:{mn:02d}"
+        fin_min   = h * 60 + mn
+        if m_start:
+            diff = fin_min - debut_min
+            if 0 < diff < 480:   # max 8 h de séance
+                duree_minutes = diff
+
+    return heure_debut, heure_fin, duree_minutes
+
+
 # ── Extraction de la date ──────────────────────────────────────────────────────
 def parse_date(text):
     # Nouveau format : "Conseil Municipal du 27/01/2025"
@@ -197,11 +226,15 @@ def extract_pdf(pdf_path):
     date = parse_date(text)
     presences, absences, pouvoirs = parse_membres(text)
     delibs = parse_deliberations(text)
+    heure_debut, heure_fin, duree_minutes = parse_horaires(text)
 
     return {
         "fichier":          pdf_path.name,
         "date":             date.strftime("%Y-%m-%d") if date else None,
         "annee":            date.year if date else None,
+        "heure_debut":      heure_debut,
+        "heure_fin":        heure_fin,
+        "duree_minutes":    duree_minutes,
         "presences":        presences,
         "nb_presences":     len(presences),
         "absences":         absences,
@@ -227,7 +260,8 @@ def main():
             seances.append(data)
             nb = data["nb_deliberations"]
             date = data["date"] or "?"
-            print(f"-> {date}  {nb} délibérations  {data['nb_presences']} présents")
+            duree = f"{data['duree_minutes']}min" if data['duree_minutes'] else "?min"
+            print(f"-> {date}  {nb} deliberations  {data['nb_presences']} presents  {duree}")
         except Exception as e:
             print(f"-> ERREUR : {e}")
             errors.append({"fichier": pdf.name, "erreur": str(e)})

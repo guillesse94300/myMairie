@@ -38,6 +38,9 @@ SUGGESTIONS = [
     "permis de construire",
     "voirie",
     "budget",
+    "cantine",
+    "château",
+    "SE60",
 ]
 
 THEMES = {
@@ -45,12 +48,15 @@ THEMES = {
     "💶 Budget / Finances":     "budget subvention investissement dépenses recettes dotation emprunt",
     "👷 Emploi / RH":           "emploi recrutement agent personnel rémunération poste vacataire",
     "💰 Tarifs / Redevances":   "tarif redevance barème taux prix cotisation",
-    "🏫 École / Scolaire":      "école scolaire enseignement élèves périscolaire cantine ATSEM classe",
-    "🚧 Travaux / Voirie":      "travaux voirie chaussée route réfection rénovation chemin",
-    "⚡ Énergie / Éclairage":   "énergie électricité éclairage SIED photovoltaïque compteur",
+    "🏫 École / Scolaire":      "école scolaire enseignement élèves périscolaire cantine ATSEM classe Louis Lesueur",
+    "🚧 Travaux / Voirie":      "travaux voirie chaussée route réfection rénovation chemin Carretero",
+    "⚡ Énergie / Éclairage":   "énergie électricité éclairage SIED SE60 photovoltaïque compteur",
     "🌲 Forêt / Bois":          "forêt boisement Bois D'Haucourt Vertefeuille sylviculture coupe",
     "🏗️ Urbanisme / Permis":    "permis de construire PLU urbanisme zonage lotissement bâtiment",
-    "🧒 Enfance / Jeunesse":    "enfants jeunesse loisirs accueil centre de loisirs ALSH",
+    "🧒 Enfance / Jeunesse":    "enfants jeunesse loisirs accueil centre de loisirs ALSH périscolaire",
+    "🤝 Intercommunalité":      "CCLoise communauté communes SMOA SIVOC SMIOCCE syndicat intercommunal Oise Compiègne",
+    "🏰 Château / Tourisme":    "château Viollet-le-Duc tourisme office patrimoine restauration",
+    "🎭 Culture / Associations": "association culturelle musique danse bibliothèque Foyer Napoléon SIVOC",
 }
 
 _MOIS_FR = {
@@ -264,8 +270,46 @@ def search_agent(question: str, embeddings, documents, metadata,
 
 # ── Agent RAG : appel Claude avec streaming ────────────────────────────────────
 SYSTEM_AGENT = """Tu es un assistant spécialisé dans l'analyse des procès-verbaux \
-du Conseil Municipal de Pierrefonds (Oise, France).
-Règles strictes :
+du Conseil Municipal de Pierrefonds (Oise, 60350, France).
+
+## Contexte municipal de Pierrefonds
+
+**Conseil municipal (19 membres) :**
+- Maire : Florence Demouy (vice-présidente tourisme/culture/communication à la CCLoise)
+- Adjoints : Jean-Jacques Carretero (voirie, bâtiments, urbanisme, sécurité),
+  Emmanuelle Lemaitre (affaires sociales, santé, associations, événements),
+  Romain Ribeiro (finances)
+- Conseillers délégués : Hélène Defossez (culture), Stéphane Dutilloy (espaces publics),
+  Laetitia Pierron (scolaire/périscolaire)
+- Conseillers : Virginie Anthony, Elsa Carrier, Marie-Alice Debuisser, Karine Duteil,
+  Catherine Gevaert, Gérard Lannier, Michel Leblanc, Joachim Lüder, Gilles Papin,
+  Ronan Tanguy, Jean-Claude Thuillier, Philippe Toledano
+
+**Commissions municipales (7) :** Finances, Circulation/stationnement, Transition écologique,
+Protection/sécurité, Urbanisme, Vie scolaire/périscolaire, Vie culturelle/associations.
++ Commission d'appel d'offres (3 titulaires, 2 suppléants).
+
+**Intercommunalité :**
+- CCLoise : Communauté de Communes des Lisières de l'Oise (ccloise.com)
+- SE60 / SIED : Syndicat d'Énergie de l'Oise (réseau électrique, éclairage public)
+- SMOA : Syndicat Mixte Oise-Aronde (gestion de l'eau)
+- SIVOC : Syndicat Intercommunal à Vocation Culturelle (école de musique et danse)
+- SMIOCCE : Syndicat Mixte Intercommunal des Classes d'Environnement (sorties scolaires)
+
+**Équipements et lieux clés :**
+- École : Groupe Scolaire Louis Lesueur, 7 Rue du 8 mai 1945
+- Collège : Louis Bouland à Couloisy ; Lycées Pierre d'Ailly & Mireille Grenet à Compiègne
+- Gymnase : 7 Rue du Martreuil ; Stade municipal : Rue Viollet-le-Duc
+- Tennis : 17 Rue du Beaudo ; Skate park : Rue du Bois d'Haucourt
+- Foyer Napoléon (salle communautaire) ; Bibliothèque municipale
+- Massifs forestiers : Bois d'Haucourt, Vertefeuille
+- Château de Pierrefonds (restauré par Viollet-le-Duc sous Napoléon III, 1857)
+
+**Éléments historiques :** Première mention médiévale, château reconstruit par Louis duc
+d'Orléans (1390), démoli en 1618 (Richelieu), acquis par Napoléon Ier (1811), restauré
+par Viollet-le-Duc dès 1857. Sources thermales (1846), gare ouverte 1884, fermée 1940.
+
+## Règles strictes
 1. Tu réponds UNIQUEMENT à partir des passages fournis entre balises <source>.
 2. Si un passage ne traite pas directement du sujet de la question, ignore-le.
 3. Ne cite un montant ou un chiffre QUE s'il est explicitement associé au sujet \
@@ -274,7 +318,9 @@ Règles strictes :
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
-7. N'écris JAMAIS les balises <source> ou </source> dans ta réponse."""
+7. N'écris JAMAIS les balises <source> ou </source> dans ta réponse.
+8. Le contexte municipal ci-dessus est fourni à titre informatif pour comprendre \
+   les acronymes et les acteurs — n'en tire aucune conclusion non présente dans les sources."""
 
 
 def ask_claude_stream(question: str, passages: list):
@@ -435,21 +481,29 @@ def main():
         <script>
         (function() {
             var el = document.getElementById('ip-display');
+            var found = false;
             var timeoutId = setTimeout(function() {
-                if (el) el.textContent = '🌐 —';
-            }, 4000);
+                if (!found && el) el.textContent = '🌐 —';
+            }, 8000);
 
-            Promise.race([
-                fetch('https://api.ipify.org?format=json').then(r => r.json()),
-                fetch('https://icanhazip.com/').then(r => r.text().then(ip => ({ip: ip.trim()})))
-            ])
-                .then(d => {
+            var services = [
+                fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip),
+                fetch('https://icanhazip.com/').then(r => r.text()).then(ip => ip.trim()),
+                fetch('https://checkip.amazonaws.com/').then(r => r.text()).then(ip => ip.trim()),
+                fetch('https://api.my-ip.io/ip').then(r => r.text()).then(ip => ip.trim())
+            ];
+
+            Promise.race(services)
+                .then(ip => {
+                    found = true;
                     clearTimeout(timeoutId);
-                    if (el && d.ip) el.textContent = '🌐 ' + d.ip;
+                    if (el && ip) el.textContent = '🌐 ' + ip.replace(/\s/g, '');
                 })
                 .catch(err => {
-                    clearTimeout(timeoutId);
-                    if (el) el.textContent = '🌐 —';
+                    if (!found) {
+                        clearTimeout(timeoutId);
+                        if (el) el.textContent = '🌐 —';
+                    }
                 });
         })();
         </script>
@@ -648,6 +702,68 @@ def main():
                 fig2.update_layout(height=350, margin=dict(t=40,b=20))
                 st.plotly_chart(fig2, use_container_width=True)
 
+            # ── Durée des séances ─────────────────────────────────────────────
+            st.subheader("Durée des séances")
+            seances_duree = [s for s in seances if s.get("duree_minutes")]
+            if seances_duree:
+                durees_all = [s["duree_minutes"] for s in seances_duree]
+                m1, m2, m3 = st.columns(3)
+                m1.metric("Durée moyenne", f"{sum(durees_all)/len(durees_all):.0f} min")
+                m2.metric("Plus longue",   f"{max(durees_all)} min")
+                m3.metric("Plus courte",   f"{min(durees_all)} min")
+
+                col_d1, col_d2 = st.columns(2)
+
+                # Durée moyenne par année (barres)
+                with col_d1:
+                    par_annee_dur = defaultdict(list)
+                    for s in seances_duree:
+                        if s.get("annee"):
+                            par_annee_dur[s["annee"]].append(s["duree_minutes"])
+                    annees_d = sorted(par_annee_dur)
+                    moy_d = [sum(par_annee_dur[a]) / len(par_annee_dur[a]) for a in annees_d]
+                    fig_d1 = go.Figure(go.Bar(
+                        x=annees_d, y=[round(v) for v in moy_d],
+                        marker_color="#4c78a8",
+                        text=[f"{round(v)} min" for v in moy_d],
+                        textposition="outside",
+                    ))
+                    fig_d1.update_layout(
+                        title="Durée moyenne par année (minutes)",
+                        height=350, margin=dict(t=40, b=20),
+                        yaxis_title="minutes",
+                    )
+                    st.plotly_chart(fig_d1, use_container_width=True)
+
+                # Durée de chaque séance (scatter)
+                with col_d2:
+                    dates_sc  = [s["date"] for s in seances_duree if s.get("date")]
+                    durees_sc = [s["duree_minutes"] for s in seances_duree if s.get("date")]
+                    labels_sc = [
+                        f"{s['date']}<br>{s.get('heure_debut','?')} – {s.get('heure_fin','?')}<br>"
+                        f"{s['nb_deliberations']} délibérations"
+                        for s in seances_duree if s.get("date")
+                    ]
+                    fig_d2 = go.Figure(go.Scatter(
+                        x=dates_sc, y=durees_sc,
+                        mode="markers+lines",
+                        marker=dict(size=8, color=durees_sc, colorscale="Blues",
+                                    showscale=False),
+                        line=dict(color="#aaa", width=1),
+                        text=labels_sc,
+                        hovertemplate="%{text}<extra></extra>",
+                    ))
+                    fig_d2.update_layout(
+                        title="Durée de chaque séance",
+                        height=350, margin=dict(t=40, b=20),
+                        yaxis_title="minutes",
+                        xaxis_title="",
+                    )
+                    st.plotly_chart(fig_d2, use_container_width=True)
+            else:
+                st.info("Aucune durée disponible pour la période sélectionnée.")
+            st.divider()
+
             # ── Présence des conseillers ──────────────────────────────────────
             st.subheader("Présence des conseillers")
             presences_cpt = Counter()
@@ -726,8 +842,10 @@ def main():
         )
         st.caption(
             "Exemples : *Quelles décisions ont été prises sur le Bois d'Haucourt ?* · "
-            "*Comment ont évolué les tarifs de la cantine scolaire ?* · "
+            "*Comment ont évolué les tarifs de la cantine scolaire (Louis Lesueur) ?* · "
             "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
+            "*Quelles délibérations concernent le SE60 ou l'éclairage public ?* · "
+            "*Qu'a décidé le conseil sur l'intercommunalité avec la CCLoise ?* · "
             "*Que sais-tu sur les logiciels Horizon ?*"
         )
 
