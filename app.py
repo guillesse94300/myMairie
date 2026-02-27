@@ -35,14 +35,9 @@ PDF_BASE_URL = "app/static"
 SUGGESTIONS = [
     "Bois D'Haucourt",
     "Vertefeuille",
-    "Compiègne",
     "permis de construire",
-    "urbanisme",
-    "taxe foncière",
     "voirie",
-    "eau potable",
-    "Le Rocher",
-    "Fontaine",
+    "budget",
 ]
 
 THEMES = {
@@ -366,11 +361,6 @@ def _liens_sources(text: str, passages: list) -> str:
     text = re.sub(r'</source>', "", text)
     text = re.sub(r'<source[^>]*>', "", text)
 
-    # 3. Remplacer les noms de fichiers cités directement (ex : CM-28-juin-2022.pdf)
-    for fname, url in fname_map.items():
-        label = fname.replace(".pdf", "")
-        text = text.replace(fname, f"[📄 {label}]({url})")
-
     return text
 
 
@@ -444,14 +434,21 @@ def main():
         <p style="font-size:0.75em;color:#888;margin:0 0 0.6rem 0;padding:0" id="ip-display">🌐 Détection…</p>
         <script>
         (function() {
-            fetch('https://httpbin.org/ip')
-                .then(r => r.json())
+            var el = document.getElementById('ip-display');
+            var timeoutId = setTimeout(function() {
+                if (el) el.textContent = '🌐 —';
+            }, 4000);
+
+            Promise.race([
+                fetch('https://api.ipify.org?format=json').then(r => r.json()),
+                fetch('https://icanhazip.com/').then(r => r.text().then(ip => ({ip: ip.trim()})))
+            ])
                 .then(d => {
-                    var el = document.getElementById('ip-display');
-                    if (el) el.textContent = '🌐 ' + d.origin;
+                    clearTimeout(timeoutId);
+                    if (el && d.ip) el.textContent = '🌐 ' + d.ip;
                 })
-                .catch(() => {
-                    var el = document.getElementById('ip-display');
+                .catch(err => {
+                    clearTimeout(timeoutId);
                     if (el) el.textContent = '🌐 —';
                 });
         })();
