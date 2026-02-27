@@ -43,7 +43,11 @@
       "Bash(git add .gitignore static/)",
       "Bash(git tag -a 3.0 -m \"Version 3.0\")",
       "Bash(git push origin 3.0)",
-      "Bash(gh release create 3.0 --repo guillesse94300/myMairie --title \"3.0\" --notes \"## Version 3.0 — Déploiement Streamlit Cloud + PDFs en ligne:*)"
+      "Bash(gh release create 3.0 --repo guillesse94300/myMairie --title \"3.0\" --notes \"## Version 3.0 — Déploiement Streamlit Cloud + PDFs en ligne:*)",
+      "Bash(git pull origin main --rebase)",
+      "Bash(git stash)",
+      "Bash(git stash pop)",
+      "Bash(git push origin main)"
     ]
   }
 }

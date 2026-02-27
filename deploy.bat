@@ -59,8 +59,17 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Pusher vers GitHub
+:: Synchroniser avec le distant avant de pusher
 echo.
+echo Synchronisation avec GitHub...
+git pull origin main --rebase
+if errorlevel 1 (
+    echo ERREUR lors du pull. Resolvez les conflits manuellement.
+    pause
+    exit /b 1
+)
+
+:: Pusher vers GitHub
 echo Push vers GitHub (origin main)...
 git push origin main
 if errorlevel 1 (
