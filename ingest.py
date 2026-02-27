@@ -12,8 +12,8 @@ from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-PDF_DIR        = Path(__file__).parent
-DB_DIR         = PDF_DIR / "vector_db"
+PDF_DIR        = Path(__file__).parent / "static"   # PDFs dans static/
+DB_DIR         = Path(__file__).parent / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 1000   # caractères max par chunk
 

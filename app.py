@@ -5,22 +5,19 @@ Usage  : streamlit run app.py
 
 import re
 import pickle
-import threading
-import functools
-import http.server
 import numpy as np
 import streamlit as st
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-PDF_DIR         = Path(__file__).parent
-DB_DIR          = PDF_DIR / "vector_db"
-MODEL_NAME      = "paraphrase-multilingual-MiniLM-L12-v2"
-PDF_SERVER_PORT = 8502
+APP_DIR  = Path(__file__).parent
+PDF_DIR  = APP_DIR / "static"          # PDFs servis par Streamlit static serving
+DB_DIR   = APP_DIR / "vector_db"
+MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
-# True seulement si des PDFs sont présents localement (pas sur Streamlit Cloud)
-HAS_PDFS = any(PDF_DIR.glob("*.pdf"))
+# URL de base pour les PDFs (fonctionne local ET sur Streamlit Cloud)
+PDF_BASE_URL = "app/static"
 
 SUGGESTIONS = [
     "Bois D'Haucourt",
@@ -43,19 +40,6 @@ THEMES = {
     "💧 Eau / Assainissement":  "eau potable assainissement réseau",
     "🏫 École":                 "école enseignement enfants périscolaire",
 }
-
-
-# ── Serveur HTTP local pour ouvrir les PDFs dans le navigateur ────────────────
-@st.cache_resource(show_spinner=False)
-def start_pdf_server():
-    handler = functools.partial(
-        http.server.SimpleHTTPRequestHandler,
-        directory=str(PDF_DIR)
-    )
-    server = http.server.HTTPServer(("localhost", PDF_SERVER_PORT), handler)
-    thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
-    return PDF_SERVER_PORT
 
 
 # ── Chargement des ressources (mis en cache) ───────────────────────────────────
@@ -137,8 +121,6 @@ def main():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
         st.stop()
 
-    if HAS_PDFS:
-        start_pdf_server()
     embeddings, documents, metadata = load_db()
     st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs")
 
@@ -208,15 +190,14 @@ def main():
                         unsafe_allow_html=True,
                     )
                 with c3:
-                    if HAS_PDFS:
-                        pdf_url = f"http://localhost:{PDF_SERVER_PORT}/{meta['filename']}"
-                        st.markdown(
-                            f'<a href="{pdf_url}" target="_blank">'
-                            f'<button style="width:100%;padding:6px;cursor:pointer;'
-                            f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
-                            f'📄 Ouvrir</button></a>',
-                            unsafe_allow_html=True,
-                        )
+                    pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
+                    st.markdown(
+                        f'<a href="{pdf_url}" target="_blank">'
+                        f'<button style="width:100%;padding:6px;cursor:pointer;'
+                        f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
+                        f'📄 Ouvrir</button></a>',
+                        unsafe_allow_html=True,
+                    )
                 extract = excerpt(doc, terms)
                 st.markdown(f"> {highlight(extract, terms)}")
     else:

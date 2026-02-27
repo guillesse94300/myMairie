@@ -1,7 +1,3 @@
-# PDFs (documents sources, non versionnés)
-*.pdf
-*.docx
-
 # Base vectorielle locale alternative
 base_vectorielle/
 
@@ -13,9 +9,6 @@ __pycache__/
 
 # Marqueur d'installation des dépendances
 .deps_installed
-
-# Streamlit
-.streamlit/
 
 # Python env
 venv/
