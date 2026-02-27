@@ -9,6 +9,7 @@ import subprocess
 import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
+from datetime import datetime
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
@@ -46,6 +47,49 @@ THEMES = {
     "🏗️ Urbanisme / Permis":    "permis de construire PLU urbanisme zonage lotissement bâtiment",
     "🧒 Enfance / Jeunesse":    "enfants jeunesse loisirs accueil centre de loisirs ALSH",
 }
+
+_MOIS_FR = {
+    'janvier': 1, 'fevrier': 2, 'mars': 3, 'avril': 4,
+    'mai': 5, 'juin': 6, 'juillet': 7, 'aout': 8,
+    'septembre': 9, 'octobre': 10, 'novembre': 11, 'decembre': 12,
+}
+
+def _pdf_date_key(p: Path) -> datetime:
+    """Retourne une clé datetime extraite du nom de fichier pour le tri."""
+    name = p.stem
+    # Format YYYYMMDD-... (ex: 20240613-PV-AFFICHAGE-1)
+    m = re.match(r'^(\d{4})(\d{2})(\d{2})', name)
+    if m:
+        try:
+            return datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            pass
+    # Format ...-DD-MM-YYYY (ex: compte-rendu-02-02-2016)
+    m = re.search(r'(\d{1,2})-(\d{2})-(\d{4})$', name)
+    if m:
+        try:
+            return datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+        except ValueError:
+            pass
+    # Format ...-DD-MOIS-YYYY (ex: CM-01-MARS-2022, CM-du-10-avril-2024)
+    m = re.search(r'[^\d](\d{1,2})-([a-zA-Zéûèà]+)-(\d{4})', name, re.IGNORECASE)
+    if m:
+        mon = m.group(2).lower()
+        mon = mon.replace('é', 'e').replace('è', 'e').replace('û', 'u').replace('à', 'a')
+        month_num = _MOIS_FR.get(mon)
+        if month_num:
+            try:
+                return datetime(int(m.group(3)), month_num, int(m.group(1)))
+            except ValueError:
+                pass
+    # Juste une année (ex: REPERTOIRE-CHRONOLOGIQUE-2024-...)
+    m = re.search(r'(\d{4})', name)
+    if m:
+        try:
+            return datetime(int(m.group(1)), 1, 1)
+        except ValueError:
+            pass
+    return datetime.min
 
 
 # ── Mode admin ─────────────────────────────────────────────────────────────────
@@ -162,7 +206,7 @@ def main():
         .stDeployButton                   { display: none !important; }
         #MainMenu                         { display: none !important; }
         footer                            { display: none !important; }
-        [data-testid='stSidebar'] > div:first-child { padding-top: 1rem !important; }
+        [data-testid='stSidebar'] > div:first-child { padding-top: 0 !important; }
         [data-testid='stSidebarContent'] { padding-top: 0 !important; }
         </style>""",
         unsafe_allow_html=True,
@@ -228,7 +272,7 @@ def main():
                 theme_query = tq
         st.markdown("---")
         st.markdown("**Lien Direct**")
-        pdfs = sorted(PDF_DIR.glob("*.pdf"), key=lambda p: p.name)
+        pdfs = sorted(PDF_DIR.glob("*.pdf"), key=_pdf_date_key, reverse=True)
         if pdfs:
             links = "".join(
                 f'<a href="{PDF_BASE_URL}/{p.name}" target="_blank" '
