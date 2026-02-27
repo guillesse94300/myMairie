@@ -14,10 +14,10 @@ from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
 try:
-    import anthropic as _anthropic
-    _ANTHROPIC_OK = True
+    from groq import Groq as _Groq
+    _GROQ_OK = True
 except ImportError:
-    _ANTHROPIC_OK = False
+    _GROQ_OK = False
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 APP_DIR  = Path(__file__).parent
@@ -208,20 +208,21 @@ Pour chaque affirmation importante, cite la source entre parenthèses (ex : CM-2
 
 def ask_claude_stream(question: str, passages: list):
     """
-    Générateur qui streame la réponse de Claude.
-    Lève ValueError si la clé API est manquante ou si anthropic n'est pas installé.
+    Générateur qui streame la réponse via l'API Groq (gratuite).
+    Lève ValueError si la clé API est manquante ou si groq n'est pas installé.
     """
-    if not _ANTHROPIC_OK:
-        raise ValueError("Le package `anthropic` n'est pas installé. Lancez : `pip install anthropic`")
+    if not _GROQ_OK:
+        raise ValueError("Le package `groq` n'est pas installé. Lancez : `pip install groq`")
 
     try:
-        api_key = st.secrets.get("ANTHROPIC_API_KEY", "")
+        api_key = st.secrets.get("GROQ_API_KEY", "")
     except Exception:
         api_key = ""
     if not api_key:
         raise ValueError(
-            "Clé API Anthropic manquante. "
-            "Ajoutez `ANTHROPIC_API_KEY = \"sk-ant-...\"` dans `.streamlit/secrets.toml`."
+            "Clé API Groq manquante. "
+            "Ajoutez `GROQ_API_KEY = \"gsk_...\"` dans `.streamlit/secrets.toml`. "
+            "Clé gratuite sur : https://console.groq.com/keys"
         )
 
     context_parts = []
@@ -236,15 +237,20 @@ def ask_claude_stream(question: str, passages: list):
         "Réponds à la question en te basant exclusivement sur ces passages."
     )
 
-    client = _anthropic.Anthropic(api_key=api_key)
-    with client.messages.stream(
-        model="claude-haiku-4-5-20251001",
+    client = _Groq(api_key=api_key)
+    stream = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
         max_tokens=1500,
-        system=SYSTEM_AGENT,
-        messages=[{"role": "user", "content": user_msg}],
-    ) as stream:
-        for text in stream.text_stream:
-            yield text
+        messages=[
+            {"role": "system", "content": SYSTEM_AGENT},
+            {"role": "user",   "content": user_msg},
+        ],
+        stream=True,
+    )
+    for chunk in stream:
+        content = chunk.choices[0].delta.content
+        if content:
+            yield content
 
 
 # ── Interface principale ───────────────────────────────────────────────────────

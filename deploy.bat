@@ -9,9 +9,9 @@ echo.
 
 cd /d "%~dp0"
 
-:: Installer anthropic localement si absent
-echo Installation locale des dependances (anthropic)...
-python -m pip install --quiet anthropic
+:: Installer groq localement si absent
+echo Installation locale des dependances (groq)...
+python -m pip install --quiet groq
 echo   OK.
 echo.
 
