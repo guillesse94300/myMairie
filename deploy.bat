@@ -9,6 +9,12 @@ echo.
 
 cd /d "%~dp0"
 
+:: Installer anthropic localement si absent
+echo Installation locale des dependances (anthropic)...
+python -m pip install --quiet anthropic
+echo   OK.
+echo.
+
 :: Vérifier qu'on est dans un dépôt git
 git status >nul 2>&1
 if errorlevel 1 (

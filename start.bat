@@ -10,7 +10,7 @@ echo.
 
 echo [1/3] Installation des dependances...
 python -m pip install --quiet --upgrade pip
-python -m pip install --quiet Django>=4.2 numpy sentence-transformers pypdf python-docx
+python -m pip install --quiet Django>=4.2 numpy sentence-transformers pypdf python-docx anthropic
 if errorlevel 1 (
     echo ERREUR: echec de l'installation des dependances.
     pause

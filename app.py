@@ -13,6 +13,12 @@ from datetime import datetime
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
+try:
+    import anthropic as _anthropic
+    _ANTHROPIC_OK = True
+except ImportError:
+    _ANTHROPIC_OK = False
+
 # ── Configuration ──────────────────────────────────────────────────────────────
 APP_DIR  = Path(__file__).parent
 PDF_DIR  = APP_DIR / "static"          # PDFs servis par Streamlit static serving
@@ -191,6 +197,56 @@ def excerpt(text: str, terms: list, window: int = 450) -> str:
     return ("…" if start else "") + text[start:end] + ("…" if end < len(text) else "")
 
 
+# ── Agent RAG : appel Claude avec streaming ────────────────────────────────────
+SYSTEM_AGENT = """Tu es un assistant spécialisé dans l'analyse des procès-verbaux \
+du Conseil Municipal de Pierrefonds (Oise, France).
+Tu réponds uniquement à partir des passages fournis entre balises <source>.
+Si l'information demandée est absente ou insuffisante dans ces passages, dis-le clairement.
+Tu réponds toujours en français, de façon concise et structurée.
+Pour chaque affirmation importante, cite la source entre parenthèses (ex : CM-28-juin-2022, p. 3)."""
+
+
+def ask_claude_stream(question: str, passages: list):
+    """
+    Générateur qui streame la réponse de Claude.
+    Lève ValueError si la clé API est manquante ou si anthropic n'est pas installé.
+    """
+    if not _ANTHROPIC_OK:
+        raise ValueError("Le package `anthropic` n'est pas installé. Lancez : `pip install anthropic`")
+
+    try:
+        api_key = st.secrets.get("ANTHROPIC_API_KEY", "")
+    except Exception:
+        api_key = ""
+    if not api_key:
+        raise ValueError(
+            "Clé API Anthropic manquante. "
+            "Ajoutez `ANTHROPIC_API_KEY = \"sk-ant-...\"` dans `.streamlit/secrets.toml`."
+        )
+
+    context_parts = []
+    for i, (doc, meta, score) in enumerate(passages, 1):
+        source_label = f"{meta.get('filename', '?')}, {meta.get('date', '?')}"
+        context_parts.append(f"<source id=\"{i}\" fichier=\"{source_label}\">\n{doc}\n</source>")
+    context = "\n\n".join(context_parts)
+
+    user_msg = (
+        f"Question : {question}\n\n"
+        f"Passages pertinents issus des procès-verbaux :\n\n{context}\n\n"
+        "Réponds à la question en te basant exclusivement sur ces passages."
+    )
+
+    client = _anthropic.Anthropic(api_key=api_key)
+    with client.messages.stream(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=1500,
+        system=SYSTEM_AGENT,
+        messages=[{"role": "user", "content": user_msg}],
+    ) as stream:
+        for text in stream.text_stream:
+            yield text
+
+
 # ── Interface principale ───────────────────────────────────────────────────────
 def main():
     st.set_page_config(
@@ -225,7 +281,10 @@ def main():
             '[data-testid="stToolbar"]',
             '.stDeployButton',
             '#MainMenu',
-            'footer'
+            'footer',
+            '[data-testid="stSidebarNav"]',
+            '[data-testid="stSidebarNavItems"]',
+            '[data-testid="stSidebarNavSeparator"]'
         ];
         sel.forEach(s => {
             window.parent.document.querySelectorAll(s)
@@ -242,22 +301,6 @@ def main():
 
     st.title("🏛️ Procès-verbaux de séances - Conseil Municipal Pierrefonds")
     st.caption("Source : https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal")
-
-    # ── Filtres en ligne ─────────────────────────────────────────────────────────
-    fcol1, fcol2, fcol3 = st.columns([3, 1, 1])
-    with fcol1:
-        year_filter = st.multiselect(
-            "Année(s)", options=list(range(2015, 2027)), default=[],
-            placeholder="Toutes les années",
-        )
-    with fcol2:
-        n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
-    with fcol3:
-        exact_mode = st.toggle(
-            "Mot(s) exact(s)",
-            value=False,
-            help="Si activé, ne retourne que les passages contenant vraiment le(s) mot(s) cherché(s).",
-        )
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -279,12 +322,17 @@ def main():
         st.markdown("**Lien Direct**")
         pdfs = sorted(PDF_DIR.glob("*.pdf"), key=_pdf_date_key, reverse=True)
         if pdfs:
+            def _fmt_label(p):
+                dt = _pdf_date_key(p)
+                if dt == datetime.min:
+                    return p.stem
+                return dt.strftime("%d/%m/%Y")
             links = "".join(
                 f'<a href="{PDF_BASE_URL}/{p.name}" target="_blank" '
                 f'style="display:block;font-size:0.78em;margin:3px 0;'
                 f'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
                 f'color:#1a73e8;text-decoration:none;" '
-                f'title="{p.name}">📄 {p.name}</a>'
+                f'title="{p.name}">📄 {_fmt_label(p)}</a>'
                 for p in pdfs
             )
             st.markdown(
@@ -305,70 +353,158 @@ def main():
             unsafe_allow_html=True,
         )
 
-    # ── Barre de recherche ───────────────────────────────────────────────────────
-    query = st.text_input(
-        "Recherche sémantique",
-        value=theme_query or "",
-        placeholder="Ex : Bois D'Haucourt, Vertefeuille, forêt, permis…",
-        label_visibility="collapsed",
-    )
+    # ── Onglets ─────────────────────────────────────────────────────────────────
+    tab_search, tab_agent = st.tabs(["🔍 Recherche", "🤖 Agent Q&R"])
 
-    # Suggestions rapides
-    cols = st.columns(len(SUGGESTIONS))
-    for col, s in zip(cols, SUGGESTIONS):
-        if col.button(s, key=f"s_{s}", use_container_width=True):
-            query = s
+    # ════════════════════════════════════════════════════════════════════════════
+    # ONGLET RECHERCHE
+    # ════════════════════════════════════════════════════════════════════════════
+    with tab_search:
+        fcol1, fcol2, fcol3 = st.columns([3, 1, 1])
+        with fcol1:
+            year_filter = st.multiselect(
+                "Année(s)", options=list(range(2015, 2027)), default=[],
+                placeholder="Toutes les années",
+                key="search_years",
+            )
+        with fcol2:
+            n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
+        with fcol3:
+            exact_mode = st.toggle(
+                "Mot(s) exact(s)",
+                value=False,
+                help="Si activé, ne retourne que les passages contenant vraiment le(s) mot(s) cherché(s).",
+            )
 
-    st.divider()
-
-    # ── Résultats ────────────────────────────────────────────────────────────────
-    if query:
-        with st.spinner("Recherche…"):
-            results = search(query, embeddings, documents, metadata,
-                             n=n_results, year_filter=year_filter, exact=exact_mode)
-
-        terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
-        mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
-        st.markdown(f"### {len(results)} résultats pour « {query} » *({mode_label})*")
-        if not results:
-            st.warning("Aucun résultat. Désactivez le mode 'Mot(s) exact(s) obligatoire' pour une recherche sémantique plus large.")
-        if year_filter:
-            st.markdown(f"*Filtrés sur : {', '.join(map(str, sorted(year_filter)))}*")
-
-        for rank, (doc, meta, score) in enumerate(results, 1):
-            color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
-            pdf_path = PDF_DIR / meta["filename"]
-            with st.container(border=True):
-                c1, c2, c3 = st.columns([5, 1, 1])
-                with c1:
-                    st.markdown(f"**#{rank} — {meta['filename']}**")
-                    if admin:
-                        chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
-                        st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
-                    else:
-                        st.markdown(f"Date : `{meta['date']}`")
-                with c2:
-                    st.markdown(
-                        f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
-                        f"{score:.0%}</span>",
-                        unsafe_allow_html=True,
-                    )
-                with c3:
-                    pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
-                    st.markdown(
-                        f'<a href="{pdf_url}" target="_blank">'
-                        f'<button style="width:100%;padding:6px;cursor:pointer;'
-                        f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
-                        f'📄 Ouvrir</button></a>',
-                        unsafe_allow_html=True,
-                    )
-                extract = excerpt(doc, terms)
-                st.markdown(f"> {highlight(extract, terms)}")
-    else:
-        st.info(
-            "Saisissez une requête ou cliquez sur une suggestion. "
-            "La recherche est **sémantique** : elle comprend le sens, pas uniquement les mots exacts."
+        query = st.text_input(
+            "Recherche sémantique",
+            value=theme_query or "",
+            placeholder="Ex : Bois D'Haucourt, Vertefeuille, forêt, permis…",
+            label_visibility="collapsed",
         )
+
+        # Suggestions rapides
+        cols = st.columns(len(SUGGESTIONS))
+        for col, s in zip(cols, SUGGESTIONS):
+            if col.button(s, key=f"s_{s}", use_container_width=True):
+                query = s
+
+        st.divider()
+
+        if query:
+            with st.spinner("Recherche…"):
+                results = search(query, embeddings, documents, metadata,
+                                 n=n_results, year_filter=year_filter, exact=exact_mode)
+
+            terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
+            mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
+            st.markdown(f"### {len(results)} résultats pour « {query} » *({mode_label})*")
+            if not results:
+                st.warning("Aucun résultat. Désactivez le mode 'Mot(s) exact(s) obligatoire' pour une recherche sémantique plus large.")
+            if year_filter:
+                st.markdown(f"*Filtrés sur : {', '.join(map(str, sorted(year_filter)))}*")
+
+            for rank, (doc, meta, score) in enumerate(results, 1):
+                color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                with st.container(border=True):
+                    c1, c2, c3 = st.columns([5, 1, 1])
+                    with c1:
+                        st.markdown(f"**#{rank} — {meta['filename']}**")
+                        if admin:
+                            chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
+                            st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
+                        else:
+                            st.markdown(f"Date : `{meta['date']}`")
+                    with c2:
+                        st.markdown(
+                            f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
+                            f"{score:.0%}</span>",
+                            unsafe_allow_html=True,
+                        )
+                    with c3:
+                        pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
+                        st.markdown(
+                            f'<a href="{pdf_url}" target="_blank">'
+                            f'<button style="width:100%;padding:6px;cursor:pointer;'
+                            f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
+                            f'📄 Ouvrir</button></a>',
+                            unsafe_allow_html=True,
+                        )
+                    extract = excerpt(doc, terms)
+                    st.markdown(f"> {highlight(extract, terms)}")
+        else:
+            st.info(
+                "Saisissez une requête ou cliquez sur une suggestion. "
+                "La recherche est **sémantique** : elle comprend le sens, pas uniquement les mots exacts."
+            )
+
+    # ════════════════════════════════════════════════════════════════════════════
+    # ONGLET AGENT Q&R
+    # ════════════════════════════════════════════════════════════════════════════
+    with tab_agent:
+        st.markdown(
+            "Posez une question en langage naturel. L'agent recherche les passages "
+            "pertinents dans les PV puis génère une réponse synthétisée."
+        )
+        st.caption(
+            "Exemples : *Pourquoi la fontaine est cassée ?* · "
+            "*Comment a évolué la taxe du marché ?* · "
+            "*Quelles décisions ont été prises sur la voirie en 2023 ?*"
+        )
+
+        acol1, acol2 = st.columns([3, 1])
+        with acol1:
+            agent_years = st.multiselect(
+                "Filtrer par année(s) (optionnel)",
+                options=list(range(2015, 2027)), default=[],
+                placeholder="Toutes les années",
+                key="agent_years",
+            )
+        with acol2:
+            n_passages = st.slider(
+                "Passages envoyés à l'agent",
+                min_value=3, max_value=20, value=10,
+                help="Plus de passages = réponse plus complète mais plus lente.",
+            )
+
+        question = st.text_area(
+            "Votre question",
+            placeholder="Ex : Pourquoi la fontaine est cassée ?",
+            height=80,
+            label_visibility="collapsed",
+        )
+
+        if st.button("Obtenir une réponse", type="primary", disabled=not question.strip()):
+            with st.spinner("Recherche des passages pertinents…"):
+                passages = search(
+                    question, embeddings, documents, metadata,
+                    n=n_passages, year_filter=agent_years, exact=False,
+                )
+
+            if not passages:
+                st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
+            else:
+                st.markdown("#### Réponse")
+                try:
+                    st.write_stream(ask_claude_stream(question, passages))
+                except ValueError as e:
+                    st.error(str(e))
+                except Exception as e:
+                    st.error(f"Erreur lors de l'appel à l'API Claude : {e}")
+
+                with st.expander(f"📚 {len(passages)} passages consultés"):
+                    for rank, (doc, meta, score) in enumerate(passages, 1):
+                        color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                        pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
+                        st.markdown(
+                            f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
+                            f"`{meta['date']}` · "
+                            f"<span style='color:{color}'>{score:.0%}</span>",
+                            unsafe_allow_html=True,
+                        )
+                        st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
+        elif not question.strip():
+            st.info("Saisissez une question ci-dessus puis cliquez sur **Obtenir une réponse**.")
 
 
 if __name__ == "__main__":
