@@ -146,7 +146,7 @@ def excerpt(text: str, terms: list, window: int = 450) -> str:
 # ── Interface principale ───────────────────────────────────────────────────────
 def main():
     st.set_page_config(
-        page_title="Comptes Rendus — Pierrefonds",
+        page_title="Procès-verbaux — Pierrefonds",
         page_icon="🏛️",
         layout="wide",
     )
@@ -185,7 +185,8 @@ def main():
     </script>
     """, height=0)
 
-    st.title("🏛️ Comptes Rendus du Conseil Municipal — Pierrefonds")
+    st.title("🏛️ Procès-verbaux de séances - Conseil Municipal Pierrefonds")
+    st.caption("Source : https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal")
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -215,6 +216,26 @@ def main():
         for label, tq in THEMES.items():
             if st.button(label, use_container_width=True):
                 theme_query = tq
+        st.markdown("---")
+        st.markdown("**Lien Direct**")
+        pdfs = sorted(PDF_DIR.glob("*.pdf"), key=lambda p: p.name)
+        if pdfs:
+            links = "".join(
+                f'<a href="{PDF_BASE_URL}/{p.name}" target="_blank" '
+                f'style="display:block;font-size:0.78em;margin:3px 0;'
+                f'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
+                f'color:#1a73e8;text-decoration:none;" '
+                f'title="{p.name}">📄 {p.name}</a>'
+                for p in pdfs
+            )
+            st.markdown(
+                f'<div style="max-height:300px;overflow-y:auto;'
+                f'border:1px solid #e0e0e0;border-radius:6px;padding:6px 10px;">'
+                f'{links}</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption("Aucun PDF trouvé.")
         st.markdown("---")
         commit_date, version = get_git_info()
         st.markdown(
