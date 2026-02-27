@@ -8,6 +8,7 @@ import pickle
 import subprocess
 import numpy as np
 import streamlit as st
+import streamlit.components.v1 as components
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
@@ -152,13 +153,37 @@ def main():
 
     st.markdown(
         """<style>
-        [data-testid='stToolbar']   { display: none; }
-        [data-testid='stAppDeployButton'] { display: none; }
-        #MainMenu                   { display: none; }
-        footer                      { display: none; }
+        [data-testid='stToolbar']         { display: none !important; }
+        [data-testid='stAppDeployButton'] { display: none !important; }
+        .stDeployButton                   { display: none !important; }
+        #MainMenu                         { display: none !important; }
+        footer                            { display: none !important; }
         </style>""",
         unsafe_allow_html=True,
     )
+    # Masquage dynamique via JS (Streamlit Cloud injecte le bouton après le rendu)
+    components.html("""
+    <script>
+    const hide = () => {
+        const sel = [
+            '[data-testid="stAppDeployButton"]',
+            '[data-testid="stToolbar"]',
+            '.stDeployButton',
+            '#MainMenu',
+            'footer'
+        ];
+        sel.forEach(s => {
+            window.parent.document.querySelectorAll(s)
+                .forEach(el => { el.style.display = 'none'; });
+        });
+    };
+    hide();
+    new MutationObserver(hide).observe(
+        window.parent.document.body,
+        { childList: true, subtree: true }
+    );
+    </script>
+    """, height=0)
 
     st.title("🏛️ Comptes Rendus du Conseil Municipal — Pierrefonds")
 
