@@ -173,10 +173,7 @@ def main():
             "Année(s)", options=list(range(2015, 2027)), default=[],
             placeholder="Toutes les années",
         )
-        if admin:
-            n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
-        else:
-            n_results = 10
+        n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
         exact_mode = st.toggle(
             "Mot(s) exact(s) obligatoire",
             value=False,
