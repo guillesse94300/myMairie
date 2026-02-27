@@ -4,14 +4,16 @@ Usage  : streamlit run app.py
 """
 
 import re
+import json
 import pickle
-import socket
 import subprocess
-import urllib.request
 import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
+import plotly.express as px
+import plotly.graph_objects as go
 from datetime import datetime
+from collections import Counter, defaultdict
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
@@ -100,22 +102,6 @@ def _pdf_date_key(p: Path) -> datetime:
     return datetime.min
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
-def _get_public_ip() -> str:
-    """Retourne l'IP publique du serveur (mise en cache 1h)."""
-    try:
-        return urllib.request.urlopen(
-            "https://api.ipify.org", timeout=3
-        ).read().decode().strip()
-    except Exception:
-        try:
-            _s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            _s.connect(("8.8.8.8", 80))
-            ip = _s.getsockname()[0]
-            _s.close()
-            return ip
-        except Exception:
-            return socket.gethostbyname(socket.gethostname())
 
 
 # ── Mode admin ─────────────────────────────────────────────────────────────────
@@ -434,11 +420,23 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.markdown(
-            f'<p style="font-size:0.75em;color:#888;margin:0 0 0.6rem 0;padding:0">'
-            f'🌐 {_get_public_ip()}</p>',
-            unsafe_allow_html=True,
-        )
+        st.markdown("""
+        <p style="font-size:0.75em;color:#888;margin:0 0 0.6rem 0;padding:0" id="ip-display">🌐 Détection…</p>
+        <script>
+        (function() {
+            fetch('https://httpbin.org/ip')
+                .then(r => r.json())
+                .then(d => {
+                    var el = document.getElementById('ip-display');
+                    if (el) el.textContent = '🌐 ' + d.origin;
+                })
+                .catch(() => {
+                    var el = document.getElementById('ip-display');
+                    if (el) el.textContent = '🌐 —';
+                });
+        })();
+        </script>
+        """, unsafe_allow_html=True)
         st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
         theme_query = None
         for label, tq in THEMES.items():
@@ -481,7 +479,7 @@ def main():
         )
 
     # ── Onglets ─────────────────────────────────────────────────────────────────
-    tab_search, tab_agent = st.tabs(["🔍 Recherche", "🤖 Agent Q&R"])
+    tab_search, tab_stats, tab_agent = st.tabs(["🔍 Recherche", "📊 Statistiques", "🤖 Agent Q&R"])
 
     # Bascule automatique vers l'onglet Recherche quand un thème est cliqué
     if st.session_state.get("_switch_to_search", False):
@@ -576,6 +574,130 @@ def main():
                 "Saisissez une requête ou cliquez sur une suggestion. "
                 "La recherche est **sémantique** : elle comprend le sens, pas uniquement les mots exacts."
             )
+
+    # ════════════════════════════════════════════════════════════════════════════
+    # ONGLET STATISTIQUES
+    # ════════════════════════════════════════════════════════════════════════════
+    with tab_stats:
+        stats_path = DB_DIR / "stats.json"
+        if not stats_path.exists():
+            st.warning("Fichier stats.json introuvable. Lancez : `python stats_extract.py`")
+        else:
+            stats = json.loads(stats_path.read_text(encoding="utf-8"))
+            seances = [s for s in stats["seances"] if s.get("annee")]
+
+            # ── Filtres ──────────────────────────────────────────────────────
+            annees_dispo = sorted({s["annee"] for s in seances})
+            sel_annees = st.multiselect(
+                "Filtrer par année(s)", annees_dispo, default=[],
+                placeholder="Toutes les années", key="stat_years"
+            )
+            if sel_annees:
+                seances = [s for s in seances if s["annee"] in sel_annees]
+
+            st.markdown(f"**{len(seances)} séances · {sum(s['nb_deliberations'] for s in seances)} délibérations**")
+            st.divider()
+
+            col1, col2 = st.columns(2)
+
+            # ── Délibérations par année ───────────────────────────────────────
+            with col1:
+                par_annee = defaultdict(lambda: {"seances": 0, "delibs": 0})
+                for s in seances:
+                    par_annee[s["annee"]]["seances"] += 1
+                    par_annee[s["annee"]]["delibs"]  += s["nb_deliberations"]
+                annees = sorted(par_annee)
+                fig = go.Figure()
+                fig.add_bar(x=annees, y=[par_annee[a]["delibs"]  for a in annees], name="Délibérations", marker_color="#4c78a8")
+                fig.add_bar(x=annees, y=[par_annee[a]["seances"] for a in annees], name="Séances",       marker_color="#f58518")
+                fig.update_layout(title="Séances & délibérations par année",
+                                  barmode="group", height=350, margin=dict(t=40,b=20))
+                st.plotly_chart(fig, use_container_width=True)
+
+            # ── Types de vote ─────────────────────────────────────────────────
+            with col2:
+                vote_counter = Counter()
+                for s in seances:
+                    for d in s["deliberations"]:
+                        vote_counter[d["vote"]["type"]] += 1
+                labels = {"unanimité": "Unanimité", "vote": "Vote avec décompte", "inconnu": "Non déterminé"}
+                colors = {"unanimité": "#54a24b", "vote": "#f58518", "inconnu": "#bab0ac"}
+                fig2 = px.pie(
+                    names=[labels.get(k, k) for k in vote_counter],
+                    values=list(vote_counter.values()),
+                    color_discrete_sequence=[colors.get(k, "#aaa") for k in vote_counter],
+                    title="Répartition des types de vote",
+                )
+                fig2.update_layout(height=350, margin=dict(t=40,b=20))
+                st.plotly_chart(fig2, use_container_width=True)
+
+            # ── Présence des conseillers ──────────────────────────────────────
+            st.subheader("Présence des conseillers")
+            presences_cpt = Counter()
+            for s in seances:
+                for p in s["presences"]:
+                    presences_cpt[p] += 1
+            # Garder les noms qui apparaissent au moins 3 fois (élus, pas agents)
+            top_elus = [(nom, nb) for nom, nb in presences_cpt.most_common(25) if nb >= 3]
+            if top_elus:
+                noms, nbs = zip(*top_elus)
+                fig3 = px.bar(
+                    x=list(nbs), y=list(noms),
+                    orientation="h",
+                    labels={"x": "Nb séances présent", "y": ""},
+                    color=list(nbs),
+                    color_continuous_scale="Blues",
+                    title=f"Présences sur {len(seances)} séances",
+                )
+                fig3.update_layout(height=max(350, len(noms) * 22),
+                                   margin=dict(t=40, b=20), showlegend=False,
+                                   coloraxis_showscale=False,
+                                   yaxis=dict(autorange="reversed"))
+                st.plotly_chart(fig3, use_container_width=True)
+
+            # ── Thèmes des délibérations ──────────────────────────────────────
+            col3, col4 = st.columns(2)
+            with col3:
+                theme_cpt = Counter()
+                for s in seances:
+                    for d in s["deliberations"]:
+                        theme_cpt[d.get("theme", "Autre")] += 1
+                if theme_cpt:
+                    fig4 = px.pie(
+                        names=list(theme_cpt.keys()),
+                        values=list(theme_cpt.values()),
+                        title="Délibérations par thème",
+                    )
+                    fig4.update_layout(height=400, margin=dict(t=40, b=20))
+                    st.plotly_chart(fig4, use_container_width=True)
+
+            # ── Délibérations avec opposition ─────────────────────────────────
+            with col4:
+                opposition = []
+                for s in seances:
+                    for d in s["deliberations"]:
+                        v = d["vote"]
+                        if v["type"] == "vote" and (v.get("contre", 0) or v.get("abstentions", 0)):
+                            opposition.append({
+                                "date":    s["date"],
+                                "titre":   d["titre"][:60],
+                                "pour":    v.get("pour", 0),
+                                "contre":  v.get("contre", 0),
+                                "abstentions": v.get("abstentions", 0),
+                                "noms_contre": ", ".join(v.get("noms_contre", [])),
+                                "noms_abs":    ", ".join(v.get("noms_abstentions", [])),
+                            })
+                if opposition:
+                    st.markdown(f"**{len(opposition)} votes avec opposition ou abstention**")
+                    for o in sorted(opposition, key=lambda x: x["date"] or "", reverse=True)[:20]:
+                        with st.expander(f"`{o['date']}` — {o['titre']}"):
+                            st.markdown(
+                                f"Pour : **{o['pour']}** · "
+                                f"Contre : **{o['contre']}** ({o['noms_contre']}) · "
+                                f"Abstentions : **{o['abstentions']}** ({o['noms_abs']})"
+                            )
+                else:
+                    st.info("Aucun vote avec opposition trouvé sur la période.")
 
     # ════════════════════════════════════════════════════════════════════════════
     # ONGLET AGENT Q&R

@@ -44,6 +44,18 @@ if not exist "%~dp0vector_db" (
     echo.
 )
 
+REM Extraction des statistiques si stats.json absent
+if not exist "%~dp0vector_db\stats.json" (
+    echo Extraction des statistiques de vote en cours...
+    python stats_extract.py
+    if errorlevel 1 (
+        echo ERREUR lors de l'extraction des statistiques.
+        pause
+        exit /b 1
+    )
+    echo.
+)
+
 REM Lancement de l'interface Streamlit
 echo Lancement de l'interface de recherche...
 echo Ouvrez votre navigateur sur : http://localhost:8501
