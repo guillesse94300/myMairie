@@ -1,5 +1,9 @@
-# Base vectorielle (générée par ingest.py)
-vector_db/
+# PDFs (documents sources, non versionnés)
+*.pdf
+*.docx
+
+# Base vectorielle locale alternative
+base_vectorielle/
 
 # Cache du modèle sentence-transformers
 __pycache__/

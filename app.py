@@ -19,6 +19,9 @@ DB_DIR          = PDF_DIR / "vector_db"
 MODEL_NAME      = "paraphrase-multilingual-MiniLM-L12-v2"
 PDF_SERVER_PORT = 8502
 
+# True seulement si des PDFs sont présents localement (pas sur Streamlit Cloud)
+HAS_PDFS = any(PDF_DIR.glob("*.pdf"))
+
 SUGGESTIONS = [
     "Bois D'Haucourt",
     "Vertefeuille",
@@ -134,7 +137,8 @@ def main():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
         st.stop()
 
-    start_pdf_server()
+    if HAS_PDFS:
+        start_pdf_server()
     embeddings, documents, metadata = load_db()
     st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs")
 
@@ -204,14 +208,15 @@ def main():
                         unsafe_allow_html=True,
                     )
                 with c3:
-                    pdf_url = f"http://localhost:{PDF_SERVER_PORT}/{meta['filename']}"
-                    st.markdown(
-                        f'<a href="{pdf_url}" target="_blank">'
-                        f'<button style="width:100%;padding:6px;cursor:pointer;'
-                        f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
-                        f'📄 Ouvrir</button></a>',
-                        unsafe_allow_html=True,
-                    )
+                    if HAS_PDFS:
+                        pdf_url = f"http://localhost:{PDF_SERVER_PORT}/{meta['filename']}"
+                        st.markdown(
+                            f'<a href="{pdf_url}" target="_blank">'
+                            f'<button style="width:100%;padding:6px;cursor:pointer;'
+                            f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
+                            f'📄 Ouvrir</button></a>',
+                            unsafe_allow_html=True,
+                        )
                 extract = excerpt(doc, terms)
                 st.markdown(f"> {highlight(extract, terms)}")
     else:
