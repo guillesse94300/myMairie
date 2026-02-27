@@ -203,7 +203,9 @@ du Conseil Municipal de Pierrefonds (Oise, France).
 Tu réponds uniquement à partir des passages fournis entre balises <source>.
 Si l'information demandée est absente ou insuffisante dans ces passages, dis-le clairement.
 Tu réponds toujours en français, de façon concise et structurée.
-Pour chaque affirmation importante, cite la source entre parenthèses (ex : CM-28-juin-2022, p. 3)."""
+Pour chaque affirmation importante, cite le nom du fichier source entre parenthèses, \
+exactement tel qu'il apparaît dans l'attribut fichier= de la balise <source> (ex : CM-28-juin-2022.pdf).
+N'écris JAMAIS les balises <source> ou </source> dans ta réponse."""
 
 
 def ask_claude_stream(question: str, passages: list):
@@ -251,6 +253,46 @@ def ask_claude_stream(question: str, passages: list):
         content = chunk.choices[0].delta.content
         if content:
             yield content
+
+
+# ── Post-traitement : remplacement des références sources par des liens ─────────
+def _liens_sources(text: str, passages: list) -> str:
+    """
+    Remplace dans le texte :
+    - les balises <source id="N" ...> et </source> résiduelles
+    - les noms de fichiers PDF cités par le LLM
+    par des liens Markdown cliquables ouvrant le PDF dans un nouvel onglet.
+    """
+    # Mapping id (1-based) → (filename, url)
+    id_map = {}
+    fname_map = {}
+    for i, (_, meta, _) in enumerate(passages, 1):
+        fname = meta.get("filename", "")
+        url   = f"{PDF_BASE_URL}/{fname}"
+        id_map[str(i)] = (fname, url)
+        if fname:
+            fname_map[fname] = url
+
+    # 1. Remplacer <source id="N" ...> (balises ouvrantes avec ou sans attributs)
+    def _repl_open(m):
+        sid = m.group(1)
+        if sid in id_map:
+            fname, url = id_map[sid]
+            label = fname.replace(".pdf", "")
+            return f"[📄 {label}]({url})"
+        return ""
+    text = re.sub(r'<source\s+id=["\'](\d+)["\'][^>]*>', _repl_open, text)
+
+    # 2. Supprimer les balises fermantes et toute balise <source> résiduelle
+    text = re.sub(r'</source>', "", text)
+    text = re.sub(r'<source[^>]*>', "", text)
+
+    # 3. Remplacer les noms de fichiers cités directement (ex : CM-28-juin-2022.pdf)
+    for fname, url in fname_map.items():
+        label = fname.replace(".pdf", "")
+        text = text.replace(fname, f"[📄 {label}]({url})")
+
+    return text
 
 
 # ── Interface principale ───────────────────────────────────────────────────────
@@ -453,25 +495,13 @@ def main():
             "pertinents dans les PV puis génère une réponse synthétisée."
         )
         st.caption(
-            "Exemples : *Pourquoi la fontaine est cassée ?* · "
-            "*Comment a évolué la taxe du marché ?* · "
-            "*Quelles décisions ont été prises sur la voirie en 2023 ?*"
+            "Exemples : *Quelles décisions ont été prises sur le Bois d'Haucourt ?* · "
+            "*Comment ont évolué les tarifs de la cantine scolaire ?* · "
+            "*Quels travaux de voirie ont été votés et pour quel montant ?*"
         )
 
-        acol1, acol2 = st.columns([3, 1])
-        with acol1:
-            agent_years = st.multiselect(
-                "Filtrer par année(s) (optionnel)",
-                options=list(range(2015, 2027)), default=[],
-                placeholder="Toutes les années",
-                key="agent_years",
-            )
-        with acol2:
-            n_passages = st.slider(
-                "Passages envoyés à l'agent",
-                min_value=3, max_value=20, value=10,
-                help="Plus de passages = réponse plus complète mais plus lente.",
-            )
+        agent_years = []
+        n_passages = 15
 
         question = st.text_area(
             "Votre question",
@@ -491,12 +521,20 @@ def main():
                 st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
             else:
                 st.markdown("#### Réponse")
+                placeholder = st.empty()
+                full_text = ""
                 try:
-                    st.write_stream(ask_claude_stream(question, passages))
+                    for chunk in ask_claude_stream(question, passages):
+                        full_text += chunk
+                        placeholder.markdown(full_text + " ▌")
+                    # Post-traitement : balises → liens PDF
+                    placeholder.markdown(_liens_sources(full_text, passages))
                 except ValueError as e:
+                    placeholder.empty()
                     st.error(str(e))
                 except Exception as e:
-                    st.error(f"Erreur lors de l'appel à l'API Claude : {e}")
+                    placeholder.empty()
+                    st.error(f"Erreur lors de l'appel à l'API : {e}")
 
                 with st.expander(f"📚 {len(passages)} passages consultés"):
                     for rank, (doc, meta, score) in enumerate(passages, 1):
