@@ -149,14 +149,6 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        commit_date, version = get_git_info()
-        st.markdown(
-            f"<div style='font-size:0.78em;color:#888;margin-bottom:12px;line-height:1.6'>"
-            f"🏷️ Version&nbsp;&nbsp;<b>{version}</b><br>"
-            f"🕐 Commit&nbsp;&nbsp;<b>{commit_date}</b>"
-            f"</div>",
-            unsafe_allow_html=True,
-        )
         st.header("Filtres")
         year_filter = st.multiselect(
             "Année(s)", options=list(range(2015, 2027)), default=[],
@@ -174,6 +166,15 @@ def main():
         for label, tq in THEMES.items():
             if st.button(label, use_container_width=True):
                 theme_query = tq
+        st.markdown("---")
+        commit_date, version = get_git_info()
+        st.markdown(
+            f"<div style='font-size:0.78em;color:#888;line-height:1.6'>"
+            f"🏷️ Version&nbsp;&nbsp;<b>{version}</b><br>"
+            f"🕐 Commit&nbsp;&nbsp;<b>{commit_date}</b>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
 
     # ── Barre de recherche ───────────────────────────────────────────────────────
     query = st.text_input(
