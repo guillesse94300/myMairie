@@ -35,12 +35,16 @@ SUGGESTIONS = [
 ]
 
 THEMES = {
-    "🌲 Forêt / Bois":          "Bois D'Haucourt Vertefeuille forêt boisement",
-    "🏗️ Urbanisme":             "permis de construire PLU zonage urbanisme",
-    "💶 Budget / Taxes":        "budget taxe foncière dotation subvention",
-    "🚧 Voirie":                "voirie route chemin travaux",
-    "💧 Eau / Assainissement":  "eau potable assainissement réseau",
-    "🏫 École":                 "école enseignement enfants périscolaire",
+    "📜 Convention / Contrat":  "convention contrat accord partenariat prestataire signature",
+    "💶 Budget / Finances":     "budget subvention investissement dépenses recettes dotation emprunt",
+    "👷 Emploi / RH":           "emploi recrutement agent personnel rémunération poste vacataire",
+    "💰 Tarifs / Redevances":   "tarif redevance barème taux prix cotisation",
+    "🏫 École / Scolaire":      "école scolaire enseignement élèves périscolaire cantine ATSEM classe",
+    "🚧 Travaux / Voirie":      "travaux voirie chaussée route réfection rénovation chemin",
+    "⚡ Énergie / Éclairage":   "énergie électricité éclairage SIED photovoltaïque compteur",
+    "🌲 Forêt / Bois":          "forêt boisement Bois D'Haucourt Vertefeuille sylviculture coupe",
+    "🏗️ Urbanisme / Permis":    "permis de construire PLU urbanisme zonage lotissement bâtiment",
+    "🧒 Enfance / Jeunesse":    "enfants jeunesse loisirs accueil centre de loisirs ALSH",
 }
 
 
@@ -158,6 +162,8 @@ def main():
         .stDeployButton                   { display: none !important; }
         #MainMenu                         { display: none !important; }
         footer                            { display: none !important; }
+        [data-testid='stSidebar'] > div:first-child { padding-top: 1rem !important; }
+        [data-testid='stSidebarContent'] { padding-top: 0 !important; }
         </style>""",
         unsafe_allow_html=True,
     )
