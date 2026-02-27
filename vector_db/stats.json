@@ -1,195 +1,8 @@
 {
-  "generated_at": "2026-02-27T22:39:43.089736",
+  "generated_at": "2026-02-27T22:56:43.521865",
   "nb_pdfs": 82,
   "nb_seances": 82,
   "seances": [
-    {
-      "fichier": "CM-du-28-mars-2024.pdf",
-      "date": null,
-      "annee": null,
-      "presences": [
-        "DEMOUY",
-        "LEMAITRE",
-        "CARRETERO",
-        "RIBEIRO",
-        "LANNIER",
-        "GEVAERT",
-        "PAPIN",
-        "DEFOSSEZ",
-        "DUTEIL",
-        "DUTILLOY",
-        "PIERRON",
-        "TOLEDANO",
-        "THUILLIER",
-        "LEBLANC",
-        "TANGUY"
-      ],
-      "nb_presences": 15,
-      "absences": [
-        "ANTHONY"
-      ],
-      "nb_absences": 1,
-      "pouvoirs": [],
-      "nb_deliberations": 12,
-      "deliberations": [
-        {
-          "num": 1,
-          "titre": "Loi APER – définition des Zones d'Accélération des Energies Renouvelables (dites ZAEnR) à l'échelle",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Énergie / Éclairage"
-        },
-        {
-          "num": 2,
-          "titre": "Installation d’un nouveau conseiller municipal",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Autre"
-        },
-        {
-          "num": 3,
-          "titre": "Détermination du nombre de postes d’adjoint après la démission d'un adjoint",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Emploi / RH"
-        },
-        {
-          "num": 4,
-          "titre": "Commissions communales : désignation des conseillers municipaux appelés à remplacer le conseiller",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Convention / Contrat"
-        },
-        {
-          "num": 5,
-          "titre": "Election des délégués de la commune au sein du conseil d’école",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "École / Scolaire"
-        },
-        {
-          "num": 6,
-          "titre": "Remplacement du délégué titulaire de la commune au sein du Syndicat Mixte Intercommunal de l’Oise",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "École / Scolaire"
-        },
-        {
-          "num": 1,
-          "titre": "Loi APER – définition des Zones d'Accélération des Energies Renouvelables (dites ZAEnR) à",
-          "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Énergie / Éclairage"
-        },
-        {
-          "num": 2,
-          "titre": "Installation d’un nouveau conseiller municipal",
-          "vote": {
-            "type": "inconnu",
-            "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Urbanisme / Permis"
-        },
-        {
-          "num": 3,
-          "titre": "Détermination du nombre de postes d’adjoint après la démission d'un adjoint",
-          "vote": {
-            "type": "vote",
-            "pour": 16,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Emploi / RH"
-        },
-        {
-          "num": 4,
-          "titre": "Commissions communales : désignation des conseillers municipaux appelés à remplacer le",
-          "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Convention / Contrat"
-        },
-        {
-          "num": 5,
-          "titre": "Election des délégués de la commune au sein du conseil d’école",
-          "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "École / Scolaire"
-        },
-        {
-          "num": 6,
-          "titre": "Remplacement du délégué titulaire de la commune au sein du Syndicat Mixte Intercommunal",
-          "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
-          },
-          "theme": "Convention / Contrat"
-        }
-      ]
-    },
     {
       "fichier": "compte-rendu-28-05-2020.pdf",
       "date": null,
@@ -14441,6 +14254,193 @@
       ]
     },
     {
+      "fichier": "CM-du-28-mars-2024.pdf",
+      "date": "2024-03-28",
+      "annee": 2024,
+      "presences": [
+        "DEMOUY",
+        "LEMAITRE",
+        "CARRETERO",
+        "RIBEIRO",
+        "LANNIER",
+        "GEVAERT",
+        "PAPIN",
+        "DEFOSSEZ",
+        "DUTEIL",
+        "DUTILLOY",
+        "PIERRON",
+        "TOLEDANO",
+        "THUILLIER",
+        "LEBLANC",
+        "TANGUY"
+      ],
+      "nb_presences": 15,
+      "absences": [
+        "ANTHONY"
+      ],
+      "nb_absences": 1,
+      "pouvoirs": [],
+      "nb_deliberations": 12,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Loi APER – définition des Zones d'Accélération des Energies Renouvelables (dites ZAEnR) à l'échelle",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Énergie / Éclairage"
+        },
+        {
+          "num": 2,
+          "titre": "Installation d’un nouveau conseiller municipal",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Détermination du nombre de postes d’adjoint après la démission d'un adjoint",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 4,
+          "titre": "Commissions communales : désignation des conseillers municipaux appelés à remplacer le conseiller",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 5,
+          "titre": "Election des délégués de la commune au sein du conseil d’école",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 6,
+          "titre": "Remplacement du délégué titulaire de la commune au sein du Syndicat Mixte Intercommunal de l’Oise",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 1,
+          "titre": "Loi APER – définition des Zones d'Accélération des Energies Renouvelables (dites ZAEnR) à",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Énergie / Éclairage"
+        },
+        {
+          "num": 2,
+          "titre": "Installation d’un nouveau conseiller municipal",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 3,
+          "titre": "Détermination du nombre de postes d’adjoint après la démission d'un adjoint",
+          "vote": {
+            "type": "vote",
+            "pour": 16,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 4,
+          "titre": "Commissions communales : désignation des conseillers municipaux appelés à remplacer le",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 5,
+          "titre": "Election des délégués de la commune au sein du conseil d’école",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 6,
+          "titre": "Remplacement du délégué titulaire de la commune au sein du Syndicat Mixte Intercommunal",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
+    },
+    {
       "fichier": "CM-du-10-avril-2024.pdf",
       "date": "2024-04-10",
       "annee": 2024,
@@ -14681,7 +14681,7 @@
     },
     {
       "fichier": "PV-CM-du-15-mai-2024.pdf",
-      "date": "2024-04-10",
+      "date": "2024-05-15",
       "annee": 2024,
       "presences": [
         "DEMOUY",
@@ -14703,8 +14703,37 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 2,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2024-21",
+          "titre": "Désignation du vice-président de l’association des amis du jumelage",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 2,
+          "num_str": "D2024-22",
+          "titre": "Bilan de la concertation du public et définition des ZAEnr sur le territoire",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Énergie / Éclairage"
+        }
+      ]
     },
     {
       "fichier": "20240613-PV-AFFICHAGE-1.pdf",
@@ -14730,8 +14759,37 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 2,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2024-27",
+          "titre": "Organisation du temps scolaire",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 2,
+          "num_str": "D2024-28",
+          "titre": "Décision Budgétaire modificative 2024-02",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        }
+      ]
     },
     {
       "fichier": "20241015-PV.pdf",
@@ -14759,8 +14817,37 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 2,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2024-44",
+          "titre": "Tarif accueil de loisirs et restauration de l’accueil de loisirs – année scolaire 2024-2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 2,
+          "num_str": "D2024-45",
+          "titre": "admission en non-valeur",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        }
+      ]
     },
     {
       "fichier": "20241210-PV.pdf",
@@ -14789,8 +14876,191 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 13,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2024-48",
+          "titre": "Gratuité inscription bibliothèque municipale pour les moins de 18 ans",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 2,
+          "num_str": "D2024-49",
+          "titre": "Instauration d’une amende administrative pour les dépôts sauvages de déchets",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 3,
+          "num_str": "D2024-50",
+          "titre": "Création d’une place de dépôt de bois en forêt domaniale avec emprise sur chemin",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 4,
+          "num_str": "D2024-51",
+          "titre": "Attribution du marché de fourniture de repas pour le service de restauration scolaire et",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 5,
+          "num_str": "D2024-52",
+          "titre": "Redevance d’occupation du domaine public télécommunications 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 6,
+          "num_str": "D2024-53",
+          "titre": "Redevance d’occupation du domaine public électricité 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 7,
+          "num_str": "D2024-54",
+          "titre": "Redevance d’occupation du domaine public chantiers provisoires",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 8,
+          "num_str": "D2024-55",
+          "titre": "Demande de subvention 2025 Travaux rue de l’Armistice (phase 3)",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 9,
+          "num_str": "D2024-52",
+          "titre": "Tarification 2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 10,
+          "num_str": "D2024-53",
+          "titre": "Participation au risque prévoyance - maintien de salaire des agents",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 11,
+          "num_str": "D2024-58",
+          "titre": "Cartes cadeaux pour les enfants du personnel",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 12,
+          "num_str": "D2024-55",
+          "titre": "Recrutement de vacataires",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 13,
+          "num_str": "D2024-56",
+          "titre": "Adhésion de la commune de Montmartin au Syndicat intercommunal à vocation",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        }
+      ]
     },
     {
       "fichier": "20250127-PV.pdf",
@@ -14815,8 +15085,37 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 2,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2025-001",
+          "titre": "Autorisation d’engager, liquider et mandater les dépenses d’investissement avant le",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 2,
+          "num_str": "D2025-002",
+          "titre": "Création et recrutement de contrats d’engagement éducatif (CEE) pour les accueils de",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        }
+      ]
     },
     {
       "fichier": "20250306-PV.pdf",
@@ -14842,8 +15141,79 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 5,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2025-003",
+          "titre": "RODP chantiers provisoires 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 2,
+          "num_str": "D2025-004",
+          "titre": "Marché entretien espaces verts 2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 3,
+          "num_str": "D2025-005",
+          "titre": "Subvention LEADER aménagement Place de l’Hôtel de Ville",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 4,
+          "num_str": "D2025-006",
+          "titre": "Recrutement vacataire agent administratif",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 5,
+          "num_str": "D2025-007",
+          "titre": "SMOA extension du périmètre GEMA",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        }
+      ]
     },
     {
       "fichier": "20250403-PV.pdf",
@@ -14870,8 +15240,121 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 8,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2025-008",
+          "titre": "Élection du président de séance",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 2,
+          "num_str": "D2025-009",
+          "titre": "Adhésion à la Fondation du Patrimoine",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "num_str": "D2025-010",
+          "titre": "Compte Financier Unique 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 4,
+          "num_str": "D2025-011",
+          "titre": "Affectation des résultats 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "num_str": "D2025-012",
+          "titre": "Subventions 2025 aux associations",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 6,
+          "num_str": "D2025-013",
+          "titre": "Vote des taux d’imposition de fiscalité directe locale pour 2025",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 7,
+          "num_str": "D2025-014",
+          "titre": "Vote du Budget Primitif 2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 8,
+          "num_str": "D2025-015",
+          "titre": "Bilan annuel des cessions et des acquisitions",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
     },
     {
       "fichier": "20250527-PV.pdf",
@@ -14897,8 +15380,135 @@
       "absences": [],
       "nb_absences": 0,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 9,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2025-016",
+          "titre": "Dissolution de l’Association Foncière de Pierrefonds",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "num_str": "D2025-017",
+          "titre": "Adhésion à l’association Cats in The Air 2016",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 3,
+          "num_str": "D2025-018",
+          "titre": "Subvention Région HDF Travaux rue de l’Armistice – Phase 3",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 4,
+          "num_str": "D2025-019",
+          "titre": "Devis Hydrogénie pour la réhabilitation de la fontaine",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "num_str": "D2025-020",
+          "titre": "Redevance d’occupation du domaine public télécommunications 2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 6,
+          "num_str": "D2025-021",
+          "titre": "Redevance d’occupation du domaine public électricité 2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 7,
+          "num_str": "D2025-022",
+          "titre": "Redevance d’occupation du domaine public chantiers provisoires 2025",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 8,
+          "num_str": "D2025-023",
+          "titre": "Tarifs ULIS 2025/2026",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 9,
+          "num_str": "D2025-024",
+          "titre": "Tarifs restauration scolaire 2025/2026",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        }
+      ]
     },
     {
       "fichier": "20250707-PV.pdf",
@@ -14925,8 +15535,51 @@
       ],
       "nb_absences": 2,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 3,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2025-027",
+          "titre": "Présentation du rapport d’observations définitives de la CRC – ADTO SAO",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "num_str": "D2025-028",
+          "titre": "Création d’un emploi d’adjoint technique à temps non complet - 30h",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 3,
+          "num_str": "D2025-029",
+          "titre": "Création d’un emploi d’adjoint technique à temps non complet - 22h",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        }
+      ]
     },
     {
       "fichier": "20250929-PV.pdf",
@@ -14954,12 +15607,83 @@
       ],
       "nb_absences": 1,
       "pouvoirs": [],
-      "nb_deliberations": 0,
-      "deliberations": []
+      "nb_deliberations": 5,
+      "deliberations": [
+        {
+          "num": 1,
+          "num_str": "D2025-030",
+          "titre": "Admission en non-valeur",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "num_str": "D2025-031",
+          "titre": "Mise à jour du tableau des emplois",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 3,
+          "num_str": "D2025-032",
+          "titre": "Carte cadeaux pour les enfants du personnel",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 4,
+          "num_str": "D2025-033",
+          "titre": "Rapport d’activités annuel CCLO 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 5,
+          "num_str": "D2025-034",
+          "titre": "Rapport d’activités annuel SE60 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Énergie / Éclairage"
+        }
+      ]
     },
     {
       "fichier": "20251120-PV.pdf",
-      "date": "2025-09-29",
+      "date": "2025-11-20",
       "annee": 2025,
       "presences": [
         "DEMOUY",
@@ -14984,11 +15708,68 @@
       ],
       "nb_absences": 1,
       "pouvoirs": [],
-      "nb_deliberations": 1,
+      "nb_deliberations": 14,
       "deliberations": [
         {
+          "num": 1,
+          "num_str": "D2025-035",
+          "titre": "Adhésion au Conseil d’Architecture d’Urbanisme et de l’Environnement de",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
           "num": 2,
-          "titre": "Ressources humaines",
+          "num_str": "D2025-036",
+          "titre": "Participation de la commune à une classe découverte 2026",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 3,
+          "num_str": "D2025-037",
+          "titre": "Décision Budgétaire Modificative 2025-01",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 4,
+          "num_str": "D2025-038",
+          "titre": "Subvention Association Saint Louis Poissy",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 5,
+          "num_str": "D2025-039",
+          "titre": "Renouvellement contrat logiciels métiers",
           "vote": {
             "type": "inconnu",
             "pour": null,
@@ -14997,7 +15778,133 @@
             "noms_abstentions": [],
             "noms_contre": []
           },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 6,
+          "num_str": "D2025-040",
+          "titre": "Tarifs 2026",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 7,
+          "num_str": "D2025-041",
+          "titre": "Mise en place des autorisations spéciales d’absence",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 8,
+          "num_str": "D2025-042",
+          "titre": "Participation au financement de la protection sociale complémentaire risque",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
           "theme": "Emploi / RH"
+        },
+        {
+          "num": 9,
+          "num_str": "D2025-043",
+          "titre": "Adhésion au contrat d’assurance des risques statutaires du Centre de Gestion 60",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 10,
+          "num_str": "D2025-044",
+          "titre": "Rapport annuel de la SPL ADTO SAO 2024",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 11,
+          "num_str": "D2025-045",
+          "titre": "RPQS assainissement collectif 2024 – CCLO",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 12,
+          "num_str": "D2025-046",
+          "titre": "RPQS assainissement non collectif 2024 – CCLO",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 13,
+          "num_str": "D2025-047",
+          "titre": "RPQS eau potable 2024 – CCLO",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 14,
+          "num_str": "D2025-048",
+          "titre": "RPQS prévention et gestion des déchets ménagers et assimilés 2024 – CCLO",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
         }
       ]
     }

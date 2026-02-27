@@ -35,7 +35,14 @@ THEME_PATTERNS = {
 
 # ── Extraction de la date ──────────────────────────────────────────────────────
 def parse_date(text):
-    # "Conseil Municipal du 01 mars 2022"
+    # Nouveau format : "Conseil Municipal du 27/01/2025"
+    m = re.search(r'Conseil Municipal du (\d{1,2})/(\d{2})/(\d{4})', text, re.IGNORECASE)
+    if m:
+        try:
+            return datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+        except ValueError:
+            pass
+    # Ancien format : "Conseil Municipal du 01 mars 2022"
     m = re.search(
         r'Conseil Municipal du (\d{1,2})\s+(\w+)\s+(\d{4})',
         text, re.IGNORECASE
@@ -49,7 +56,6 @@ def parse_date(text):
                 return datetime(year, month, day)
             except ValueError:
                 pass
-    # Fallback : extraire l'année depuis le nom de fichier n'est pas possible ici
     return None
 
 
@@ -105,8 +111,8 @@ def parse_membres(text):
 def parse_vote(block):
     low = block.lower()
 
-    # Unanimité
-    if re.search(r'unanimit|unanimement', low):
+    # Unanimité (ancien et nouveau format)
+    if re.search(r'unanimit|unanimement|d[eé]lib[eé]r[eé].*unanim|unanim.*d[eé]lib[eé]r[eé]', low):
         return {"type": "unanimité", "pour": None, "contre": 0, "abstentions": 0,
                 "noms_abstentions": [], "noms_contre": []}
 
@@ -152,10 +158,25 @@ def classify_theme(text):
 # ── Extraction des délibérations ───────────────────────────────────────────────
 def parse_deliberations(text):
     delibs = []
-    # Découper sur les titres numérotés "1. Titre\n"
-    blocks = re.split(r'\n(?=\d{1,2}\.\s+[A-ZÀÂÉÈÊËÎÏÔÙÛÜÇ«])', text)
 
-    for block in blocks[1:]:
+    # ── Nouveau format (2024+) : "D2024-44 - Objet : ..." ────────────────────
+    new_blocks = re.split(r'\n(?=D\d{4}-\d{1,4}\s*[-–])', text)
+    if len(new_blocks) > 1:
+        for i, block in enumerate(new_blocks[1:], 1):
+            m_title = re.match(r'^(D\d{4}-\d{1,4})\s*[-–]\s*(?:Objet\s*:\s*)?(.+?)(?:\n|$)', block)
+            if not m_title:
+                continue
+            num_str = m_title.group(1)
+            titre   = m_title.group(2).strip()[:200]
+            vote    = parse_vote(block)
+            theme   = classify_theme(titre + " " + block[:600])
+            delibs.append({"num": i, "num_str": num_str, "titre": titre,
+                           "vote": vote, "theme": theme})
+        return delibs
+
+    # ── Ancien format : "1. Titre en majuscule\n" ─────────────────────────────
+    old_blocks = re.split(r'\n(?=\d{1,2}\.\s+[A-ZÀÂÉÈÊËÎÏÔÙÛÜÇ«])', text)
+    for block in old_blocks[1:]:
         m_title = re.match(r'^(\d{1,2})\.\s+(.+?)(?:\n|$)', block)
         if not m_title:
             continue
