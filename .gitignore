@@ -1,0 +1,26 @@
+# Base vectorielle (générée par ingest.py)
+vector_db/
+
+# Cache du modèle sentence-transformers
+__pycache__/
+*.pyc
+*.pyo
+.cache/
+
+# Marqueur d'installation des dépendances
+.deps_installed
+
+# Streamlit
+.streamlit/
+
+# Python env
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
