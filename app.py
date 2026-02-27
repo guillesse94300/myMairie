@@ -5,6 +5,7 @@ Usage  : streamlit run app.py
 
 import re
 import pickle
+import subprocess
 import numpy as np
 import streamlit as st
 from sentence_transformers import SentenceTransformer
@@ -40,6 +41,28 @@ THEMES = {
     "💧 Eau / Assainissement":  "eau potable assainissement réseau",
     "🏫 École":                 "école enseignement enfants périscolaire",
 }
+
+
+# ── Informations Git ───────────────────────────────────────────────────────────
+@st.cache_data(show_spinner=False)
+def get_git_info():
+    cwd = str(APP_DIR)
+    try:
+        commit_date = subprocess.check_output(
+            ["git", "log", "-1", "--format=%ci"],
+            cwd=cwd, stderr=subprocess.DEVNULL
+        ).decode().strip()[:16]   # "YYYY-MM-DD HH:MM"
+        commit_date = commit_date.replace("T", " ")
+    except Exception:
+        commit_date = "—"
+    try:
+        version = subprocess.check_output(
+            ["git", "describe", "--tags", "--abbrev=0"],
+            cwd=cwd, stderr=subprocess.DEVNULL
+        ).decode().strip()
+    except Exception:
+        version = "—"
+    return commit_date, version
 
 
 # ── Chargement des ressources (mis en cache) ───────────────────────────────────
@@ -126,6 +149,14 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
+        commit_date, version = get_git_info()
+        st.markdown(
+            f"<div style='font-size:0.78em;color:#888;margin-bottom:12px;line-height:1.6'>"
+            f"🏷️ Version&nbsp;&nbsp;<b>{version}</b><br>"
+            f"🕐 Commit&nbsp;&nbsp;<b>{commit_date}</b>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
         st.header("Filtres")
         year_filter = st.multiselect(
             "Année(s)", options=list(range(2015, 2027)), default=[],

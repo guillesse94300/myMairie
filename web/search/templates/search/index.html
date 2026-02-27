@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recherche – Documents Mairie Pierrefonds</title>
+  <style>
+    :root {
+      --bg: #f5f5f0;
+      --card: #fff;
+      --border: #ddd;
+      --primary: #2c5f2d;
+      --primary-light: #97c593;
+      --text: #222;
+      --muted: #666;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.5rem;
+      line-height: 1.5;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0 0 1rem;
+    }
+    .form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .form input[type="search"] {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .form input[type="search"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(44, 95, 45, 0.15);
+    }
+    .form button {
+      padding: 0.65rem 1.25rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .form button:hover { background: #234a24; }
+    .error {
+      background: #fde8e8;
+      color: #a00;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .no-base {
+      background: #fff8e6;
+      color: #8a6d00;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .results-count {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .result {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .result-meta {
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+    .result-doc-link {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--primary-light);
+    }
+    .result-doc-link:hover {
+      text-decoration: underline;
+    }
+    .result-text {
+      color: var(--text);
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .result-distance {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Recherche dans les documents Mairie</h1>
+    <p style="color: var(--muted); margin: 0 0 1rem;">PV et comptes-rendus du conseil municipal – recherche sémantique.</p>
+
+    <form class="form" method="get" action="">
+      <input type="search" name="q" value="{{ query }}" placeholder="Ex. Bois d'Haucourt, délibération budget, chasse…" autofocus>
+      <button type="submit">Rechercher</button>
+    </form>
+
+    {% if not base_available and not error %}
+      <div class="no-base">La base vectorielle n'est pas encore construite. Exécutez <code>python build_vector_store.py</code> dans le dossier Mairie.</div>
+    {% endif %}
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if query %}
+      {% if results %}
+        <p class="results-count">{{ results|length }} résultat(s) pour « {{ query }} »</p>
+        {% for r in results %}
+          <article class="result">
+            <div class="result-meta">
+              <a href="{% url 'document' r.meta.fichier %}#page={{ r.meta.page }}" class="result-doc-link" target="_blank" rel="noopener noreferrer">{{ r.meta.fichier }}</a> — page {{ r.meta.page }}
+            </div>
+            <div class="result-text">{{ r.text }}</div>
+            <div class="result-distance">Pertinence : {{ r.similarity|floatformat:2 }} (plus c’est élevé, plus le document correspond à la requête)</div>
+          </article>
+        {% endfor %}
+      {% else %}
+        {% if not error and base_available %}
+          <p class="results-count">Aucun résultat pour « {{ query }} ».</p>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    <footer class="footer">
+      Données : dossier Mairie Pierrefonds. Recherche par similarité sémantique (sentence-transformers).
+    </footer>
+  </div>
+</body>
+</html>
