@@ -17,6 +17,9 @@ venv/
 dist/
 build/
 
+# Secrets (ne jamais versionner)
+.streamlit/secrets.toml
+
 # OS
 .DS_Store
 Thumbs.db

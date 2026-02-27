@@ -43,6 +43,18 @@ THEMES = {
 }
 
 
+# ── Mode admin ─────────────────────────────────────────────────────────────────
+def is_admin() -> bool:
+    token = st.query_params.get("admin", "")
+    if not token:
+        return False
+    try:
+        secret = st.secrets.get("ADMIN_TOKEN", "")
+    except Exception:
+        secret = ""
+    return bool(secret and token == secret)
+
+
 # ── Informations Git ───────────────────────────────────────────────────────────
 @st.cache_data(show_spinner=False)
 def get_git_info():
@@ -138,14 +150,21 @@ def main():
         layout="wide",
     )
 
+    st.markdown(
+        "<style>[data-testid='stToolbar']{display:none;}</style>",
+        unsafe_allow_html=True,
+    )
+
     st.title("🏛️ Comptes Rendus du Conseil Municipal — Pierrefonds")
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
         st.stop()
 
+    admin = is_admin()
     embeddings, documents, metadata = load_db()
-    st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs")
+    if admin:
+        st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs · 🔑 Mode admin")
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
@@ -154,7 +173,10 @@ def main():
             "Année(s)", options=list(range(2015, 2027)), default=[],
             placeholder="Toutes les années",
         )
-        n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
+        if admin:
+            n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
+        else:
+            n_results = 10
         exact_mode = st.toggle(
             "Mot(s) exact(s) obligatoire",
             value=False,
@@ -213,8 +235,11 @@ def main():
                 c1, c2, c3 = st.columns([5, 1, 1])
                 with c1:
                     st.markdown(f"**#{rank} — {meta['filename']}**")
-                    chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
-                    st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
+                    if admin:
+                        chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
+                        st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
+                    else:
+                        st.markdown(f"Date : `{meta['date']}`")
                 with c2:
                     st.markdown(
                         f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
