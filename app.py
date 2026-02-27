@@ -151,7 +151,12 @@ def main():
     )
 
     st.markdown(
-        "<style>[data-testid='stToolbar']{display:none;}</style>",
+        """<style>
+        [data-testid='stToolbar']   { display: none; }
+        [data-testid='stAppDeployButton'] { display: none; }
+        #MainMenu                   { display: none; }
+        footer                      { display: none; }
+        </style>""",
         unsafe_allow_html=True,
     )
 
