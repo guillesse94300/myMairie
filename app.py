@@ -248,6 +248,21 @@ def search_agent(question: str, embeddings, documents, metadata,
         if key not in seen:
             seen[key] = (doc, meta, score)
 
+    # Expansion de contexte : pour chaque chunk trouvé, ajouter les voisins
+    # immédiats (±1, ±2) du même fichier — capture les délibérations adjacentes
+    all_by_key = {
+        (m.get("filename", ""), m.get("chunk", 0)): (d, m)
+        for d, m in zip(documents, metadata)
+    }
+    for (fname, chunk_idx), (_, _, score) in list(seen.items()):
+        for delta in (-2, -1, 1, 2):
+            nkey = (fname, chunk_idx + delta)
+            if nkey in all_by_key and nkey not in seen:
+                nd, nm = all_by_key[nkey]
+                # Score décroissant avec la distance
+                neighbor_score = max(0.0, score - 0.05 * abs(delta))
+                seen[nkey] = (nd, nm, neighbor_score)
+
     merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)[:n]
     return [(doc, meta, min(score, 1.0)) for doc, meta, score in merged]
 
@@ -288,8 +303,8 @@ def ask_claude_stream(question: str, passages: list):
 
     context_parts = []
     for i, (doc, meta, score) in enumerate(passages, 1):
-        source_label = f"{meta.get('filename', '?')}, {meta.get('date', '?')}"
-        context_parts.append(f"<source id=\"{i}\" fichier=\"{source_label}\">\n{doc}\n</source>")
+        fname = meta.get("filename", "?")
+        context_parts.append(f"<source id=\"{i}\" fichier=\"{fname}\">\n{doc}\n</source>")
     context = "\n\n".join(context_parts)
 
     user_msg = (
@@ -332,17 +347,22 @@ def _liens_sources(text: str, passages: list) -> str:
         if fname:
             fname_map[fname] = url
 
-    # 1. Remplacer <source id="N" ...> (balises ouvrantes avec ou sans attributs)
-    def _repl_open(m):
-        sid = m.group(1)
+    def _make_link(sid):
         if sid in id_map:
             fname, url = id_map[sid]
             label = fname.replace(".pdf", "")
             return f"[📄 {label}]({url})"
-        return ""
-    text = re.sub(r'<source\s+id=["\'](\d+)["\'][^>]*>', _repl_open, text)
+        return f"[{sid}]"
 
-    # 2. Supprimer les balises fermantes et toute balise <source> résiduelle
+    # 0. Remplacer les références [N] produites par le LLM (format principal)
+    #    (?!\() évite de remplacer les liens Markdown déjà formés [texte](url)
+    text = re.sub(r'\[(\d+)\](?!\()', lambda m: _make_link(m.group(1)), text)
+
+    # 1. Remplacer <source id="N" ...> résiduels (au cas où le LLM en échappe)
+    text = re.sub(r'<source\s+id=["\'](\d+)["\'][^>]*>',
+                  lambda m: _make_link(m.group(1)), text)
+
+    # 2. Supprimer les balises <source> / </source> restantes
     text = re.sub(r'</source>', "", text)
     text = re.sub(r'<source[^>]*>', "", text)
 

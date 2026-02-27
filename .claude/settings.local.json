@@ -50,7 +50,9 @@
       "Bash(git push origin main)",
       "Bash(python -c \":*)",
       "Bash(git rm \"static/Interview_QA.pdf\")",
-      "Bash(git rm \"static/LISTE-DELIBERATIONS-DU-27-janvier-2026 \\(1\\).pdf\")"
+      "Bash(git rm \"static/LISTE-DELIBERATIONS-DU-27-janvier-2026 \\(1\\).pdf\")",
+      "Bash(python stats_extract.py)",
+      "Bash(git add app.py stats_extract.py requirements.txt startClaude.bat vector_db/stats.json)"
     ]
   }
 }
