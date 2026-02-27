@@ -7,6 +7,7 @@ import re
 import pickle
 import socket
 import subprocess
+import urllib.request
 import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
@@ -97,6 +98,24 @@ def _pdf_date_key(p: Path) -> datetime:
         except ValueError:
             pass
     return datetime.min
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def _get_public_ip() -> str:
+    """Retourne l'IP publique du serveur (mise en cache 1h)."""
+    try:
+        return urllib.request.urlopen(
+            "https://api.ipify.org", timeout=3
+        ).read().decode().strip()
+    except Exception:
+        try:
+            _s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            _s.connect(("8.8.8.8", 80))
+            ip = _s.getsockname()[0]
+            _s.close()
+            return ip
+        except Exception:
+            return socket.gethostbyname(socket.gethostname())
 
 
 # ── Mode admin ─────────────────────────────────────────────────────────────────
@@ -416,16 +435,9 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        try:
-            _s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            _s.connect(("8.8.8.8", 80))
-            _ip = _s.getsockname()[0]
-            _s.close()
-        except Exception:
-            _ip = socket.gethostbyname(socket.gethostname())
         st.markdown(
             f'<p style="font-size:0.75em;color:#888;margin:0 0 0.6rem 0;padding:0">'
-            f'🖥️ {_ip}</p>',
+            f'🌐 {_get_public_ip()}</p>',
             unsafe_allow_html=True,
         )
         st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
