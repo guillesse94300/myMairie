@@ -24,14 +24,14 @@ PDF_BASE_URL = "app/static"
 SUGGESTIONS = [
     "Bois D'Haucourt",
     "Vertefeuille",
-    "forêt",
+    "Compiègne",
     "permis de construire",
     "urbanisme",
     "taxe foncière",
     "voirie",
     "eau potable",
-    "budget",
-    "école",
+    "Le Rocher",
+    "Fontaine",
 ]
 
 THEMES = {
@@ -194,6 +194,22 @@ def main():
     st.title("🏛️ Procès-verbaux de séances - Conseil Municipal Pierrefonds")
     st.caption("Source : https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal")
 
+    # ── Filtres en ligne ─────────────────────────────────────────────────────────
+    fcol1, fcol2, fcol3 = st.columns([3, 1, 1])
+    with fcol1:
+        year_filter = st.multiselect(
+            "Année(s)", options=list(range(2015, 2027)), default=[],
+            placeholder="Toutes les années",
+        )
+    with fcol2:
+        n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
+    with fcol3:
+        exact_mode = st.toggle(
+            "Mot(s) exact(s)",
+            value=False,
+            help="Si activé, ne retourne que les passages contenant vraiment le(s) mot(s) cherché(s).",
+        )
+
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
         st.stop()
@@ -205,18 +221,6 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.header("Filtres")
-        year_filter = st.multiselect(
-            "Année(s)", options=list(range(2015, 2027)), default=[],
-            placeholder="Toutes les années",
-        )
-        n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
-        exact_mode = st.toggle(
-            "Mot(s) exact(s) obligatoire",
-            value=False,
-            help="Si activé, ne retourne que les passages contenant vraiment le(s) mot(s) cherché(s).",
-        )
-        st.markdown("---")
         st.markdown("**Thèmes**")
         theme_query = None
         for label, tq in THEMES.items():
