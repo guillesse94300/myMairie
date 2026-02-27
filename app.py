@@ -5,6 +5,7 @@ Usage  : streamlit run app.py
 
 import re
 import pickle
+import socket
 import subprocess
 import numpy as np
 import streamlit as st
@@ -197,15 +198,69 @@ def excerpt(text: str, terms: list, window: int = 450) -> str:
     return ("…" if start else "") + text[start:end] + ("…" if end < len(text) else "")
 
 
+# Mots vides français exclus de la recherche exacte
+_STOP_FR = {
+    'les', 'des', 'une', 'que', 'qui', 'est', 'pas', 'par', 'sur',
+    'pour', 'avec', 'dans', 'ont', 'ete', 'aux', 'mais', 'quels',
+    'quelles', 'quand', 'comment', 'pourquoi', 'combien', 'quel',
+    'leur', 'leurs', 'votre', 'notre', 'cette', 'cet', 'ces', 'ses',
+    'plus', 'tout', 'tous', 'toutes', 'bien', 'aussi', 'tres',
+    'elle', 'elles', 'ils', 'vous', 'nous', 'lui', 'fait', 'faire',
+    'avoir', 'etre', 'autre', 'autres', 'entre', 'depuis', 'avant',
+    'apres', 'pendant', 'pris', 'prises', 'vote', 'votes', 'votees',
+    'quelles', 'prises', 'montant', 'montants',
+}
+
+
+# ── Recherche hybride pour l'agent (sémantique + exacte sur noms clés) ────────
+def search_agent(question: str, embeddings, documents, metadata,
+                 n: int = 15, year_filter: list = None):
+    """
+    Combine recherche sémantique et recherche exacte filtrée sur les noms
+    significatifs de la question (sans mots vides ni mots de question).
+    """
+    sem = search(question, embeddings, documents, metadata,
+                 n=n, year_filter=year_filter, exact=False)
+
+    # Extraire uniquement les mots porteurs de sens (≥ 4 chars, hors stop words)
+    raw = [t.strip("'\".,?!") for t in re.split(r'\W+', question)]
+    sig = [t for t in raw
+           if len(t) >= 4
+           and t.lower().replace('é','e').replace('è','e')
+                        .replace('ê','e').replace('û','u') not in _STOP_FR]
+
+    seen: dict = {}
+    if sig:
+        focused = " ".join(sig)
+        exact = search(focused, embeddings, documents, metadata,
+                       n=n, year_filter=year_filter, exact=True)
+        for doc, meta, score in exact:
+            key = (meta.get("filename", ""), meta.get("chunk", 0))
+            seen[key] = (doc, meta, score + 0.05)   # bonus priorité
+
+    for doc, meta, score in sem:
+        key = (meta.get("filename", ""), meta.get("chunk", 0))
+        if key not in seen:
+            seen[key] = (doc, meta, score)
+
+    merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)[:n]
+    return [(doc, meta, min(score, 1.0)) for doc, meta, score in merged]
+
+
 # ── Agent RAG : appel Claude avec streaming ────────────────────────────────────
 SYSTEM_AGENT = """Tu es un assistant spécialisé dans l'analyse des procès-verbaux \
 du Conseil Municipal de Pierrefonds (Oise, France).
-Tu réponds uniquement à partir des passages fournis entre balises <source>.
-Si l'information demandée est absente ou insuffisante dans ces passages, dis-le clairement.
-Tu réponds toujours en français, de façon concise et structurée.
-Pour chaque affirmation importante, cite le nom du fichier source entre parenthèses, \
-exactement tel qu'il apparaît dans l'attribut fichier= de la balise <source> (ex : CM-28-juin-2022.pdf).
-N'écris JAMAIS les balises <source> ou </source> dans ta réponse."""
+Règles strictes :
+1. Tu réponds UNIQUEMENT à partir des passages fournis entre balises <source>.
+2. Si un passage ne traite pas directement du sujet de la question, ignore-le.
+3. Ne cite un montant ou un chiffre QUE s'il est explicitement associé au sujet \
+   exact de la question dans le passage (ex : ne pas citer un montant de logiciel \
+   pour répondre à une question sur la voirie).
+4. Si l'information est absente ou insuffisante, dis-le clairement et brièvement.
+5. Tu réponds toujours en français, de façon concise et structurée.
+6. Pour chaque affirmation, cite le fichier source entre parenthèses, \
+   tel qu'il apparaît dans l'attribut fichier= de la balise <source>.
+7. N'écris JAMAIS les balises <source> ou </source> dans ta réponse."""
 
 
 def ask_claude_stream(question: str, passages: list):
@@ -361,11 +416,24 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
+        try:
+            _s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            _s.connect(("8.8.8.8", 80))
+            _ip = _s.getsockname()[0]
+            _s.close()
+        except Exception:
+            _ip = socket.gethostbyname(socket.gethostname())
+        st.markdown(
+            f'<p style="font-size:0.75em;color:#888;margin:0 0 0.6rem 0;padding:0">'
+            f'🖥️ {_ip}</p>',
+            unsafe_allow_html=True,
+        )
         st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
         theme_query = None
         for label, tq in THEMES.items():
             if st.button(label, use_container_width=True):
                 theme_query = tq
+                st.session_state["_switch_to_search"] = True
         st.markdown("---")
         st.markdown("**Lien Direct**")
         pdfs = sorted(PDF_DIR.glob("*.pdf"), key=_pdf_date_key, reverse=True)
@@ -403,6 +471,18 @@ def main():
 
     # ── Onglets ─────────────────────────────────────────────────────────────────
     tab_search, tab_agent = st.tabs(["🔍 Recherche", "🤖 Agent Q&R"])
+
+    # Bascule automatique vers l'onglet Recherche quand un thème est cliqué
+    if st.session_state.get("_switch_to_search", False):
+        st.session_state["_switch_to_search"] = False
+        components.html("""
+        <script>
+        setTimeout(function () {
+            var tabs = window.parent.document.querySelectorAll('[data-baseweb="tab"]');
+            if (tabs && tabs[0]) tabs[0].click();
+        }, 150);
+        </script>
+        """, height=0)
 
     # ════════════════════════════════════════════════════════════════════════════
     # ONGLET RECHERCHE
@@ -497,7 +577,8 @@ def main():
         st.caption(
             "Exemples : *Quelles décisions ont été prises sur le Bois d'Haucourt ?* · "
             "*Comment ont évolué les tarifs de la cantine scolaire ?* · "
-            "*Quels travaux de voirie ont été votés et pour quel montant ?*"
+            "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
+            "*Que sais-tu sur les logiciels Horizon ?*"
         )
 
         agent_years = []
@@ -512,9 +593,9 @@ def main():
 
         if st.button("Obtenir une réponse", type="primary", disabled=not question.strip()):
             with st.spinner("Recherche des passages pertinents…"):
-                passages = search(
+                passages = search_agent(
                     question, embeddings, documents, metadata,
-                    n=n_passages, year_filter=agent_years, exact=False,
+                    n=n_passages, year_filter=agent_years,
                 )
 
             if not passages:
