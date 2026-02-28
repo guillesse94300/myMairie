@@ -18,7 +18,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime, timedelta
+from datetime import datetime
 from collections import Counter, defaultdict
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
@@ -71,11 +71,10 @@ def _safe_source_url(url: str) -> str | None:
     return None
 
 
-# ── Rate limiting par IP (recherche + agent) ───────────────────────────────────
+# ── Rate limiting par IP (recherche + agent) : 5 recherches / jour ──────────────
 RATE_LIMIT_MAX = 5
-RATE_LIMIT_WINDOW = timedelta(hours=1)
 RATE_LIMIT_WHITELIST = {"86.208.120.20"}
-_rate_limit_store: dict[str, list[float]] = {}  # ip -> timestamps
+QUOTA_EPUISE_MSG = "Quota de recherche épuisé, attendez minuit !"
 
 
 def _init_searches_db() -> None:
@@ -124,36 +123,46 @@ def get_client_ip() -> str | None:
     return None
 
 
+def _get_searches_today_count_for_ip(ip: str) -> int:
+    """Nombre de recherches aujourd'hui pour cette IP (base SQLite)."""
+    if not ip:
+        return 0
+    try:
+        _init_searches_db()
+        with sqlite3.connect(SEARCHES_DB) as conn:
+            cur = conn.execute(
+                "SELECT COUNT(*) FROM searches WHERE ip = ? AND date(timestamp, 'unixepoch', 'localtime') = date('now', 'localtime')",
+                (ip,),
+            )
+            return cur.fetchone()[0] or 0
+    except Exception:
+        return 0
+
+
 def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     """
-    Vérifie la limite (5 recherches / heure par IP) et consomme 1 si autorisé.
+    Vérifie la limite (5 recherches / jour par IP). La consommation a lieu lors de log_search().
     Retourne (autorisé, restant). restant est None si IP whitelistée ou inconnue.
     """
     ip = get_client_ip()
-    now = datetime.now().timestamp()
     if not ip:
         return (True, None)
     if ip in RATE_LIMIT_WHITELIST:
         return (True, None)
-    cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
-    if ip not in _rate_limit_store:
-        _rate_limit_store[ip] = []
-    times = [t for t in _rate_limit_store[ip] if t > cutoff]
-    if len(times) >= RATE_LIMIT_MAX:
+    count_today = _get_searches_today_count_for_ip(ip)
+    if count_today >= RATE_LIMIT_MAX:
         return (False, 0)
-    times.append(now)
-    _rate_limit_store[ip] = times
-    return (True, RATE_LIMIT_MAX - len(times))
+    # Après cette recherche il restera 5 - (count_today + 1)
+    return (True, RATE_LIMIT_MAX - count_today - 1)
 
 
 def rate_limit_get_remaining() -> int | None:
-    """Nombre de recherches restantes (sans consommer). None si whitelist ou IP inconnue."""
+    """Nombre de recherches restantes aujourd'hui (sans consommer). None si whitelist ou IP inconnue."""
     ip = get_client_ip()
     if not ip or ip in RATE_LIMIT_WHITELIST:
         return None
-    cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
-    times = [t for t in _rate_limit_store.get(ip, []) if t > cutoff]
-    return max(0, RATE_LIMIT_MAX - len(times))
+    count_today = _get_searches_today_count_for_ip(ip)
+    return max(0, RATE_LIMIT_MAX - count_today)
 
 
 def get_searches_today_count() -> int:
@@ -625,6 +634,33 @@ Je voulais m'entraîner sur ce domaine — une sorte de travaux pratiques pour m
 """)
 
 
+@st.dialog("Base des recherches", width="large", icon="🔑")
+def admin_searches_db():
+    """Affiche la table SQLite des recherches (IP, timestamp, requête) — visible uniquement via URL admin."""
+    try:
+        _init_searches_db()
+        with sqlite3.connect(SEARCHES_DB) as conn:
+            rows = conn.execute(
+                "SELECT ip, timestamp, query FROM searches ORDER BY timestamp DESC"
+            ).fetchall()
+        if not rows:
+            st.info("Aucune recherche enregistrée.")
+            return
+        # Tableau : IP, Date/Heure (lisible), Recherche
+        data = [
+            {
+                "IP": r[0] or "",
+                "Date / Heure": datetime.fromtimestamp(r[1]).strftime("%Y-%m-%d %H:%M:%S") if r[1] else "",
+                "Recherche": (r[2] or "")[:500],
+            }
+            for r in rows
+        ]
+        st.dataframe(data, use_container_width=True, height=400)
+        st.caption(f"Total : {len(data)} enregistrement(s)")
+    except Exception as e:
+        st.error(f"Impossible de charger la base : {e}")
+
+
 # ── Interface principale ───────────────────────────────────────────────────────
 def main():
     if "current_section" not in st.session_state:
@@ -721,17 +757,22 @@ def main():
     with st.container(border=True):
         c_nav, c_mail, c_deploy, c_stats = st.columns([2, 2, 1, 1.4])
         with c_nav:
-            btn1, btn2, btn3 = st.columns(3)
-            with btn1:
+            nav_cols = 4 if admin else 3
+            btn_cols = st.columns(nav_cols)
+            with btn_cols[0]:
                 if st.button("🏠 Accueil", key="banner_accueil"):
                     st.session_state["current_section"] = "home"
                     st.rerun()
-            with btn2:
+            with btn_cols[1]:
                 if st.button("ℹ️ À propos", key="banner_about"):
                     about_casimir()
-            with btn3:
+            with btn_cols[2]:
                 if st.button("📖 Guide utilisateur", key="banner_guide"):
                     guide_utilisateur()
+            if admin:
+                with btn_cols[3]:
+                    if st.button("🔑 ADMIN", key="banner_admin"):
+                        admin_searches_db()
         with c_mail:
             st.markdown(
                 '<p style="margin:0;padding:0;white-space:nowrap;font-size:0.9rem">'
@@ -844,10 +885,7 @@ def main():
             if do_search and search_question:
                 allowed, remaining = rate_limit_check_and_consume()
                 if not allowed:
-                    st.error(
-                        "Limite de 5 recherches par heure atteinte pour votre adresse IP. "
-                        "Réessayez plus tard."
-                    )
+                    st.error(QUOTA_EPUISE_MSG)
                 else:
                     log_search(get_client_ip(), search_question)
                     with st.spinner("Recherche des passages pertinents…"):
@@ -927,10 +965,7 @@ def main():
             if query:
                 allowed, remaining = rate_limit_check_and_consume()
                 if not allowed:
-                    st.error(
-                        "Limite de 5 recherches par heure atteinte pour votre adresse IP. "
-                        "Réessayez plus tard."
-                    )
+                    st.error(QUOTA_EPUISE_MSG)
                 else:
                     log_search(get_client_ip(), query)
                     with st.spinner("Recherche…"):
