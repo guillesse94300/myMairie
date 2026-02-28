@@ -624,12 +624,15 @@ def main():
         .home-card h3 { color:#2c5f2d; margin:0 0 0.5rem; font-size:1.1rem; }
         .home-card p { color:#666; margin:0; font-size:0.9rem; line-height:1.4; }
         .top-banner { background:#f0f2f6; padding:0.5rem 1rem; border-radius:6px; margin-bottom:1rem; }
-        /* Réduire l'espace en haut de la page */
+        /* Espace en haut : léger pour ne pas tronquer le bandeau */
         [data-testid="stAppViewContainer"] > section { padding-top: 0 !important; }
-        [data-testid="stAppViewContainer"] .block-container { padding-top: 0.25rem !important; max-width: 100% !important; }
-        section[data-testid="stSidebar"] + div .block-container { padding-top: 0.25rem !important; }
-        /* Bandeau compact */
+        [data-testid="stAppViewContainer"] .block-container { padding-top: 0.5rem !important; max-width: 100% !important; }
+        section[data-testid="stSidebar"] + div .block-container { padding-top: 0.5rem !important; }
+        /* Bandeau : padding interne pour que boutons/texte ne soient pas coupés */
         [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child { margin-bottom: 0.25rem !important; }
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child [data-testid="stVerticalBlock"] { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
+        /* Boutons du bandeau : éviter l'effet tronqué */
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button { padding-top: 0.45rem !important; padding-bottom: 0.45rem !important; }
         </style>""",
         unsafe_allow_html=True,
     )
