@@ -626,15 +626,14 @@ def main():
         .home-card h3 { color:#2c5f2d; margin:0 0 0.5rem; font-size:1.1rem; }
         .home-card p { color:#666; margin:0; font-size:0.9rem; line-height:1.4; }
         .top-banner { background:#f0f2f6; padding:0.5rem 1rem; border-radius:6px; margin-bottom:1rem; }
-        /* Espace en haut : léger pour ne pas tronquer le bandeau */
+        /* Espace au-dessus du bandeau pour ne pas tronquer */
         [data-testid="stAppViewContainer"] > section { padding-top: 0 !important; }
-        [data-testid="stAppViewContainer"] .block-container { padding-top: 0.5rem !important; max-width: 100% !important; }
-        section[data-testid="stSidebar"] + div .block-container { padding-top: 0.5rem !important; }
-        /* Bandeau : padding interne pour que boutons/texte ne soient pas coupés */
-        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child { margin-bottom: 0.25rem !important; }
-        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child [data-testid="stVerticalBlock"] { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
-        /* Boutons du bandeau : éviter l'effet tronqué */
-        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button { padding-top: 0.45rem !important; padding-bottom: 0.45rem !important; }
+        [data-testid="stAppViewContainer"] .block-container { padding-top: 0.75rem !important; max-width: 100% !important; }
+        section[data-testid="stSidebar"] + div .block-container { padding-top: 0.75rem !important; }
+        /* Bandeau : padding interne, contenu ne touche pas les bords */
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child { margin-bottom: 0.5rem !important; padding: 0.5rem 0.75rem !important; box-sizing: border-box !important; }
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child [data-testid="stVerticalBlock"] { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
         </style>""",
         unsafe_allow_html=True,
     )
@@ -688,7 +687,7 @@ def main():
     remaining = rate_limit_get_remaining()
     remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
     with st.container(border=True):
-        c_nav, c_mail, c_deploy, c_stats = st.columns([2, 2, 1, 1])
+        c_nav, c_mail, c_deploy, c_stats = st.columns([2, 2, 1, 1.4])
         with c_nav:
             btn1, btn2, btn3 = st.columns(3)
             with btn1:
@@ -713,8 +712,8 @@ def main():
         with c_stats:
             st.components.v1.html(
                 f"""
-                <div style="font-size:0.9rem;margin:0;padding:0.4rem 0;min-height:1.8rem;display:flex;align-items:center;box-sizing:border-box">
-                    <span><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {total_today} (auj.) · {remaining_str}</span>
+                <div style="font-size:0.85rem;margin:0;padding:0.35rem 0;min-height:1.6rem;display:flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box">
+                    <span><b>🌐</b> <span id="banner-pubip">…</span> · <b>Rech. :</b> {total_today} (auj.) · {remaining_str}</span>
                 </div>
                 <script>
                 (function() {{
@@ -726,7 +725,7 @@ def main():
                 }})();
                 </script>
                 """,
-                height=44,
+                height=40,
             )
 
     # ── Sidebar (uniquement sur section Recherche) ─────────────────────────────
