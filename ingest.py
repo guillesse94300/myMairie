@@ -3,25 +3,29 @@ ingest.py — Indexe tous les PDFs du Conseil Municipal + journal (L'ECHO)
 Stockage : embeddings.npy + metadata.pkl + documents.pkl
 Usage    : python ingest.py
 
-Pour les PDFs image (ex. L'ECHO), utilise l'OCR (Tesseract requis).
-Installer Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
+Pour les PDFs image (ex. L'ECHO), utilise l'OCR :
+- Tesseract si installé (https://github.com/UB-Mannheim/tesseract/wiki)
+- Sinon EasyOCR (pip install easyocr) — pas de binaire externe
 """
 
 import re
 import shutil
 import pickle
+import sys
 import pdfplumber
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
-# OCR pour PDFs image (L'ECHO) — import optionnel
+# OCR pour PDFs image (L'ECHO) — Tesseract puis EasyOCR en secours
+_OCR_TESSERACT = False
+_OCR_EASYOCR = False
+_easyocr_reader = None
+
 try:
     import fitz  # PyMuPDF
     from PIL import Image
     import pytesseract
-    # Détection Tesseract sur Windows (souvent pas dans le PATH)
-    import sys
     if sys.platform == "win32":
         for path in [
             r"C:\Program Files\Tesseract-OCR\tesseract.exe",
@@ -30,9 +34,22 @@ try:
             if Path(path).exists():
                 pytesseract.pytesseract.tesseract_cmd = path
                 break
-    _OCR_AVAILABLE = True
+    try:
+        pytesseract.get_tesseract_version()
+        _OCR_TESSERACT = True
+    except Exception:
+        pass
 except ImportError:
-    _OCR_AVAILABLE = False
+    pass
+
+if not _OCR_TESSERACT:
+    try:
+        import easyocr
+        _OCR_EASYOCR = True
+    except ImportError:
+        pass
+
+_OCR_AVAILABLE = _OCR_TESSERACT or _OCR_EASYOCR
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 APP_DIR        = Path(__file__).parent
@@ -125,8 +142,26 @@ def chunk_text(text: str, size: int = CHUNK_SIZE) -> list:
 
 
 # ── Programme principal ────────────────────────────────────────────────────────
+def _check_tesseract() -> bool:
+    """Vérifie que Tesseract est utilisable. Affiche un message si non."""
+    if not _OCR_AVAILABLE:
+        return False
+    try:
+        pytesseract.get_tesseract_version()
+        return True
+    except Exception:
+        print(
+            "\n  [!] Tesseract non trouve. Pour l'OCR des PDFs L'ECHO (image), installez :\n"
+            "      https://github.com/UB-Mannheim/tesseract/wiki\n"
+            "      Pensez a cocher 'French' lors de l'installation.\n"
+        )
+        return False
+
+
 def main():
     DB_DIR.mkdir(exist_ok=True)
+
+    _tesseract_ok = _check_tesseract()
 
     # Copier les PDFs du journal vers static/journal/ pour que Streamlit puisse les servir
     static_journal = STATIC_DIR / "journal"
@@ -174,6 +209,8 @@ def main():
             if not pages_text:
                 if not _OCR_AVAILABLE:
                     print("aucun texte (PDF scanne ? Installez PyMuPDF, pytesseract et Tesseract pour l'OCR)")
+                elif not _tesseract_ok:
+                    print("aucun texte (Tesseract non installe ou pas dans le PATH)")
                 else:
                     print("aucun texte (OCR echoue ?)")
                 skipped.append(pdf_path.name)

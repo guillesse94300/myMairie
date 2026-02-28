@@ -15,10 +15,18 @@ python -m pip install --quiet -r requirements.txt
 python -m pip install --quiet groq
 echo   OK.
 echo.
-echo Pour l'OCR des PDFs L'ECHO (image), Tesseract doit etre installe :
-echo   https://github.com/UB-Mannheim/tesseract/wiki
-echo   Cocher "French" lors de l'installation.
-echo.
+:: Verifier que Tesseract est installe (requis pour OCR des PDFs L'ECHO)
+python check_tesseract.py 2>nul
+if errorlevel 1 (
+    echo ATTENTION : Tesseract non trouve. Les PDFs L'ECHO ^(image^) seront ignores.
+    echo   Installez Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
+    echo   Cocher "French" lors de l'installation. Ajoutez au PATH ou dans :
+    echo   C:\Program Files\Tesseract-OCR\tesseract.exe
+    echo.
+) else (
+    echo Tesseract OK pour l'OCR des PDFs L'ECHO.
+    echo.
+)
 
 :: Telecharger les L'ECHO (journal) si possible
 echo Telechargement des publications L'ECHO (journal)...
