@@ -9,6 +9,9 @@ echo.
 
 cd /d "%~dp0"
 
+:: Dossier data pour la base SQLite des recherches (IP, timestamp, requête)
+if not exist "%~dp0data" mkdir "%~dp0data"
+
 :: Installer les dependances
 echo Installation des dependances...
 python -m pip install --quiet -r requirements.txt

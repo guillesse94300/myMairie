@@ -14,6 +14,9 @@ echo Mise a jour de Streamlit...
 pip install -U streamlit
 echo.
 
+:: Dossier data pour la base SQLite des recherches (cree par l'app si absent)
+if not exist "%~dp0data" mkdir "%~dp0data"
+
 :: Mettre a jour la date de deploiement (affichee dans l'app)
 python -c "from datetime import datetime; open('deploy_date.txt','w').write(datetime.now().strftime('%%Y-%%m-%%d %%H:%%M'))"
 echo Date de deploiement mise a jour dans deploy_date.txt

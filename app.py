@@ -76,7 +76,34 @@ RATE_LIMIT_MAX = 5
 RATE_LIMIT_WINDOW = timedelta(hours=1)
 RATE_LIMIT_WHITELIST = {"86.208.120.20"}
 _rate_limit_store: dict[str, list[float]] = {}  # ip -> timestamps
-_searches_today_timestamps: list[float] = []  # timestamps des recherches (pour total "aujourd'hui")
+
+
+def _init_searches_db() -> None:
+    """Crée le dossier data et la table SQLite si besoin."""
+    try:
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(SEARCHES_DB) as conn:
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS searches "
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT, timestamp REAL, query TEXT)"
+            )
+    except Exception:
+        pass
+
+
+def log_search(ip: str | None, query: str) -> None:
+    """Enregistre une recherche (IP, timestamp, requête) en SQLite."""
+    if not query or not query.strip():
+        return
+    try:
+        _init_searches_db()
+        with sqlite3.connect(SEARCHES_DB) as conn:
+            conn.execute(
+                "INSERT INTO searches (ip, timestamp, query) VALUES (?, ?, ?)",
+                (ip or "", datetime.now().timestamp(), (query or "").strip()[:2000]),
+            )
+    except Exception:
+        pass
 
 
 def get_client_ip() -> str | None:
@@ -105,10 +132,8 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     ip = get_client_ip()
     now = datetime.now().timestamp()
     if not ip:
-        _searches_today_timestamps.append(now)
         return (True, None)
     if ip in RATE_LIMIT_WHITELIST:
-        _searches_today_timestamps.append(now)
         return (True, None)
     cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
     if ip not in _rate_limit_store:
@@ -118,7 +143,6 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
         return (False, 0)
     times.append(now)
     _rate_limit_store[ip] = times
-    _searches_today_timestamps.append(now)
     return (True, RATE_LIMIT_MAX - len(times))
 
 
@@ -133,11 +157,16 @@ def rate_limit_get_remaining() -> int | None:
 
 
 def get_searches_today_count() -> int:
-    """Nombre total de recherches depuis minuit (ce matin)."""
-    today = datetime.now().date()
-    global _searches_today_timestamps
-    _searches_today_timestamps = [t for t in _searches_today_timestamps if datetime.fromtimestamp(t).date() == today]
-    return len(_searches_today_timestamps)
+    """Nombre total de recherches depuis minuit (ce matin), lu depuis la base SQLite."""
+    try:
+        _init_searches_db()
+        with sqlite3.connect(SEARCHES_DB) as conn:
+            cur = conn.execute(
+                "SELECT COUNT(*) FROM searches WHERE date(timestamp, 'unixepoch', 'localtime') = date('now', 'localtime')"
+            )
+            return cur.fetchone()[0] or 0
+    except Exception:
+        return 0
 
 
 SUGGESTIONS = [
@@ -820,6 +849,7 @@ def main():
                         "Réessayez plus tard."
                     )
                 else:
+                    log_search(get_client_ip(), search_question)
                     with st.spinner("Recherche des passages pertinents…"):
                         passages = search_agent(
                             search_question, embeddings, documents, metadata,
@@ -902,6 +932,7 @@ def main():
                         "Réessayez plus tard."
                     )
                 else:
+                    log_search(get_client_ip(), query)
                     with st.spinner("Recherche…"):
                         results = search(query, embeddings, documents, metadata,
                                         n=n_results, year_filter=year_filter, exact=exact_mode)

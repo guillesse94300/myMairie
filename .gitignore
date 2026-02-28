@@ -1,6 +1,9 @@
 # Base vectorielle locale alternative
 base_vectorielle/
 
+# Données locales (SQLite recherches : IP, timestamp, requête)
+data/
+
 # Cache du modèle sentence-transformers
 __pycache__/
 *.pyc
