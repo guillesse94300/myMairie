@@ -14,6 +14,7 @@ import warnings
 # Supprimer les warnings non bloquants (pin_memory, HF Hub)
 warnings.filterwarnings("ignore", message=".*pin_memory.*", category=UserWarning)
 warnings.filterwarnings("ignore", message=".*HF_TOKEN.*", category=UserWarning)
+import os
 import shutil
 import pickle
 import sys
@@ -120,19 +121,23 @@ def _ocr_tesseract(doc) -> list:
 
 
 def _ocr_easyocr(doc) -> list:
-    """OCR via EasyOCR (fallback, pas de binaire externe)."""
+    """OCR via EasyOCR (fallback, pas de binaire externe). Une page en erreur est ignorée."""
     global _easyocr_reader
     if _easyocr_reader is None:
         import easyocr
         _easyocr_reader = easyocr.Reader(["fr", "en"], gpu=False, verbose=False)
     pages_text = []
     for page in doc:
-        pix = page.get_pixmap(dpi=200, alpha=False)
-        arr = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.height, pix.width, 3)
-        result = _easyocr_reader.readtext(arr)
-        text = " ".join(r[1] for r in result if r[1].strip())
-        if text.strip():
-            pages_text.append(text.strip())
+        try:
+            pix = page.get_pixmap(dpi=200, alpha=False)
+            arr = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.height, pix.width, 3)
+            result = _easyocr_reader.readtext(arr)
+            text = " ".join(r[1] for r in result if r[1].strip())
+            if text.strip():
+                pages_text.append(text.strip())
+        except Exception:
+            # Une page qui fait planter EasyOCR est ignorée (ex. format particulier)
+            continue
     return pages_text
 
 
@@ -205,7 +210,15 @@ def main():
                 print(f"  Copie : journal/{pdf.name} -> static/journal/")
 
     print(f"Chargement du modele '{MODEL_NAME}'...")
-    model = SentenceTransformer(MODEL_NAME)
+    try:
+        import torch
+        use_gpu = os.environ.get("USE_GPU") and torch.cuda.is_available()
+        device = "cuda" if use_gpu else "cpu"
+        if use_gpu:
+            print(f"  GPU : {torch.cuda.get_device_name(0)}")
+    except Exception:
+        device = "cpu"
+    model = SentenceTransformer(MODEL_NAME, device=device)
 
     # Collecter tous les PDFs : static/ (récursif, inclut static/journal/)
     pdf_files = []
@@ -233,9 +246,13 @@ def main():
 
             # Si aucun texte (PDF image type L'ECHO), tenter l'OCR
             if not pages_text and _OCR_AVAILABLE:
-                pages_text = extract_text_ocr(pdf_path)
-                if pages_text:
-                    print("OCR", end=" ... ")
+                try:
+                    pages_text = extract_text_ocr(pdf_path)
+                    if pages_text:
+                        print("OCR", end=" ... ")
+                except Exception as e:
+                    print(f"OCR echoue ({e!r})", end=" ... ")
+                    pages_text = []
 
             if not pages_text:
                 if not _OCR_AVAILABLE:

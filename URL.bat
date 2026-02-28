@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 echo ============================================
-echo   Recuperation des URLs (site_url.txt)
+echo   URL - Scan des URLs ^(site_url.txt^) - creation des .md
 echo ============================================
 echo.
 

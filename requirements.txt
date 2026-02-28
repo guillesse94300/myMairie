@@ -1,6 +1,10 @@
 pdfplumber
 requests
 beautifulsoup4
+# Pour sites protégés (ex. courrier-picard.fr) : impersonation TLS Chrome
+curl_cffi
+# Pour sites JS (ex. notion.site) : navigateur headless
+playwright
 sentence-transformers
 streamlit
 numpy

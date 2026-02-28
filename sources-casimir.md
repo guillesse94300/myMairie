@@ -8,6 +8,8 @@ Cette liste est extraite de la base d’indexation (`vector_db/metadata.pkl`).
 
 **Enrichir Casimir :** ajoutez des URLs dans `siteweb.txt`, puis exécutez `python fetch_sites.py` et `python ingest.py` (ou `update_casimir.bat`).
 
+**Synthèse des connaissances :** le fichier `knowledge_sites/casimir_synthese_connaissances.md` résume les informations clés issues des .md (mairie, élus, scolarité, culture, tourisme, CCLO) pour améliorer les réponses de Casimir sur les sujets courants.
+
 ---
 
 ## Résumé
@@ -17,6 +19,29 @@ Cette liste est extraite de la base d’indexation (`vector_db/metadata.pkl`).
 | **Documents indexés** | 82 |
 | **Segments (chunks)** | 1 783 |
 | **Période couverte** | 2015 – 2025 |
+
+---
+
+## 0. Sources web (knowledge_sites)
+
+Les fichiers `.md` du dossier `knowledge_sites/` sont indexés par `ingest.py` (étiquetés « [Web] »). Ils proviennent des sites listés dans `siteweb.txt`, récupérés par `fetch_sites.py`. En cas d’échec (403, contenu vide, anti-bot), un **service de scraping en fallback** est utilisé si une clé API est configurée : `SCRAPER_API_KEY` (ScraperAPI) ou `ZENROWS_API_KEY` (ZenRows). Définir la variable d’environnement avant de lancer `fetch_sites.py` (ou `update_casimir.bat`).
+
+| Fichier | Description |
+|---------|-------------|
+| `mairie-pierrefonds_fr_index.md` | Accueil – Commune de Pierrefonds |
+| `mairie-pierrefonds_fr_vie-quotidienne_enfance-scolarite.md` | Enfance, scolarité, restauration, périscolaire, ALSH |
+| `mairie-pierrefonds_fr_vie-quotidienne_culture.md` | Culture, bibliothèque, Atelier musical, festival Les Petites Bouilles |
+| `mairie-pierrefonds_fr_vie-municipale_conseil-municipal.md` | Conseil municipal, élus, procès-verbaux |
+| `mairie-pierrefonds_fr_event_reunion-publique-p-e-p-i-t-e-s.md` | Événement réunion publique P.E.P.I.T.E.S |
+| `compiegne-pierrefonds_fr_index.md` | Office de tourisme Compiègne-Pierrefonds |
+| `lessecretsdepierrefonds_fr_index.md` | Les Secrets de Pierrefonds (musée, visites, escape game) |
+| `fr_wikipedia_org_wiki_Pierrefonds__Oise_.md` | Article Wikipédia Pierrefonds (Oise) |
+| `ccloise_com_index.md` | Communauté de communes des Lisières de l'Oise |
+| `oisehebdo_fr_index.md` | Oise Hebdo (recherche Pierrefonds) |
+| `courrier-picard_fr_880_locations_pierrefonds-oise.md` | Courrier picard – Pierrefonds Oise |
+| `casimir_synthese_connaissances.md` | **Synthèse** : mairie, élus, scolarité, culture, tourisme, CCLO |
+
+Après ajout ou modification de fichiers dans `knowledge_sites/`, exécuter `python ingest.py` pour réindexer.
 
 ---
 

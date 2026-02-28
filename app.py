@@ -560,13 +560,13 @@ def main():
     # ════════════════════════════════════════════════════════════════════════════
     if st.session_state["current_section"] == "home":
         st.title("Demande à Casimir!")
-        st.subheader("Tout ce que tu veux savoir sur Pierrefonds")
+        st.subheader("Tout ce que tu veux savoir sur Pierrefonds grâce à notre Agent Intelligence Artificielle")
         st.markdown("<br>", unsafe_allow_html=True)
 
         CARDS = [
-            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir recherche dans les PV et synthétise une réponse.", "agent"),
-            ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus. Filtres par année, mode exact, suggestions.", "search"),
-            ("📊", "Statistiques des séances", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
+            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours et en permanence.", "agent"),
+            ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
+            ("📊", "Statistiques des séances du Conseil Municipal", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
             ("📄", "Sources et Documents", "Liste des procès-verbaux et documents disponibles. Liens directs vers les PDF.", "docs"),
         ]
         col1, col2 = st.columns(2)
@@ -587,8 +587,9 @@ def main():
         if st.session_state["current_section"] == "agent":
             st.title("🤖 Interroger l'Agent Casimir")
             st.caption(
-                "Posez une question en langage naturel. Casimir recherche les passages "
-                "pertinents dans les PV puis génère une réponse synthétisée."
+                "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus "
+                "sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! "
+                "Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours et en permanence."
             )
 
             AGENT_EXAMPLES = [
@@ -599,13 +600,13 @@ def main():
                 "Que sais-tu sur les logiciels Horizon ?",
                 "Que sais-tu de Vertefeuille ?",
             ]
-            st.caption("Exemples (cliquez pour remplir et lancer la recherche) :")
+            st.caption("Exemples (cliquez pour lancer la recherche) :")
             ex_c1, ex_c2 = st.columns(2)
             for i, ex in enumerate(AGENT_EXAMPLES):
                 with (ex_c1 if i % 2 == 0 else ex_c2):
                     if st.button(f"🔗 {ex}", key=f"agent_ex_{i}", use_container_width=True):
-                        st.session_state["agent_question"] = ex
-                        st.session_state["agent_auto_search"] = True
+                        st.session_state["agent_question"] = ""
+                        st.session_state["agent_auto_search"] = ex
                         st.rerun()
 
             agent_years = []
@@ -613,20 +614,22 @@ def main():
 
             question = st.text_area(
                 "Votre question",
-                placeholder="Ex : Comment ont évolué les tarifs de la cantine scolaire ?",
+                placeholder="Demandez ici à Casimir!",
                 height=80,
                 label_visibility="collapsed",
                 key="agent_question",
             )
 
+            auto_question = st.session_state.pop("agent_auto_search", None)
             do_search = (
                 st.button("Obtenir une réponse", type="primary", disabled=not question.strip(), key="agent_btn")
-                or st.session_state.pop("agent_auto_search", False)
+                or (auto_question is not None)
             )
-            if do_search and question.strip():
+            search_question = question.strip() if question.strip() else (auto_question or "")
+            if do_search and search_question:
                 with st.spinner("Recherche des passages pertinents…"):
                     passages = search_agent(
-                        question, embeddings, documents, metadata,
+                        search_question, embeddings, documents, metadata,
                         n=n_passages, year_filter=agent_years,
                     )
                 if not passages:
@@ -636,7 +639,7 @@ def main():
                     placeholder = st.empty()
                     full_text = ""
                     try:
-                        for chunk in ask_claude_stream(question, passages):
+                        for chunk in ask_claude_stream(search_question, passages):
                             full_text += chunk
                             placeholder.markdown(full_text + " ▌")
                         placeholder.markdown(_liens_sources(full_text, passages))
@@ -659,7 +662,7 @@ def main():
                             )
                             st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
             elif not question.strip():
-                st.info("Saisissez une question ou cliquez sur un exemple ci-dessus.")
+                st.info("Saisissez une question ou cliquez sur un exemple pour lancer la recherche.")
 
         # ════════════════════════════════════════════════════════════════════════
         # SECTION RECHERCHE
@@ -750,7 +753,7 @@ def main():
         # SECTION STATISTIQUES
         # ════════════════════════════════════════════════════════════════════════
         elif st.session_state["current_section"] == "stats":
-            st.title("📊 Statistiques des séances")
+            st.title("📊 Statistiques des séances du Conseil Municipal")
             stats_path = DB_DIR / "stats.json"
             if not stats_path.exists():
                 st.warning("Fichier stats.json introuvable. Lancez : `python stats_extract.py`")
@@ -944,19 +947,23 @@ def main():
                 "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
             )
             st.divider()
-            st.markdown("**Documents disponibles** (PV + L'ECHO, triés par date décroissante)")
-            pdfs_static = sorted((APP_DIR / "static").rglob("*.pdf"), key=_pdf_date_key, reverse=True)
-            if pdfs_static:
-                for p in pdfs_static:
+            st.markdown("**Documents disponibles** (PV, L'ECHO, .md — triés par date décroissante)")
+            static_dir = APP_DIR / "static"
+            pdfs_static = list(static_dir.rglob("*.pdf"))
+            mds_static = list(static_dir.rglob("*.md"))
+            all_docs = sorted(pdfs_static + mds_static, key=_pdf_date_key, reverse=True)
+            if all_docs:
+                for p in all_docs:
                     dt = _pdf_date_key(p)
                     label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
-                    rel_path = str(p.relative_to(APP_DIR / "static")).replace("\\", "/")
-                    pdf_url = f"{PDF_BASE_URL}/{rel_path}"
+                    rel_path = str(p.relative_to(static_dir)).replace("\\", "/")
+                    doc_url = f"{PDF_BASE_URL}/{rel_path}"
+                    icon = "📄" if p.suffix.lower() == ".pdf" else "📝"
                     st.markdown(
-                        f"`{label_date}` — [📄 {p.name}]({pdf_url})",
+                        f"`{label_date}` — [{icon} {p.name}]({doc_url})",
                     )
             else:
-                st.caption("Aucun PDF trouvé.")
+                st.caption("Aucun document trouvé.")
 
 
 if __name__ == "__main__":
