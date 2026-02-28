@@ -55,7 +55,8 @@
       "Bash(git add app.py stats_extract.py requirements.txt startClaude.bat vector_db/stats.json)",
       "Bash(git add stats_extract.py vector_db/stats.json)",
       "WebFetch(domain:www.mairie-pierrefonds.fr)",
-      "WebFetch(domain:www.calameo.com)"
+      "WebFetch(domain:www.calameo.com)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://www.mairie-pierrefonds.fr/vie-municipale/publications/\")"
     ]
   }
 }
