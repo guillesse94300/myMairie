@@ -127,6 +127,15 @@ def get_client_ip() -> str | None:
     return None
 
 
+def get_client_ip_for_log() -> str | None:
+    """IP pour log_search : priorité à l'IP publique côté client (même source que le bandeau), sinon get_client_ip()."""
+    # IP publique récupérée côté client via api.ipify.org (comme le bandeau)
+    ip = st.session_state.get("client_public_ip")
+    if ip:
+        return ip
+    return get_client_ip()
+
+
 def _get_searches_today_count_for_ip(ip: str) -> int:
     """Nombre de recherches aujourd'hui pour cette IP (base SQLite)."""
     if not ip:
@@ -148,7 +157,7 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     Vérifie la limite (5 recherches / jour par IP). La consommation a lieu lors de log_search().
     Retourne (autorisé, restant). restant est None si IP whitelistée ou inconnue.
     """
-    ip = get_client_ip()
+    ip = get_client_ip_for_log()
     if not ip:
         return (True, None)
     if ip in RATE_LIMIT_WHITELIST:
@@ -162,7 +171,7 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
 
 def rate_limit_get_remaining() -> int | None:
     """Nombre de recherches restantes aujourd'hui (sans consommer). None si whitelist ou IP inconnue."""
-    ip = get_client_ip()
+    ip = get_client_ip_for_log()
     if not ip or ip in RATE_LIMIT_WHITELIST:
         return None
     count_today = _get_searches_today_count_for_ip(ip)
@@ -671,6 +680,11 @@ def main():
     if "current_section" not in st.session_state:
         st.session_state["current_section"] = "home"
 
+    # IP publique côté client (même source que le bandeau : api.ipify.org)
+    client_ip_from_url = st.query_params.get("client_ip", "").strip()
+    if client_ip_from_url:
+        st.session_state["client_public_ip"] = client_ip_from_url
+
     show_sidebar = st.session_state["current_section"] == "search"
     st.set_page_config(
         page_title="Procès-verbaux — Pierrefonds",
@@ -712,6 +726,27 @@ def main():
     )
     # Masquage sidebar quand pas sur Recherche + masquage éléments Streamlit
     _show_sb = st.session_state["current_section"] == "search"
+    # Récupération IP publique côté client (comme le bandeau) — redirige si absent de l'URL
+    if not st.session_state.get("client_public_ip") and not st.query_params.get("client_ip"):
+        components.html("""
+        <script>
+        (function() {
+            try {
+                var url = new URL(window.parent.location.href);
+                if (!url.searchParams.has('client_ip')) {
+                    fetch('https://api.ipify.org?format=json').then(function(r) { return r.json(); })
+                    .then(function(d) {
+                        if (d && d.ip) {
+                            url.searchParams.set('client_ip', d.ip);
+                            window.parent.location.href = url.toString();
+                        }
+                    });
+                }
+            } catch (e) {}
+        })();
+        </script>
+        """, height=0)
+
     components.html(f"""
     <script>
     (function() {{
@@ -892,7 +927,7 @@ def main():
                 if not allowed:
                     st.error(QUOTA_EPUISE_MSG)
                 else:
-                    log_search(get_client_ip(), search_question)
+                    log_search(get_client_ip_for_log(), search_question)
                     with st.spinner("Recherche des passages pertinents…"):
                         passages = search_agent(
                             search_question, embeddings, documents, metadata,
@@ -972,7 +1007,7 @@ def main():
                 if not allowed:
                     st.error(QUOTA_EPUISE_MSG)
                 else:
-                    log_search(get_client_ip(), query)
+                    log_search(get_client_ip_for_log(), query)
                     with st.spinner("Recherche…"):
                         results = search(query, embeddings, documents, metadata,
                                         n=n_results, year_filter=year_filter, exact=exact_mode)
