@@ -11,8 +11,9 @@ Pour les PDFs image (ex. L'ECHO), utilise l'OCR :
 import re
 import warnings
 
-# Supprimer le warning PyTorch "pin_memory" sur machine sans GPU
+# Supprimer les warnings non bloquants (pin_memory, HF Hub)
 warnings.filterwarnings("ignore", message=".*pin_memory.*", category=UserWarning)
+warnings.filterwarnings("ignore", message=".*HF_TOKEN.*", category=UserWarning)
 import shutil
 import pickle
 import sys
