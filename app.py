@@ -820,9 +820,9 @@ def main():
         st.markdown("<br>", unsafe_allow_html=True)
 
         CARDS = [
-            ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
             ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …", "agent"),
             ("📊", "Statistiques des séances du Conseil Municipal", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
+            ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
             ("📄", "Sources et Documents", "Liste des sources utilisées par Casimir et la recherche sémantique.", "docs"),
         ]
         col1, col2 = st.columns(2)
