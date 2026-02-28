@@ -69,10 +69,11 @@ def _safe_source_url(url: str) -> str | None:
 
 
 # ── Rate limiting par IP (recherche + agent) ───────────────────────────────────
-RATE_LIMIT_MAX = 10
+RATE_LIMIT_MAX = 5
 RATE_LIMIT_WINDOW = timedelta(hours=1)
 RATE_LIMIT_WHITELIST = {"86.208.120.20"}
 _rate_limit_store: dict[str, list[float]] = {}  # ip -> timestamps
+_searches_today_timestamps: list[float] = []  # timestamps des recherches (pour total "aujourd'hui")
 
 
 def get_client_ip() -> str | None:
@@ -95,7 +96,7 @@ def get_client_ip() -> str | None:
 
 def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     """
-    Vérifie la limite (10 recherches / heure par IP) et consomme 1 si autorisé.
+    Vérifie la limite (5 recherches / heure par IP) et consomme 1 si autorisé.
     Retourne (autorisé, restant). restant est None si IP whitelistée ou inconnue.
     """
     ip = get_client_ip()
@@ -112,6 +113,7 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
         return (False, 0)
     times.append(now)
     _rate_limit_store[ip] = times
+    _searches_today_timestamps.append(now)
     return (True, RATE_LIMIT_MAX - len(times))
 
 
@@ -123,6 +125,14 @@ def rate_limit_get_remaining() -> int | None:
     cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
     times = [t for t in _rate_limit_store.get(ip, []) if t > cutoff]
     return max(0, RATE_LIMIT_MAX - len(times))
+
+
+def get_searches_today_count() -> int:
+    """Nombre total de recherches depuis minuit (ce matin)."""
+    today = datetime.now().date()
+    global _searches_today_timestamps
+    _searches_today_timestamps = [t for t in _searches_today_timestamps if datetime.fromtimestamp(t).date() == today]
+    return len(_searches_today_timestamps)
 
 
 SUGGESTIONS = [
@@ -669,12 +679,13 @@ def main():
         with bc2:
             st.markdown(f"**Déployé le** {commit_date}")
         with bc3:
+            total_today = get_searches_today_count()
             remaining = rate_limit_get_remaining()
-            remaining_str = "∞" if remaining is None else str(remaining)
+            remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
             # IP publique via JS (get_client_ip() donne souvent l'IP privée derrière un proxy)
             st.components.v1.html(
                 f"""
-                <div style="font-size:inherit"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {remaining_str}/10</div>
+                <div style="font-size:inherit"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {total_today} (aujourd'hui) · {remaining_str} (vous)</div>
                 <script>
                 (function() {{
                     var el = document.getElementById('banner-pubip');
@@ -773,7 +784,7 @@ def main():
                 allowed, remaining = rate_limit_check_and_consume()
                 if not allowed:
                     st.error(
-                        "Limite de 10 recherches par heure atteinte pour votre adresse IP. "
+                        "Limite de 5 recherches par heure atteinte pour votre adresse IP. "
                         "Réessayez plus tard."
                     )
                 else:
@@ -855,7 +866,7 @@ def main():
                 allowed, remaining = rate_limit_check_and_consume()
                 if not allowed:
                     st.error(
-                        "Limite de 10 recherches par heure atteinte pour votre adresse IP. "
+                        "Limite de 5 recherches par heure atteinte pour votre adresse IP. "
                         "Réessayez plus tard."
                     )
                 else:
