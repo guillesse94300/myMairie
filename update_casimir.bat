@@ -16,20 +16,26 @@ python -m pip install --quiet groq
 echo   OK.
 echo.
 
-:: OCR des PDFs L'ECHO : desactivé par défaut (très lent). Mettre INGEST_OCR_JOURNAL=1 pour activer.
+:: OCR des PDFs L'ECHO : demande o/n
 if not defined INGEST_OCR_JOURNAL set INGEST_OCR_JOURNAL=0
-python -c "import sys; sys.path.insert(0,'.'); from ingest import _OCR_AVAILABLE, OCR_JOURNAL; sys.exit(0 if _OCR_AVAILABLE else 1)" 2>nul
+python -c "import sys; sys.path.insert(0,'.'); from ingest import _OCR_AVAILABLE; sys.exit(0 if _OCR_AVAILABLE else 1)" 2>nul
 if errorlevel 1 (
     echo ATTENTION : OCR non disponible. Les PDFs L'ECHO ^(image^) seront ignores.
     echo   pip install easyocr   ^(recommandé, pas de binaire externe^)
     echo   ou Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
+    set INGEST_OCR_JOURNAL=0
     echo.
 ) else (
+    echo OCR disponible pour les journaux L'ECHO.
+    set OCR_CHOICE=
+    set /p OCR_CHOICE="Activer l'OCR pour les journaux L'ECHO ? ^(lent^) (o/n) [n] : "
+    if /i "!OCR_CHOICE!"=="o" set INGEST_OCR_JOURNAL=1
+    if /i "!OCR_CHOICE!"=="oui" set INGEST_OCR_JOURNAL=1
+    if not "!INGEST_OCR_JOURNAL!"=="1" set INGEST_OCR_JOURNAL=0
     if "!INGEST_OCR_JOURNAL!"=="1" (
-        echo OCR des journaux L'ECHO : ACTIVE. L'indexation peut etre longue.
+        echo   OCR journaux : ACTIVE.
     ) else (
-        echo OCR des journaux L'ECHO : desactive. Les PDFs L'ECHO seront ignores.
-        echo   Set INGEST_OCR_JOURNAL=1 pour indexer le contenu des journaux ^(lent^).
+        echo   OCR journaux : desactive.
     )
     echo.
 )

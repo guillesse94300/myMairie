@@ -115,6 +115,16 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     return (True, RATE_LIMIT_MAX - len(times))
 
 
+def rate_limit_get_remaining() -> int | None:
+    """Nombre de recherches restantes (sans consommer). None si whitelist ou IP inconnue."""
+    ip = get_client_ip()
+    if not ip or ip in RATE_LIMIT_WHITELIST:
+        return None
+    cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
+    times = [t for t in _rate_limit_store.get(ip, []) if t > cutoff]
+    return max(0, RATE_LIMIT_MAX - len(times))
+
+
 SUGGESTIONS = [
     "Bois D'Haucourt",
     "Vertefeuille",
@@ -201,17 +211,27 @@ def is_admin() -> bool:
 
 
 # ── Informations Git ───────────────────────────────────────────────────────────
+DEPLOY_DATE_FILE = APP_DIR / "deploy_date.txt"
+
 @st.cache_data(show_spinner=False)
 def get_git_info():
     cwd = str(APP_DIR)
-    try:
-        commit_date = subprocess.check_output(
-            ["git", "log", "-1", "--format=%ci"],
-            cwd=cwd, stderr=subprocess.DEVNULL
-        ).decode().strip()[:16]   # "YYYY-MM-DD HH:MM"
-        commit_date = commit_date.replace("T", " ")
-    except Exception:
-        commit_date = "—"
+    commit_date = "—"
+    # Priorité : fichier mis à jour par deploy.bat (format "YYYY-MM-DD HH:MM")
+    if DEPLOY_DATE_FILE.exists():
+        try:
+            commit_date = DEPLOY_DATE_FILE.read_text(encoding="utf-8").strip()[:16]
+        except Exception:
+            pass
+    if commit_date == "—":
+        try:
+            commit_date = subprocess.check_output(
+                ["git", "log", "-1", "--format=%ci"],
+                cwd=cwd, stderr=subprocess.DEVNULL
+            ).decode().strip()[:16]   # "YYYY-MM-DD HH:MM"
+            commit_date = commit_date.replace("T", " ")
+        except Exception:
+            pass
     try:
         version = subprocess.check_output(
             ["git", "describe", "--tags", "--abbrev=0"],
@@ -416,6 +436,12 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
 3. Ne cite un montant ou un chiffre QUE s'il est explicitement associé au sujet \
    exact de la question dans le passage.
 4. Si l'information est absente ou insuffisante, dis-le clairement et brièvement.
+4b. Pour les questions sur les montants (travaux de voirie, budget, délibérations) : si les \
+   passages ne contiennent pas le montant demandé, indique où le trouver : les montants précis \
+   figurent dans les procès-verbaux (PV) et délibérations sur mairie-pierrefonds.fr \
+   (vie municipale > conseil municipal > procès-verbaux). Le maire-adjoint voirie est \
+   Jean-Jacques Carretero ; les crédits voirie peuvent apparaître dans les délibérations \
+   budget, décisions modificatives ou éclairage public.
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
@@ -517,6 +543,25 @@ def _liens_sources(text: str, passages: list) -> str:
     return text
 
 
+# ── Popup À propos ─────────────────────────────────────────────────────────────
+@st.dialog("À propos", width="medium", icon="ℹ️")
+def about_casimir():
+    st.markdown("""
+**Bienvenue à Casimir!**
+
+Casimir est un agent créé par intelligence artificielle.  
+Son but est de tout connaître sur notre belle ville de Pierrefonds et de converser avec nous pour répondre à nos questions.
+
+Pour cela il a « appris » à partir de tous les documents publics disponibles : documents de la Mairie, sites Web, journaux.
+
+Je voulais m'entraîner sur ce domaine — une sorte de travaux pratiques pour m'exercer sur les technologies : Cursor pour le code, Anthropic Claude Opus 4.6 pour le modèle, Groq pour l'agent.
+
+**Rencontrez Casimir ici :** [https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/](https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/)
+
+**Écrivez-lui à** [casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com)
+""")
+
+
 # ── Interface principale ───────────────────────────────────────────────────────
 def main():
     if "current_section" not in st.session_state:
@@ -602,24 +647,22 @@ def main():
     with st.container(border=True):
         bc1, bc2, bc3, bc4 = st.columns(4)
         with bc1:
-            if st.button("🏠 Accueil", key="banner_accueil"):
-                st.session_state["current_section"] = "home"
-                st.rerun()
+            b1, b2 = st.columns(2)
+            with b1:
+                if st.button("🏠 Accueil", key="banner_accueil"):
+                    st.session_state["current_section"] = "home"
+                    st.rerun()
+            with b2:
+                if st.button("ℹ️ À propos", key="banner_about"):
+                    about_casimir()
+            st.markdown("[✉ casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com)")
         with bc2:
             st.markdown(f"**Déployé le** {commit_date}")
         with bc3:
-            components.html("""
-            <div style="font-size:0.9rem;margin:0;padding:0">🌐 <span id="banner-ip">Détection…</span></div>
-            <script>
-            (function(){
-                var el = document.getElementById('banner-ip');
-                Promise.race([
-                    fetch('https://api.ipify.org?format=json').then(r=>r.json().then(d=>d.ip)),
-                    fetch('https://icanhazip.com/').then(r=>r.text().then(t=>t.trim()))
-                ]).then(ip=>{el.textContent=String(ip).replace(/\\s/g,'')}).catch(()=>{el.textContent='—'});
-            })();
-            </script>
-            """, height=28)
+            ip = get_client_ip() or "—"
+            remaining = rate_limit_get_remaining()
+            remaining_str = "∞" if remaining is None else str(remaining)
+            st.markdown(f"**🌐** {ip} · **Recherches :** {remaining_str}/10")
         with bc4:
             st.markdown(f"**Version** {version}")
 

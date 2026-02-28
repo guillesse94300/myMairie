@@ -9,6 +9,26 @@ echo.
 
 cd /d "%~dp0"
 
+:: Mettre a jour Streamlit (pour st.dialog, etc.)
+echo Mise a jour de Streamlit...
+pip install -U streamlit
+echo.
+
+:: Mettre a jour la date de deploiement (affichee dans l'app)
+python -c "from datetime import datetime; open('deploy_date.txt','w').write(datetime.now().strftime('%%Y-%%m-%%d %%H:%%M'))"
+echo Date de deploiement mise a jour dans deploy_date.txt
+echo.
+
+:: Copie des .md dans static pour la page Sources et Documents
+echo Copie des .md dans static...
+python copy_md_to_static.py
+if errorlevel 1 (
+    echo   ATTENTION : echec copy_md_to_static.py
+) else (
+    echo   OK.
+)
+echo.
+
 :: Verifier qu'on est dans un depot git
 git status >nul 2>&1
 if errorlevel 1 (
