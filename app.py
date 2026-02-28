@@ -647,7 +647,7 @@ def main():
     with st.container(border=True):
         bc1, bc2, bc3 = st.columns(3)
         with bc1:
-            b1, b2, b3 = st.columns(3)
+            b1, b2, b3 = st.columns([1, 1, 2])
             with b1:
                 if st.button("🏠 Accueil", key="banner_accueil"):
                     st.session_state["current_section"] = "home"
@@ -656,7 +656,12 @@ def main():
                 if st.button("ℹ️ À propos", key="banner_about"):
                     about_casimir()
             with b3:
-                st.markdown("[✉ casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com)")
+                st.markdown(
+                    '<span style="white-space:nowrap;display:inline-block;vertical-align:middle">'
+                    '<a href="mailto:casimir.pierrefonds@outlook.com">✉ casimir.pierrefonds@outlook.com</a>'
+                    '</span>',
+                    unsafe_allow_html=True,
+                )
         with bc2:
             st.markdown(f"**Déployé le** {commit_date}")
         with bc3:
@@ -701,7 +706,7 @@ def main():
             ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …", "agent"),
             ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
             ("📊", "Statistiques des séances du Conseil Municipal", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
-            ("📄", "Sources et Documents", "Liste des procès-verbaux et documents disponibles. Liens directs vers les PDF.", "docs"),
+            ("📄", "Sources et Documents", "Liste des sources utilisées par Casimir et la recherche sémantique.", "docs"),
         ]
         col1, col2 = st.columns(2)
         for i, (icon, title, desc, section) in enumerate(CARDS):
