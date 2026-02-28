@@ -1,85 +1,103 @@
 # Scan de sécurité — Déploiement myMairie (Streamlit)
 
 **URL cible :** https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/  
-**Date :** 28 février 2025
+**Date du scan :** 28 février 2025 (mise à jour complète)
+
+**Méthode :** Analyse statique du code source et des configurations. Le chargement direct de l’URL a expiré côté outil ; le rapport s’appuie sur le dépôt Git et les fichiers du projet.
 
 ---
 
 ## Résumé
 
-| Niveau | Nombre |
-|--------|--------|
-| Critique | 1 |
-| Élevé | 2 |
-| Moyen | 2 |
-| Info | 2 |
+| Niveau   | Nombre | Évolution depuis dernier scan      |
+|----------|--------|-------------------------------------|
+| Critique | 0      | —                                   |
+| Élevé    | 1      | Rate limiting désormais en place    |
+| Moyen    | 3      | + exposition possible du rapport   |
+| Info     | 3      | —                                   |
 
 ---
 
-## 1. Critique
+## 1. Secrets et gestion des accès
 
-### 1.1 Secrets et fichier `secrets.toml`
+### 1.1 Fichier `secrets.toml` (non versionné)
 
-- **État :** Le fichier `.streamlit/secrets.toml` est bien listé dans `.gitignore` et **n’est pas suivi** par Git (`git ls-files` ne le remonte pas). Sur Streamlit Cloud, les secrets se configurent dans le dashboard (Settings → Secrets), pas via le dépôt.
-- **Risque :** Si `secrets.toml` a un jour été commité, les clés restent dans l’historique Git (ADMIN_TOKEN, GROQ_API_KEY).
-- **Actions :**
-  1. Vérifier l’historique : `git log -p --all -- .streamlit/secrets.toml`
-  2. Si le fichier est apparu dans l’historique : **révoquer et régénérer** la clé Groq (console.groq.com) et **changer** le mot de passe admin.
-  3. Ne jamais committer `secrets.toml` ; utiliser uniquement les secrets Streamlit Cloud en production.
+- **Vérification :** `.streamlit/secrets.toml` est listé dans `.gitignore` et **n’est pas suivi** par Git (`git check-ignore` confirme).
+- **En production (Streamlit Cloud) :** Les secrets doivent être configurés dans le dashboard (Settings → Secrets), pas via le dépôt.
+- **Action recommandée :** Vérifier l’historique au cas où le fichier aurait été commité par le passé :  
+  `git log -p --all -- .streamlit/secrets.toml`  
+  Si des secrets apparaissent : révoquer/régénérer la clé Groq et changer le token admin.
 
----
+### 1.2 Authentification admin (`?admin=TOKEN`) — **Élevé**
 
-## 2. Élevé
-
-### 2.1 Authentification admin par paramètre d’URL (`?admin=TOKEN`)
-
-- **Comportement actuel :** Le token admin est passé en query string. Il apparaît dans l’historique du navigateur, les logs serveur, les en-têtes Referer et les partages de lien.
+- **Comportement :** Le token admin est passé en query string (`st.query_params.get("admin")`) et comparé à `st.secrets.get("ADMIN_TOKEN")`.
+- **Risques :** Le token apparaît dans l’historique du navigateur, les logs serveur, les en-têtes Referer et les partages de lien.
 - **Recommandations :**
   - Utiliser un token long et aléatoire (ex. 32 caractères hex).
-  - Idéalement : ne pas mettre le token dans l’URL ; utiliser un formulaire (mot de passe en POST) ou une session côté serveur après une page de login, et ne pas afficher le token dans l’UI.
-
-### 2.2 Pas de limitation de débit (rate limiting)
-
-- **Risque :** Un attaquant qui obtiendrait la clé Groq (fuite, historique Git) ou exploiterait une faille pourrait envoyer un grand nombre de requêtes (coût / abus).
-- **Recommandations :**
-  - S’appuyer sur les limites Groq (quota gratuit/payant).
-  - Optionnel : ajouter un rate limiting côté app (ex. par IP ou par session) pour l’onglet Agent, pour limiter l’abus même sans fuite de clé.
+  - À terme : ne pas mettre le token dans l’URL (formulaire POST ou session après login).
 
 ---
 
-## 3. Moyen
+## 2. Rate limiting — **En place**
 
-### 3.1 Liens construits à partir des métadonnées (XSS / URL non sécurisées)
-
-- **Comportement :** Les URLs des PDF et des sources sont construites avec `meta.get("filename")`, `meta.get("rel_path")` et `meta.get("source_url")`. Ces valeurs viennent des fichiers pickle générés par `ingest.py`. Si les métadonnées étaient un jour corrompues ou injectées (ex. `javascript:...` ou `data:...`), un lien malveillant pourrait être affiché.
-- **Recommandation :** Valider/sanitiser toutes les URLs avant de les afficher : n’accepter que des chemins relatifs sûrs (pas de `..`) ou des URLs `https?://` avec domaine autorisé. Une fonction dédiée (ex. `_safe_pdf_url()`) a été ajoutée dans `app.py` pour limiter ce risque.
-
-### 3.2 Chargement de pickle (`documents.pkl`, `metadata.pkl`)
-
-- **Risque :** `pickle` peut exécuter du code arbitraire à la désérialisation. Si un attaquant pouvait remplacer ces fichiers sur le serveur, il pourrait obtenir une exécution de code.
-- **Contexte :** Sur Streamlit Cloud, le système de fichiers de l’app est dérivé du dépôt (et éventuellement du cache). Les fichiers `vector_db/*.pkl` sont soit versionnés, soit produits au build ; un utilisateur distant ne peut pas les modifier.
-- **Recommandation :** Pour de futurs déploiements où des utilisateurs pourraient uploader ou modifier des données, remplacer le stockage par un format sans exécution (JSON, base vectorielle externe) au lieu de pickle.
+- **Implémentation :** Limite de **5 recherches par heure** par IP (`RATE_LIMIT_MAX = 5`, `RATE_LIMIT_WINDOW = 1 h`).
+- **Whitelist :** IP `86.208.120.20` exemptée.
+- **Périmètre :** Recherche sémantique et requêtes Agent Casimir (même compteur).
+- **Stockage :** En mémoire (`_rate_limit_store`). Les timestamps au-delà de la fenêtre sont purgés.
+- **Affichage :** IP et nombre de recherches restantes (X/5 ou ∞) dans le bandeau.
 
 ---
 
-## 4. Informations
+## 3. Risques moyens
 
-### 4.1 Affichage de l’IP dans le bandeau
+### 3.1 Exposition du rapport de sécurité via `static/`
 
-- L’app affiche l’IP du client (via api.ipify.org / icanhazip.com). C’est une information déjà connue du serveur ; l’impact est limité, mais cela peut être retiré si vous souhaitez limiter la surface d’information.
+- **Constat :** Une copie de `SECURITY_SCAN.md` est présente dans `static/`. Avec `enableStaticServing = true` dans `.streamlit/config.toml`, les fichiers sous `static/` sont servis (ex. `…/app/static/…`).
+- **Risque :** Un attaquant peut lire le rapport et s’appuyer sur les recommandations pour cibler l’app.
+- **Recommandation :** Retirer `SECURITY_SCAN.md` du dossier `static/` (ou ne pas le copier dedans). Garder le rapport uniquement à la racine du projet et ne pas le déployer en tant que ressource statique publique.
 
-### 4.2 Pas d’authentification pour le contenu public
+### 3.2 Liens construits à partir des métadonnées (XSS / URL)
 
-- Recherche, Agent et documents sont accessibles sans login. C’est cohérent pour des comptes rendus municipaux publics. Aucune mesure supplémentaire n’est nécessaire si ce modèle est voulu.
+- **Mitigation en place :** `_safe_pdf_url(rel_path)` rejette `..`, `/`, et les schemes `javascript:`, `data:`, `vbscript:`. `_safe_source_url(url)` n’accepte que `http://` et `https://`.
+- **Utilisation :** Ces helpers sont utilisés pour les liens PDF, les sources de l’Agent et la section Documents.
+- **Risque résiduel :** Faible tant que les métadonnées (pickle) ne sont pas modifiées par un acteur malveillant.
+
+### 3.3 Chargement de pickle (`documents.pkl`, `metadata.pkl`)
+
+- **Risque :** La désérialisation `pickle.load()` peut exécuter du code si les fichiers sont altérés.
+- **Contexte :** Sur Streamlit Cloud, les fichiers sous `vector_db/` proviennent du dépôt ou du build ; un utilisateur distant ne peut pas les remplacer.
+- **Recommandation :** Pour tout déploiement où des utilisateurs pourraient fournir ou modifier des données, privilégier un format non exécutable (JSON, base vectorielle externe).
 
 ---
 
-## 5. Bonnes pratiques déjà en place
+## 4. Autres points
 
-- Secrets lus via `st.secrets` (pas de clés en dur dans le code pour la prod).
-- Pas de `DEBUG` ou de clés Django exposées dans l’app Streamlit (Django est un autre front).
-- Données sensibles (clé API, token admin) non présentes dans le dépôt actuel.
-- Contenu utilisateur (recherche, réponses Agent) affiché via les widgets Streamlit (échappement par défaut).
+### 4.1 Dépendances (`requirements.txt`)
+
+- Aucune version fixée (pas de `package==x.y.z`). Cela peut faciliter des mises à jour involontaires ou des failles connues.
+- **Recommandation :** Figer les versions en production (`pip freeze` ou outil type `pip-tools`) et auditer régulièrement (ex. `pip audit` ou Dependabot).
+
+### 4.2 Sous-processus (`subprocess`)
+
+- Utilisation limitée à `git log` et `git describe` pour les infos de déploiement (avec repli sur `deploy_date.txt`). Commandes fixes, pas d’entrée utilisateur → risque faible.
+
+### 4.3 HTML dynamique
+
+- Quelques `st.markdown(..., unsafe_allow_html=True)` avec chaînes contrôlées (styles, liens construits via `_safe_pdf_url` / `_safe_source_url`). Pas d’injection de contenu utilisateur brut en HTML.
+
+### 4.4 Django (`web/config/settings.py`)
+
+- `SECRET_KEY = "dev-secret-change-in-production"` et `ALLOWED_HOSTS = ["*"]`. À corriger si l’application Django est un jour exposée en production.
+
+---
+
+## 5. Bonnes pratiques en place
+
+- Secrets lus via `st.secrets` (pas de clés en dur pour la prod dans le code).
+- Validation des URLs des PDF et des sources avant affichage.
+- Rate limiting par IP avec whitelist.
+- Pas d’exposition de `secrets.toml` dans le dépôt (vérifié).
+- Contenu utilisateur affiché via les widgets Streamlit (échappement par défaut).
 
 ---
 
@@ -87,10 +105,10 @@
 
 - [ ] Vérifier l’historique Git pour `.streamlit/secrets.toml` et révoquer les clés si besoin.
 - [ ] Changer le token admin pour une valeur longue et aléatoire ; éviter de le mettre en URL si possible.
+- [ ] **Retirer `SECURITY_SCAN.md` du dossier `static/`** (ou ne pas le servir publiquement).
 - [ ] Garder les secrets uniquement dans Streamlit Cloud (Settings → Secrets).
-- [ ] Envisager un rate limiting sur l’endpoint Agent si le trafic augmente.
-- [ ] Utiliser la validation des URLs des sources/PDF ajoutée dans `app.py` (voir correctif ci-dessous).
+- [ ] En production : figer les versions des dépendances et les auditer régulièrement.
 
 ---
 
-*Rapport généré par analyse statique du code et des configurations du dépôt.*
+*Rapport généré par analyse du code source et des configurations. URL live non chargée (timeout).*

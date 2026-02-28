@@ -626,8 +626,10 @@ def main():
         .top-banner { background:#f0f2f6; padding:0.5rem 1rem; border-radius:6px; margin-bottom:1rem; }
         /* Réduire l'espace en haut de la page */
         [data-testid="stAppViewContainer"] > section { padding-top: 0 !important; }
-        [data-testid="stAppViewContainer"] .block-container { padding-top: 0.5rem !important; }
-        section[data-testid="stSidebar"] + div .block-container { padding-top: 0.5rem !important; }
+        [data-testid="stAppViewContainer"] .block-container { padding-top: 0.25rem !important; max-width: 100% !important; }
+        section[data-testid="stSidebar"] + div .block-container { padding-top: 0.25rem !important; }
+        /* Bandeau compact */
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child { margin-bottom: 0.25rem !important; }
         </style>""",
         unsafe_allow_html=True,
     )
@@ -675,37 +677,38 @@ def main():
     if admin:
         st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs · 🔑 Mode admin")
 
-    # ── Bandeau supérieur (toujours visible) ───────────────────────────────────
+    # ── Bandeau supérieur (une ligne, compact) ─────────────────────────────────
     commit_date, _ = get_git_info()
+    total_today = get_searches_today_count()
+    remaining = rate_limit_get_remaining()
+    remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
     with st.container(border=True):
-        bc1, bc2, bc3 = st.columns(3)
-        with bc1:
-            b1, b2, b3, b4 = st.columns([1, 1, 1, 2])
-            with b1:
+        c_nav, c_mail, c_deploy, c_stats = st.columns([2, 2, 1, 1])
+        with c_nav:
+            btn1, btn2, btn3 = st.columns(3)
+            with btn1:
                 if st.button("🏠 Accueil", key="banner_accueil"):
                     st.session_state["current_section"] = "home"
                     st.rerun()
-            with b2:
+            with btn2:
                 if st.button("ℹ️ À propos", key="banner_about"):
                     about_casimir()
-            with b3:
-                if st.button("📖 Guide Utilisateur", key="banner_guide"):
+            with btn3:
+                if st.button("📖 Guide utilisateur", key="banner_guide"):
                     guide_utilisateur()
-            with b4:
-                st.markdown(
-                    '<span style="white-space:nowrap;display:inline-block;vertical-align:middle">'
-                    '<a href="mailto:casimir.pierrefonds@outlook.com">✉ casimir.pierrefonds@outlook.com</a>'
-                    '</span>',
-                    unsafe_allow_html=True,
-                )
-        with bc2:
-            st.markdown(f"**Déployé le** {commit_date}")
-        with bc3:
-            remaining = rate_limit_get_remaining()
-            remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
+        with c_mail:
+            st.markdown(
+                '<p style="margin:0;padding:0;white-space:nowrap;font-size:0.9rem">'
+                '<a href="mailto:casimir.pierrefonds@outlook.com">✉ casimir.pierrefonds@outlook.com</a>'
+                '</p>',
+                unsafe_allow_html=True,
+            )
+        with c_deploy:
+            st.markdown(f"<p style='margin:0;padding:0;font-size:0.9rem'><strong>Déployé le</strong> {commit_date}</p>", unsafe_allow_html=True)
+        with c_stats:
             st.components.v1.html(
                 f"""
-                <div style="font-size:inherit"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {remaining_str}</div>
+                <div style="font-size:0.9rem;margin:0;padding:0"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {total_today} (auj.) · {remaining_str}</div>
                 <script>
                 (function() {{
                     var el = document.getElementById('banner-pubip');
@@ -716,7 +719,7 @@ def main():
                 }})();
                 </script>
                 """,
-                height=32,
+                height=28,
             )
 
     # ── Sidebar (uniquement sur section Recherche) ─────────────────────────────
