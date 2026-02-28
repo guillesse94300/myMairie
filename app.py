@@ -705,7 +705,7 @@ def main():
 
     show_sidebar = st.session_state["current_section"] == "search"
     st.set_page_config(
-        page_title="Procès-verbaux — Pierrefonds",
+        page_title="Casimir",
         page_icon="🏛️",
         layout="wide",
         initial_sidebar_state="expanded" if show_sidebar else "collapsed",
