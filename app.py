@@ -480,7 +480,7 @@ def main():
     </script>
     """, height=0)
 
-    st.title("🏛️ Procès-verbaux de séances - Conseil Municipal Pierrefonds")
+    st.title("Demande à l'Agent Casimir à propos de Pierrefonds !")
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -532,7 +532,6 @@ def main():
     # ════════════════════════════════════════════════════════════════════════════
     # AGENT CASIMIR — zone principale, toujours visible
     # ════════════════════════════════════════════════════════════════════════════
-    st.markdown("### 🤖 Agent Casimir")
     st.caption(
         "Posez une question en langage naturel. Casimir recherche les passages "
         "pertinents dans les PV puis génère une réponse synthétisée."
@@ -551,7 +550,7 @@ def main():
 
     question = st.text_area(
         "Votre question",
-        placeholder="Ex : Pourquoi la fontaine est cassée ?",
+        placeholder="Ex : Comment ont évolué les tarifs de la cantine scolaire ?",
         height=80,
         label_visibility="collapsed",
     )
