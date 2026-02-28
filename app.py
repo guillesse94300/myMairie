@@ -553,6 +553,25 @@ def _liens_sources(text: str, passages: list) -> str:
     return text
 
 
+# ── Chemins du guide utilisateur (static prioritaire pour déploiement) ─────────
+GUIDE_MD = APP_DIR / "static" / "Guide-utilisateurs.md"
+if not GUIDE_MD.exists():
+    GUIDE_MD = APP_DIR / "docs" / "Guide-utilisateurs.md"
+
+
+@st.dialog("Guide Utilisateur", width="large", icon="📖")
+def guide_utilisateur():
+    """Affiche la documentation utilisateur (Markdown) dans une popup."""
+    if not GUIDE_MD.exists():
+        st.warning("Le fichier Guide-utilisateurs.md est introuvable. Exécutez ALL.bat pour copier la doc vers static.")
+        return
+    try:
+        content = GUIDE_MD.read_text(encoding="utf-8")
+        st.markdown(content)
+    except Exception as e:
+        st.error(f"Impossible de charger le guide : {e}")
+
+
 # ── Popup À propos ─────────────────────────────────────────────────────────────
 @st.dialog("À propos", width="medium", icon="ℹ️")
 def about_casimir():
@@ -661,7 +680,7 @@ def main():
     with st.container(border=True):
         bc1, bc2, bc3 = st.columns(3)
         with bc1:
-            b1, b2, b3 = st.columns([1, 1, 2])
+            b1, b2, b3, b4 = st.columns([1, 1, 1, 2])
             with b1:
                 if st.button("🏠 Accueil", key="banner_accueil"):
                     st.session_state["current_section"] = "home"
@@ -670,6 +689,9 @@ def main():
                 if st.button("ℹ️ À propos", key="banner_about"):
                     about_casimir()
             with b3:
+                if st.button("📖 Guide Utilisateur", key="banner_guide"):
+                    guide_utilisateur()
+            with b4:
                 st.markdown(
                     '<span style="white-space:nowrap;display:inline-block;vertical-align:middle">'
                     '<a href="mailto:casimir.pierrefonds@outlook.com">✉ casimir.pierrefonds@outlook.com</a>'
@@ -679,13 +701,11 @@ def main():
         with bc2:
             st.markdown(f"**Déployé le** {commit_date}")
         with bc3:
-            total_today = get_searches_today_count()
             remaining = rate_limit_get_remaining()
             remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
-            # IP publique via JS (get_client_ip() donne souvent l'IP privée derrière un proxy)
             st.components.v1.html(
                 f"""
-                <div style="font-size:inherit"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {total_today} (aujourd'hui) · {remaining_str} (vous)</div>
+                <div style="font-size:inherit"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {remaining_str}</div>
                 <script>
                 (function() {{
                     var el = document.getElementById('banner-pubip');
