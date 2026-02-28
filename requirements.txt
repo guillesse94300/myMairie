@@ -1,10 +1,13 @@
 pdfplumber
+requests
+beautifulsoup4
 sentence-transformers
 streamlit
 numpy
 groq
 plotly
-# OCR pour PDFs image (L'ECHO)
+# OCR pour PDFs image (L'ECHO) — EasyOCR (recommandé) ou Tesseract
 PyMuPDF
-pytesseract
 Pillow
+easyocr
+pytesseract

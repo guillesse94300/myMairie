@@ -9,6 +9,10 @@ Pour les PDFs image (ex. L'ECHO), utilise l'OCR :
 """
 
 import re
+import warnings
+
+# Supprimer le warning PyTorch "pin_memory" sur machine sans GPU
+warnings.filterwarnings("ignore", message=".*pin_memory.*", category=UserWarning)
 import shutil
 import pickle
 import sys
@@ -101,28 +105,57 @@ def extract_date(filename: str) -> tuple:
 
 
 # ── OCR pour PDFs image (L'ECHO) ───────────────────────────────────────────────
+def _ocr_tesseract(doc) -> list:
+    """OCR via Tesseract."""
+    pages_text = []
+    for page in doc:
+        pix = page.get_pixmap(dpi=200, alpha=False)
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        text = pytesseract.image_to_string(img, lang="fra+eng")
+        if text.strip():
+            pages_text.append(text.strip())
+    return pages_text
+
+
+def _ocr_easyocr(doc) -> list:
+    """OCR via EasyOCR (fallback, pas de binaire externe)."""
+    global _easyocr_reader
+    if _easyocr_reader is None:
+        import easyocr
+        _easyocr_reader = easyocr.Reader(["fr", "en"], gpu=False, verbose=False)
+    pages_text = []
+    for page in doc:
+        pix = page.get_pixmap(dpi=200, alpha=False)
+        arr = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.height, pix.width, 3)
+        result = _easyocr_reader.readtext(arr)
+        text = " ".join(r[1] for r in result if r[1].strip())
+        if text.strip():
+            pages_text.append(text.strip())
+    return pages_text
+
+
 def extract_text_ocr(pdf_path: Path) -> list:
     """
-    Extrait le texte d'un PDF image via OCR (PyMuPDF + Tesseract).
-    Retourne une liste de textes par page, ou [] en cas d'échec.
-    Tesseract doit être installé : https://github.com/UB-Mannheim/tesseract/wiki
+    Extrait le texte d'un PDF image via OCR.
+    Essaie Tesseract puis EasyOCR en secours.
     """
     if not _OCR_AVAILABLE:
         return []
     try:
         doc = fitz.open(pdf_path)
         pages_text = []
-        for page in doc:
-            pix = page.get_pixmap(dpi=200, alpha=False)
-            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-            text = pytesseract.image_to_string(img, lang="fra+eng")
-            if text.strip():
-                pages_text.append(text.strip())
+        if _OCR_TESSERACT:
+            try:
+                pages_text = _ocr_tesseract(doc)
+            except Exception:
+                pass
+        if not pages_text and _OCR_EASYOCR:
+            doc.close()
+            doc = fitz.open(pdf_path)
+            pages_text = _ocr_easyocr(doc)
         doc.close()
         return pages_text
-    except Exception as e:
-        if "tesseract" in str(e).lower() or "not found" in str(e).lower():
-            pass  # Tesseract non installé ou pas dans le PATH
+    except Exception:
         return []
 
 
@@ -142,26 +175,22 @@ def chunk_text(text: str, size: int = CHUNK_SIZE) -> list:
 
 
 # ── Programme principal ────────────────────────────────────────────────────────
-def _check_tesseract() -> bool:
-    """Vérifie que Tesseract est utilisable. Affiche un message si non."""
-    if not _OCR_AVAILABLE:
-        return False
-    try:
-        pytesseract.get_tesseract_version()
+def _check_ocr() -> bool:
+    """Vérifie qu'au moins un OCR est disponible."""
+    if _OCR_AVAILABLE:
         return True
-    except Exception:
-        print(
-            "\n  [!] Tesseract non trouve. Pour l'OCR des PDFs L'ECHO (image), installez :\n"
-            "      https://github.com/UB-Mannheim/tesseract/wiki\n"
-            "      Pensez a cocher 'French' lors de l'installation.\n"
-        )
-        return False
+    print(
+        "\n  [!] Pour l'OCR des PDFs L'ECHO (image), installez :\n"
+        "      pip install easyocr   (recommandé, pas de binaire externe)\n"
+        "      ou Tesseract : https://github.com/UB-Mannheim/tesseract/wiki\n"
+    )
+    return False
 
 
 def main():
     DB_DIR.mkdir(exist_ok=True)
 
-    _tesseract_ok = _check_tesseract()
+    _ocr_ok = _check_ocr()
 
     # Copier les PDFs du journal vers static/journal/ pour que Streamlit puisse les servir
     static_journal = STATIC_DIR / "journal"
@@ -208,9 +237,7 @@ def main():
 
             if not pages_text:
                 if not _OCR_AVAILABLE:
-                    print("aucun texte (PDF scanne ? Installez PyMuPDF, pytesseract et Tesseract pour l'OCR)")
-                elif not _tesseract_ok:
-                    print("aucun texte (Tesseract non installe ou pas dans le PATH)")
+                    print("aucun texte (PDF scanne ? pip install easyocr pour l'OCR)")
                 else:
                     print("aucun texte (OCR echoue ?)")
                 skipped.append(pdf_path.name)

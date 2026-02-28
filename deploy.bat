@@ -9,22 +9,21 @@ echo.
 
 cd /d "%~dp0"
 
-:: Installer les dependances (inclut PyMuPDF, pytesseract, Pillow pour OCR L'ECHO)
+:: Installer les dependances (PV, L'ECHO, OCR via EasyOCR ou Tesseract)
 echo Installation des dependances...
 python -m pip install --quiet -r requirements.txt
 python -m pip install --quiet groq
 echo   OK.
 echo.
-:: Verifier que Tesseract est installe (requis pour OCR des PDFs L'ECHO)
-python check_tesseract.py 2>nul
+:: Verifier qu'un OCR est disponible pour les PDFs L'ECHO (image)
+python -c "import sys; sys.path.insert(0,'.'); from ingest import _OCR_AVAILABLE; sys.exit(0 if _OCR_AVAILABLE else 1)" 2>nul
 if errorlevel 1 (
-    echo ATTENTION : Tesseract non trouve. Les PDFs L'ECHO ^(image^) seront ignores.
-    echo   Installez Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
-    echo   Cocher "French" lors de l'installation. Ajoutez au PATH ou dans :
-    echo   C:\Program Files\Tesseract-OCR\tesseract.exe
+    echo ATTENTION : OCR non disponible. Les PDFs L'ECHO ^(image^) seront ignores.
+    echo   pip install easyocr   ^(recommandé, pas de binaire externe^)
+    echo   ou Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
     echo.
 ) else (
-    echo Tesseract OK pour l'OCR des PDFs L'ECHO.
+    echo OCR OK pour les PDFs L'ECHO ^(EasyOCR ou Tesseract^).
     echo.
 )
 

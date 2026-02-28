@@ -1,0 +1,10 @@
+# Liste des sites web à indexer pour enrichir la connaissance de Casimir
+# Une URL par ligne. Les lignes commençant par # sont ignorées.
+# Ajoutez vos URLs ci-dessous :
+
+https://www.mairie-pierrefonds.fr/
+https://fr.wikipedia.org/wiki/Pierrefonds_(Oise)
+https://www.ccloise.com/
+https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/
+https://www.mairie-pierrefonds.fr/vie-quotidienne/culture/
+https://www.mairie-pierrefonds.fr/vie-quotidienne/enfance-scolarite/

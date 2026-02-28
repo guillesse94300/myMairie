@@ -451,6 +451,11 @@ def main():
         section[data-testid='stSidebar'] > div { padding-top: 0 !important; }
         [data-testid='stSidebarContent'] { padding-top: 0 !important; }
         [data-testid='stSidebarContent'] > div:first-child { padding-top: 0 !important; margin-top: 0 !important; }
+        .home-card { background:#fff; border:1px solid #ddd; border-radius:12px; padding:1.5rem;
+                     box-shadow:0 2px 8px rgba(0,0,0,0.06); transition:box-shadow 0.2s; }
+        .home-card:hover { box-shadow:0 4px 12px rgba(44,95,45,0.15); }
+        .home-card h3 { color:#2c5f2d; margin:0 0 0.5rem; font-size:1.1rem; }
+        .home-card p { color:#666; margin:0; font-size:0.9rem; line-height:1.4; }
         </style>""",
         unsafe_allow_html=True,
     )
@@ -481,8 +486,8 @@ def main():
     </script>
     """, height=0)
 
-    st.title("Demande à Casimir!")
-    st.subheader("Tout ce que tu veux savoir sur Pierrefonds")
+    if "current_section" not in st.session_state:
+        st.session_state["current_section"] = "home"
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -518,12 +523,15 @@ def main():
         }})();
         </script>
         """, height=50)
-        st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
-        theme_query = None
-        for label, tq in THEMES.items():
-            if st.button(label, use_container_width=True):
-                theme_query = tq
-                st.session_state["_switch_to_search"] = True
+        if st.button("🏠 Accueil", use_container_width=True):
+            st.session_state["current_section"] = "home"
+            st.rerun()
+        st.markdown('<p style="font-weight:600;margin:0.5rem 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
+        for i, (label, tq) in enumerate(THEMES.items()):
+            if st.button(label, use_container_width=True, key=f"theme_{i}"):
+                st.session_state["current_section"] = "search"
+                st.session_state["_theme_query"] = tq
+                st.rerun()
         st.markdown("---")
         st.markdown(
             f"<div style='font-size:0.78em;color:#888;line-height:1.6'>"
@@ -534,178 +542,200 @@ def main():
         )
 
     # ════════════════════════════════════════════════════════════════════════════
-    # AGENT CASIMIR — zone principale, toujours visible
+    # PAGE D'ACCUEIL — 4 cartes
     # ════════════════════════════════════════════════════════════════════════════
-    st.caption(
-        "Posez une question en langage naturel. Casimir recherche les passages "
-        "pertinents dans les PV puis génère une réponse synthétisée."
-    )
-    st.caption(
-        "Exemples : *Comment ont évolué les tarifs de la cantine scolaire ?* · "
-        "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
-        "*Quelles délibérations concernent l'éclairage public ?* · "
-        "*Qu'a décidé le conseil sur l'intercommunalité ?* · "
-        "*Que sais-tu sur les logiciels Horizon ?* · "
-        "*Que sais-tu de Vertefeuille ?*"
-    )
+    if st.session_state["current_section"] == "home":
+        st.title("Demande à Casimir!")
+        st.subheader("Tout ce que tu veux savoir sur Pierrefonds")
+        st.markdown("<br>", unsafe_allow_html=True)
 
-    agent_years = []
-    n_passages  = 15
-
-    question = st.text_area(
-        "Votre question",
-        placeholder="Ex : Comment ont évolué les tarifs de la cantine scolaire ?",
-        height=80,
-        label_visibility="collapsed",
-    )
-
-    if st.button("Obtenir une réponse", type="primary", disabled=not question.strip()):
-        with st.spinner("Recherche des passages pertinents…"):
-            passages = search_agent(
-                question, embeddings, documents, metadata,
-                n=n_passages, year_filter=agent_years,
-            )
-        if not passages:
-            st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
-        else:
-            st.markdown("#### Réponse")
-            placeholder = st.empty()
-            full_text = ""
-            try:
-                for chunk in ask_claude_stream(question, passages):
-                    full_text += chunk
-                    placeholder.markdown(full_text + " ▌")
-                placeholder.markdown(_liens_sources(full_text, passages))
-            except ValueError as e:
-                placeholder.empty()
-                st.error(str(e))
-            except Exception as e:
-                placeholder.empty()
-                st.error(f"Erreur lors de l'appel à l'API : {e}")
-            with st.expander(f"📚 {len(passages)} passages consultés"):
-                for rank, (doc, meta, score) in enumerate(passages, 1):
-                    color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
-                    rel_path = meta.get("rel_path", meta["filename"])
-                    pdf_url = f"{PDF_BASE_URL}/{rel_path}"
-                    st.markdown(
-                        f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
-                        f"`{meta['date']}` · "
-                        f"<span style='color:{color}'>{score:.0%}</span>",
-                        unsafe_allow_html=True,
-                    )
-                    st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
-    elif not question.strip():
-        st.info("Saisissez une question ci-dessus puis cliquez sur **Obtenir une réponse**.")
-
-    st.divider()
-
-    # ── Onglets ─────────────────────────────────────────────────────────────────
-    tab_search, tab_stats, tab_docs = st.tabs(["🔍 Recherche", "📊 Statistiques", "📄 Sources & Documents"])
-
-    # Bascule automatique vers l'onglet Recherche quand un thème est cliqué
-    if st.session_state.get("_switch_to_search", False):
-        st.session_state["_switch_to_search"] = False
-        components.html("""
-        <script>
-        setTimeout(function () {
-            var tabs = window.parent.document.querySelectorAll('[data-baseweb="tab"]');
-            if (tabs && tabs[0]) tabs[0].click();
-        }, 150);
-        </script>
-        """, height=0)
-
-    # ════════════════════════════════════════════════════════════════════════════
-    # ONGLET RECHERCHE
-    # ════════════════════════════════════════════════════════════════════════════
-    with tab_search:
-        fcol1, fcol2, fcol3 = st.columns([3, 1, 1])
-        with fcol1:
-            year_filter = st.multiselect(
-                "Année(s)", options=list(range(2015, 2027)), default=[],
-                placeholder="Toutes les années",
-                key="search_years",
-            )
-        with fcol2:
-            n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
-        with fcol3:
-            exact_mode = st.toggle(
-                "Mot(s) exact(s)",
-                value=False,
-                help="Si activé, ne retourne que les passages contenant vraiment le(s) mot(s) cherché(s).",
-            )
-
-        query = st.text_input(
-            "Recherche sémantique",
-            value=theme_query or "",
-            placeholder="Ex : Bois D'Haucourt, Vertefeuille, forêt, permis…",
-            label_visibility="collapsed",
-        )
-
-        # Suggestions rapides
-        cols = st.columns(len(SUGGESTIONS))
-        for col, s in zip(cols, SUGGESTIONS):
-            if col.button(s, key=f"s_{s}", use_container_width=True):
-                query = s
-
-        st.divider()
-
-        if query:
-            with st.spinner("Recherche…"):
-                results = search(query, embeddings, documents, metadata,
-                                 n=n_results, year_filter=year_filter, exact=exact_mode)
-
-            terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
-            mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
-            st.markdown(f"### {len(results)} résultats pour « {query} » *({mode_label})*")
-            if not results:
-                st.warning("Aucun résultat. Désactivez le mode 'Mot(s) exact(s) obligatoire' pour une recherche sémantique plus large.")
-            if year_filter:
-                st.markdown(f"*Filtrés sur : {', '.join(map(str, sorted(year_filter)))}*")
-
-            for rank, (doc, meta, score) in enumerate(results, 1):
-                color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+        CARDS = [
+            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir recherche dans les PV et synthétise une réponse.", "agent"),
+            ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus. Filtres par année, mode exact, suggestions.", "search"),
+            ("📊", "Statistiques des séances", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
+            ("📄", "Sources et Documents", "Liste des procès-verbaux et documents disponibles. Liens directs vers les PDF.", "docs"),
+        ]
+        col1, col2 = st.columns(2)
+        for i, (icon, title, desc, section) in enumerate(CARDS):
+            col = col1 if i % 2 == 0 else col2
+            with col:
                 with st.container(border=True):
-                    c1, c2, c3 = st.columns([5, 1, 1])
-                    with c1:
-                        st.markdown(f"**#{rank} — {meta['filename']}**")
-                        if admin:
-                            chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
-                            st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
-                        else:
-                            st.markdown(f"Date : `{meta['date']}`")
-                    with c2:
-                        st.markdown(
-                            f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
-                            f"{score:.0%}</span>",
-                            unsafe_allow_html=True,
-                        )
-                    with c3:
-                        rel_path = meta.get("rel_path", meta["filename"])
-                        pdf_url = f"{PDF_BASE_URL}/{rel_path}"
-                        st.markdown(
-                            f'<a href="{pdf_url}" target="_blank">'
-                            f'<button style="width:100%;padding:6px;cursor:pointer;'
-                            f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
-                            f'📄 Ouvrir</button></a>',
-                            unsafe_allow_html=True,
-                        )
-                    extract = excerpt(doc, terms)
-                    st.markdown(f"> {highlight(extract, terms)}")
-        else:
-            st.info(
-                "Saisissez une requête ou cliquez sur une suggestion. "
-                "La recherche est **sémantique** : elle comprend le sens, pas uniquement les mots exacts."
+                    st.markdown(f"### {icon} {title}")
+                    st.caption(desc)
+                    if st.button("Accéder →", key=f"card_{section}", use_container_width=True):
+                        st.session_state["current_section"] = section
+                        if section == "search":
+                            st.session_state["_switch_to_search"] = True
+                        st.rerun()
+
+    else:
+        # ── Bouton Retour ─────────────────────────────────────────────────────
+        if st.button("← Retour à l'accueil"):
+            st.session_state["current_section"] = "home"
+            st.rerun()
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ════════════════════════════════════════════════════════════════════════
+        # SECTION AGENT CASIMIR
+        # ════════════════════════════════════════════════════════════════════════
+        if st.session_state["current_section"] == "agent":
+            st.title("🤖 Interroger l'Agent Casimir")
+            st.caption(
+                "Posez une question en langage naturel. Casimir recherche les passages "
+                "pertinents dans les PV puis génère une réponse synthétisée."
+            )
+            st.caption(
+                "Exemples : *Comment ont évolué les tarifs de la cantine scolaire ?* · "
+                "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
+                "*Quelles délibérations concernent l'éclairage public ?* · "
+                "*Qu'a décidé le conseil sur l'intercommunalité ?* · "
+                "*Que sais-tu sur les logiciels Horizon ?* · "
+                "*Que sais-tu de Vertefeuille ?*"
             )
 
-    # ════════════════════════════════════════════════════════════════════════════
-    # ONGLET STATISTIQUES
-    # ════════════════════════════════════════════════════════════════════════════
-    with tab_stats:
-        stats_path = DB_DIR / "stats.json"
-        if not stats_path.exists():
-            st.warning("Fichier stats.json introuvable. Lancez : `python stats_extract.py`")
-        else:
-            stats = json.loads(stats_path.read_text(encoding="utf-8"))
+            agent_years = []
+            n_passages  = 15
+
+            question = st.text_area(
+                "Votre question",
+                placeholder="Ex : Comment ont évolué les tarifs de la cantine scolaire ?",
+                height=80,
+                label_visibility="collapsed",
+            )
+
+            if st.button("Obtenir une réponse", type="primary", disabled=not question.strip(), key="agent_btn"):
+                with st.spinner("Recherche des passages pertinents…"):
+                    passages = search_agent(
+                        question, embeddings, documents, metadata,
+                        n=n_passages, year_filter=agent_years,
+                    )
+                if not passages:
+                    st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
+                else:
+                    st.markdown("#### Réponse")
+                    placeholder = st.empty()
+                    full_text = ""
+                    try:
+                        for chunk in ask_claude_stream(question, passages):
+                            full_text += chunk
+                            placeholder.markdown(full_text + " ▌")
+                        placeholder.markdown(_liens_sources(full_text, passages))
+                    except ValueError as e:
+                        placeholder.empty()
+                        st.error(str(e))
+                    except Exception as e:
+                        placeholder.empty()
+                        st.error(f"Erreur lors de l'appel à l'API : {e}")
+                    with st.expander(f"📚 {len(passages)} passages consultés"):
+                        for rank, (doc, meta, score) in enumerate(passages, 1):
+                            color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                            rel_path = meta.get("rel_path", meta["filename"])
+                            pdf_url = f"{PDF_BASE_URL}/{rel_path}"
+                            st.markdown(
+                                f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
+                                f"`{meta['date']}` · "
+                                f"<span style='color:{color}'>{score:.0%}</span>",
+                                unsafe_allow_html=True,
+                            )
+                            st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
+            elif not question.strip():
+                st.info("Saisissez une question ci-dessus puis cliquez sur **Obtenir une réponse**.")
+
+        # ════════════════════════════════════════════════════════════════════════
+        # SECTION RECHERCHE
+        # ════════════════════════════════════════════════════════════════════════
+        elif st.session_state["current_section"] == "search":
+            st.title("🔍 Recherche dans la base de connaissance")
+            theme_query = st.session_state.pop("_theme_query", None) or ""
+            fcol1, fcol2, fcol3 = st.columns([3, 1, 1])
+            with fcol1:
+                year_filter = st.multiselect(
+                    "Année(s)", options=list(range(2015, 2027)), default=[],
+                    placeholder="Toutes les années",
+                    key="search_years",
+                )
+            with fcol2:
+                n_results = st.number_input("Nb résultats", min_value=3, max_value=50, value=15)
+            with fcol3:
+                exact_mode = st.toggle(
+                    "Mot(s) exact(s)",
+                    value=False,
+                    help="Si activé, ne retourne que les passages contenant vraiment le(s) mot(s) cherché(s).",
+                )
+
+            query = st.text_input(
+                "Recherche sémantique",
+                value=theme_query or "",
+                placeholder="Ex : Bois D'Haucourt, Vertefeuille, forêt, permis…",
+                label_visibility="collapsed",
+            )
+
+            # Suggestions rapides
+            cols = st.columns(len(SUGGESTIONS))
+            for col, s in zip(cols, SUGGESTIONS):
+                if col.button(s, key=f"s_{s}", use_container_width=True):
+                    query = s
+
+            st.divider()
+
+            if query:
+                with st.spinner("Recherche…"):
+                    results = search(query, embeddings, documents, metadata,
+                                     n=n_results, year_filter=year_filter, exact=exact_mode)
+
+                terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
+                mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
+                st.markdown(f"### {len(results)} résultats pour « {query} » *({mode_label})*")
+                if not results:
+                    st.warning("Aucun résultat. Désactivez le mode 'Mot(s) exact(s) obligatoire' pour une recherche sémantique plus large.")
+                if year_filter:
+                    st.markdown(f"*Filtrés sur : {', '.join(map(str, sorted(year_filter)))}*")
+
+                for rank, (doc, meta, score) in enumerate(results, 1):
+                    color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                    with st.container(border=True):
+                        c1, c2, c3 = st.columns([5, 1, 1])
+                        with c1:
+                            st.markdown(f"**#{rank} — {meta['filename']}**")
+                            if admin:
+                                chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
+                                st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
+                            else:
+                                st.markdown(f"Date : `{meta['date']}`")
+                        with c2:
+                            st.markdown(
+                                f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
+                                f"{score:.0%}</span>",
+                                unsafe_allow_html=True,
+                            )
+                        with c3:
+                            rel_path = meta.get("rel_path", meta["filename"])
+                            pdf_url = f"{PDF_BASE_URL}/{rel_path}"
+                            st.markdown(
+                                f'<a href="{pdf_url}" target="_blank">'
+                                f'<button style="width:100%;padding:6px;cursor:pointer;'
+                                f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
+                                f'📄 Ouvrir</button></a>',
+                                unsafe_allow_html=True,
+                            )
+                        extract = excerpt(doc, terms)
+                        st.markdown(f"> {highlight(extract, terms)}")
+            else:
+                st.info(
+                    "Saisissez une requête ou cliquez sur une suggestion. "
+                    "La recherche est **sémantique** : elle comprend le sens, pas uniquement les mots exacts."
+                )
+
+        # ════════════════════════════════════════════════════════════════════════
+        # SECTION STATISTIQUES
+        # ════════════════════════════════════════════════════════════════════════
+        elif st.session_state["current_section"] == "stats":
+            st.title("📊 Statistiques des séances")
+            stats_path = DB_DIR / "stats.json"
+            if not stats_path.exists():
+                st.warning("Fichier stats.json introuvable. Lancez : `python stats_extract.py`")
+            else:
+                stats = json.loads(stats_path.read_text(encoding="utf-8"))
             seances = [s for s in stats["seances"] if s.get("annee")]
 
             # ── Filtres ──────────────────────────────────────────────────────
@@ -883,29 +913,30 @@ def main():
                 else:
                     st.info("Aucun vote avec opposition trouvé sur la période.")
 
-    # ════════════════════════════════════════════════════════════════════════════
-    # ONGLET SOURCES & DOCUMENTS
-    # ════════════════════════════════════════════════════════════════════════════
-    with tab_docs:
-        st.markdown(
-            "**Source officielle :** "
-            "[mairie-pierrefonds.fr — Procès-verbaux du Conseil Municipal]"
-            "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
-        )
-        st.divider()
-        st.markdown("**Documents disponibles** (PV + L'ECHO, triés par date décroissante)")
-        pdfs_static = sorted((APP_DIR / "static").rglob("*.pdf"), key=_pdf_date_key, reverse=True)
-        if pdfs_static:
-            for p in pdfs_static:
-                dt = _pdf_date_key(p)
-                label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
-                rel_path = str(p.relative_to(APP_DIR / "static")).replace("\\", "/")
-                pdf_url = f"{PDF_BASE_URL}/{rel_path}"
-                st.markdown(
-                    f"`{label_date}` — [📄 {p.name}]({pdf_url})",
-                )
-        else:
-            st.caption("Aucun PDF trouvé.")
+        # ════════════════════════════════════════════════════════════════════════
+        # SECTION SOURCES & DOCUMENTS
+        # ════════════════════════════════════════════════════════════════════════
+        elif st.session_state["current_section"] == "docs":
+            st.title("📄 Sources et Documents")
+            st.markdown(
+                "**Source officielle :** "
+                "[mairie-pierrefonds.fr — Procès-verbaux du Conseil Municipal]"
+                "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
+            )
+            st.divider()
+            st.markdown("**Documents disponibles** (PV + L'ECHO, triés par date décroissante)")
+            pdfs_static = sorted((APP_DIR / "static").rglob("*.pdf"), key=_pdf_date_key, reverse=True)
+            if pdfs_static:
+                for p in pdfs_static:
+                    dt = _pdf_date_key(p)
+                    label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
+                    rel_path = str(p.relative_to(APP_DIR / "static")).replace("\\", "/")
+                    pdf_url = f"{PDF_BASE_URL}/{rel_path}"
+                    st.markdown(
+                        f"`{label_date}` — [📄 {p.name}]({pdf_url})",
+                    )
+            else:
+                st.caption("Aucun PDF trouvé.")
 
 
 if __name__ == "__main__":
