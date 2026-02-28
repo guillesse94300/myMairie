@@ -308,6 +308,24 @@ Protection/sécurité, Urbanisme, Vie scolaire/périscolaire, Vie culturelle/ass
 **Éléments historiques :** Première mention médiévale, château reconstruit par Louis duc
 d'Orléans (1390), démoli en 1618 (Richelieu), acquis par Napoléon Ier (1811), restauré
 par Viollet-le-Duc dès 1857. Sources thermales (1846), gare ouverte 1884, fermée 1940.
+Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". Devise : "Qui veult, peult".
+
+**Géographie & démographie :**
+- Habitants : ~1 882 Pétrifontains/Pétrifontaines (INSEE 60491) · Superficie : 22 km² · Alt. moy. 80 m
+- Canton de Compiègne-2, arrondissement de Compiègne (à 13 km à l'ouest)
+- Communes voisines : Saint-Étienne-Roilaye, Retheuil, Cuise-la-Motte, Trosly-Breuil, Chelles
+- Hydrographie : ru de Berne, étang de Vertefeuilles (0,7 ha), ru de la Fontaine Porchers
+- Journal municipal : L'Écho de Pierrefonds-Palesne (parution ~trimestrielle)
+
+**Actualités locales récentes (issues de la presse et du site mairie) :**
+- Budget participatif : 1ʳᵉ édition lancée en avril 2025 (habitants/associations proposent des projets)
+- Travaux rue de l'Armistice : études 2021-2022, subventions déposées 2023, phase active en cours
+- Travaux rue de l'Impératrice Eugénie : interdiction stationnement août–oct. 2024
+- Stationnement : zone bleue mise en place place de l'Hôtel de Ville et rue Saint-Louis
+- Train touristique : rétabli depuis avril 2022
+- Incendie café du Commerce (place principale, août 2023)
+- Festival L'Enceinte (musique) : 1ʳᵉ édition prévue au pied du château en août 2026
+- Trail du Château de Pierrefonds : 27 km / 600 m D+ et 13 km / 350 m D+ (arrivée Institut Charles Quentin)
 
 ## Règles strictes
 1. Tu réponds UNIQUEMENT à partir des passages fournis entre balises <source>.
@@ -463,7 +481,6 @@ def main():
     """, height=0)
 
     st.title("🏛️ Procès-verbaux de séances - Conseil Municipal Pierrefonds")
-    st.caption("Source : https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal")
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -503,31 +520,6 @@ def main():
                 theme_query = tq
                 st.session_state["_switch_to_search"] = True
         st.markdown("---")
-        st.markdown("**Lien Direct**")
-        pdfs = sorted(PDF_DIR.glob("*.pdf"), key=_pdf_date_key, reverse=True)
-        if pdfs:
-            def _fmt_label(p):
-                dt = _pdf_date_key(p)
-                if dt == datetime.min:
-                    return p.stem
-                return dt.strftime("%d/%m/%Y")
-            links = "".join(
-                f'<a href="{PDF_BASE_URL}/{p.name}" target="_blank" '
-                f'style="display:block;font-size:0.78em;margin:3px 0;'
-                f'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
-                f'color:#1a73e8;text-decoration:none;" '
-                f'title="{p.name}">📄 {_fmt_label(p)}</a>'
-                for p in pdfs
-            )
-            st.markdown(
-                f'<div style="max-height:300px;overflow-y:auto;'
-                f'border:1px solid #e0e0e0;border-radius:6px;padding:6px 10px;">'
-                f'{links}</div>',
-                unsafe_allow_html=True,
-            )
-        else:
-            st.caption("Aucun PDF trouvé.")
-        st.markdown("---")
         commit_date, version = get_git_info()
         st.markdown(
             f"<div style='font-size:0.78em;color:#888;line-height:1.6'>"
@@ -537,8 +529,74 @@ def main():
             unsafe_allow_html=True,
         )
 
+    # ════════════════════════════════════════════════════════════════════════════
+    # AGENT CASIMIR — zone principale, toujours visible
+    # ════════════════════════════════════════════════════════════════════════════
+    st.markdown("### 🤖 Agent Casimir")
+    st.caption(
+        "Posez une question en langage naturel. Casimir recherche les passages "
+        "pertinents dans les PV puis génère une réponse synthétisée."
+    )
+    st.caption(
+        "Exemples : *Quelles décisions ont été prises sur le Bois d'Haucourt ?* · "
+        "*Comment ont évolué les tarifs de la cantine scolaire (Louis Lesueur) ?* · "
+        "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
+        "*Quelles délibérations concernent le SE60 ou l'éclairage public ?* · "
+        "*Qu'a décidé le conseil sur l'intercommunalité avec la CCLoise ?* · "
+        "*Que sais-tu sur les logiciels Horizon ?*"
+    )
+
+    agent_years = []
+    n_passages  = 15
+
+    question = st.text_area(
+        "Votre question",
+        placeholder="Ex : Pourquoi la fontaine est cassée ?",
+        height=80,
+        label_visibility="collapsed",
+    )
+
+    if st.button("Obtenir une réponse", type="primary", disabled=not question.strip()):
+        with st.spinner("Recherche des passages pertinents…"):
+            passages = search_agent(
+                question, embeddings, documents, metadata,
+                n=n_passages, year_filter=agent_years,
+            )
+        if not passages:
+            st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
+        else:
+            st.markdown("#### Réponse")
+            placeholder = st.empty()
+            full_text = ""
+            try:
+                for chunk in ask_claude_stream(question, passages):
+                    full_text += chunk
+                    placeholder.markdown(full_text + " ▌")
+                placeholder.markdown(_liens_sources(full_text, passages))
+            except ValueError as e:
+                placeholder.empty()
+                st.error(str(e))
+            except Exception as e:
+                placeholder.empty()
+                st.error(f"Erreur lors de l'appel à l'API : {e}")
+            with st.expander(f"📚 {len(passages)} passages consultés"):
+                for rank, (doc, meta, score) in enumerate(passages, 1):
+                    color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                    pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
+                    st.markdown(
+                        f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
+                        f"`{meta['date']}` · "
+                        f"<span style='color:{color}'>{score:.0%}</span>",
+                        unsafe_allow_html=True,
+                    )
+                    st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
+    elif not question.strip():
+        st.info("Saisissez une question ci-dessus puis cliquez sur **Obtenir une réponse**.")
+
+    st.divider()
+
     # ── Onglets ─────────────────────────────────────────────────────────────────
-    tab_search, tab_stats, tab_agent = st.tabs(["🔍 Recherche", "📊 Statistiques", "🤖 Agent Q&R"])
+    tab_search, tab_stats, tab_docs = st.tabs(["🔍 Recherche", "📊 Statistiques", "📄 Sources & Documents"])
 
     # Bascule automatique vers l'onglet Recherche quand un thème est cliqué
     if st.session_state.get("_switch_to_search", False):
@@ -821,71 +879,27 @@ def main():
                     st.info("Aucun vote avec opposition trouvé sur la période.")
 
     # ════════════════════════════════════════════════════════════════════════════
-    # ONGLET AGENT Q&R
+    # ONGLET SOURCES & DOCUMENTS
     # ════════════════════════════════════════════════════════════════════════════
-    with tab_agent:
+    with tab_docs:
         st.markdown(
-            "Posez une question en langage naturel. L'agent recherche les passages "
-            "pertinents dans les PV puis génère une réponse synthétisée."
+            "**Source officielle :** "
+            "[mairie-pierrefonds.fr — Procès-verbaux du Conseil Municipal]"
+            "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
         )
-        st.caption(
-            "Exemples : *Quelles décisions ont été prises sur le Bois d'Haucourt ?* · "
-            "*Comment ont évolué les tarifs de la cantine scolaire (Louis Lesueur) ?* · "
-            "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
-            "*Quelles délibérations concernent le SE60 ou l'éclairage public ?* · "
-            "*Qu'a décidé le conseil sur l'intercommunalité avec la CCLoise ?* · "
-            "*Que sais-tu sur les logiciels Horizon ?*"
-        )
-
-        agent_years = []
-        n_passages = 15
-
-        question = st.text_area(
-            "Votre question",
-            placeholder="Ex : Pourquoi la fontaine est cassée ?",
-            height=80,
-            label_visibility="collapsed",
-        )
-
-        if st.button("Obtenir une réponse", type="primary", disabled=not question.strip()):
-            with st.spinner("Recherche des passages pertinents…"):
-                passages = search_agent(
-                    question, embeddings, documents, metadata,
-                    n=n_passages, year_filter=agent_years,
+        st.divider()
+        st.markdown("**Documents disponibles** (triés par date décroissante)")
+        pdfs = sorted(PDF_DIR.glob("*.pdf"), key=_pdf_date_key, reverse=True)
+        if pdfs:
+            for p in pdfs:
+                dt = _pdf_date_key(p)
+                label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
+                pdf_url = f"{PDF_BASE_URL}/{p.name}"
+                st.markdown(
+                    f"`{label_date}` — [📄 {p.name}]({pdf_url})",
                 )
-
-            if not passages:
-                st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
-            else:
-                st.markdown("#### Réponse")
-                placeholder = st.empty()
-                full_text = ""
-                try:
-                    for chunk in ask_claude_stream(question, passages):
-                        full_text += chunk
-                        placeholder.markdown(full_text + " ▌")
-                    # Post-traitement : balises → liens PDF
-                    placeholder.markdown(_liens_sources(full_text, passages))
-                except ValueError as e:
-                    placeholder.empty()
-                    st.error(str(e))
-                except Exception as e:
-                    placeholder.empty()
-                    st.error(f"Erreur lors de l'appel à l'API : {e}")
-
-                with st.expander(f"📚 {len(passages)} passages consultés"):
-                    for rank, (doc, meta, score) in enumerate(passages, 1):
-                        color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
-                        pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
-                        st.markdown(
-                            f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
-                            f"`{meta['date']}` · "
-                            f"<span style='color:{color}'>{score:.0%}</span>",
-                            unsafe_allow_html=True,
-                        )
-                        st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
-        elif not question.strip():
-            st.info("Saisissez une question ci-dessus puis cliquez sur **Obtenir une réponse**.")
+        else:
+            st.caption("Aucun PDF trouvé.")
 
 
 if __name__ == "__main__":

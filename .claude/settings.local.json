@@ -59,7 +59,17 @@
       "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://www.mairie-pierrefonds.fr/vie-municipale/publications/\")",
       "Bash(python3 -c \":*)",
       "Bash(curl -s \"https://www.mairie-pierrefonds.fr/vie-municipale/publications/\")",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")",
+      "WebFetch(domain:www.oisehebdo.fr)",
+      "WebFetch(domain:www.courrier-picard.fr)",
+      "Bash(# Vérifier si Chromium est déjà installé ls -la \"\"/c/Users/gilles.kammerer/AppData/Local/ms-playwright/\"\" && echo \"\"playwright dir exists\"\" ls -la \"\"/c/Users/gilles.kammerer/AppData/Local/ms-playwright/chromium-1208/\"\")",
+      "Bash(python3 download_calameo.py)",
+      "Bash(ls -la \"/c/Users/gilles.kammerer/OneDrive/immobilier/Pierrefonds/Mairie/journal/\"LECHO*.pdf)",
+      "WebFetch(domain:fr.m.wikipedia.org)",
+      "WebFetch(domain:www.info-flash.com)",
+      "WebFetch(domain:commune-mairie.fr)",
+      "WebFetch(domain:fr.wikipedia.org)"
     ]
   }
 }
