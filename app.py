@@ -30,6 +30,12 @@ try:
 except ImportError:
     _GROQ_OK = False
 
+try:
+    from streamlit_javascript import st_javascript
+    _ST_JS_OK = True
+except ImportError:
+    _ST_JS_OK = False
+
 # ── Configuration ──────────────────────────────────────────────────────────────
 APP_DIR  = Path(__file__).parent
 DATA_DIR = APP_DIR / "data"
@@ -680,10 +686,22 @@ def main():
     if "current_section" not in st.session_state:
         st.session_state["current_section"] = "home"
 
-    # IP publique côté client (même source que le bandeau : api.ipify.org)
-    client_ip_from_url = st.query_params.get("client_ip", "").strip()
-    if client_ip_from_url:
-        st.session_state["client_public_ip"] = client_ip_from_url
+    # IP publique côté client (même source que le bandeau : api.ipify.org via st_javascript)
+    if "client_public_ip" not in st.session_state and _ST_JS_OK:
+        ip_js = st_javascript(
+            """(async function(){
+                try {
+                    const r = await fetch('https://api.ipify.org?format=json');
+                    const d = await r.json();
+                    return d.ip || null;
+                } catch(e) { return null; }
+            })()""",
+            "Récupération de l'IP…",
+        )
+        if ip_js and isinstance(ip_js, str) and ip_js.strip():
+            st.session_state["client_public_ip"] = ip_js.strip()
+        elif ip_js is None:
+            st.stop()
 
     show_sidebar = st.session_state["current_section"] == "search"
     st.set_page_config(
@@ -726,27 +744,6 @@ def main():
     )
     # Masquage sidebar quand pas sur Recherche + masquage éléments Streamlit
     _show_sb = st.session_state["current_section"] == "search"
-    # Récupération IP publique côté client (comme le bandeau) — redirige si absent de l'URL
-    if not st.session_state.get("client_public_ip") and not st.query_params.get("client_ip"):
-        components.html("""
-        <script>
-        (function() {
-            try {
-                var url = new URL(window.parent.location.href);
-                if (!url.searchParams.has('client_ip')) {
-                    fetch('https://api.ipify.org?format=json').then(function(r) { return r.json(); })
-                    .then(function(d) {
-                        if (d && d.ip) {
-                            url.searchParams.set('client_ip', d.ip);
-                            window.parent.location.href = url.toString();
-                        }
-                    });
-                }
-            } catch (e) {}
-        })();
-        </script>
-        """, height=0)
-
     components.html(f"""
     <script>
     (function() {{
@@ -795,7 +792,7 @@ def main():
     remaining = rate_limit_get_remaining()
     remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
     with st.container(border=True):
-        c_nav, c_mail, c_deploy, c_stats = st.columns([2, 2, 1, 1.4])
+        c_nav, c_mail_deploy, c_stats = st.columns([2, 2.4, 1.4])
         with c_nav:
             nav_cols = 4 if admin else 3
             btn_cols = st.columns(nav_cols)
@@ -813,15 +810,14 @@ def main():
                 with btn_cols[3]:
                     if st.button("🔑 ADMIN", key="banner_admin"):
                         admin_searches_db()
-        with c_mail:
+        with c_mail_deploy:
             st.markdown(
-                '<p style="margin:0;padding:0;white-space:nowrap;font-size:0.9rem">'
-                '<a href="mailto:casimir.pierrefonds@outlook.com">✉ casimir.pierrefonds@outlook.com</a>'
-                '</p>',
+                '<div style="text-align:left;font-size:0.9rem;line-height:1.5">'
+                '<p style="margin:0;padding:0">Email : <a href="mailto:casimir.pierrefonds@outlook.com">casimir.pierrefonds@outlook.com</a></p>'
+                f'<p style="margin:0;padding:0"><strong>Déployé le</strong> {commit_date}</p>'
+                '</div>',
                 unsafe_allow_html=True,
             )
-        with c_deploy:
-            st.markdown(f"<p style='margin:0;padding:0;font-size:0.9rem'><strong>Déployé le</strong> {commit_date}</p>", unsafe_allow_html=True)
         with c_stats:
             st.components.v1.html(
                 f"""
