@@ -1,20 +1,22 @@
 """
-ingest.py — Indexe tous les PDFs du Conseil Municipal + journal (L'ECHO)
+ingest.py — Indexe d'abord les .md (sites web), puis optionnellement les PDFs (PV, L'ECHO)
 Stockage : embeddings.npy + metadata.pkl + documents.pkl
-Usage    : python ingest.py
+Usage    : python ingest.py           # .md puis PDFs
+           python ingest.py --md-only # uniquement .md (sites web)
 
 Pour les PDFs image (ex. L'ECHO), utilise l'OCR :
 - Tesseract si installé (https://github.com/UB-Mannheim/tesseract/wiki)
 - Sinon EasyOCR (pip install easyocr) — pas de binaire externe
 """
 
+import argparse
+import os
 import re
 import warnings
 
 # Supprimer les warnings non bloquants (pin_memory, HF Hub)
 warnings.filterwarnings("ignore", message=".*pin_memory.*", category=UserWarning)
 warnings.filterwarnings("ignore", message=".*HF_TOKEN.*", category=UserWarning)
-import os
 import shutil
 import pickle
 import sys
@@ -65,6 +67,9 @@ KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py
 DB_DIR         = APP_DIR / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 1000   # caractères max par chunk
+
+# OCR des PDFs journal (L'ECHO) : très lent en CPU. Mettre INGEST_OCR_JOURNAL=1 pour l'activer.
+OCR_JOURNAL    = os.environ.get("INGEST_OCR_JOURNAL", "0").strip().lower() in ("1", "true", "yes")
 
 # ── Extraction de la date depuis le nom de fichier ─────────────────────────────
 MONTHS_FR = {
@@ -194,10 +199,14 @@ def _check_ocr() -> bool:
     return False
 
 
-def main():
+def main(args=None):
+    if args is None:
+        args = argparse.Namespace(md_only=False)
     DB_DIR.mkdir(exist_ok=True)
 
     _ocr_ok = _check_ocr()
+    if not OCR_JOURNAL:
+        print("  OCR des PDFs journal (L'ECHO) : desactive par defaut. INGEST_OCR_JOURNAL=1 pour activer.\n")
 
     # Copier les PDFs du journal vers static/journal/ pour que Streamlit puisse les servir
     static_journal = STATIC_DIR / "journal"
@@ -220,20 +229,72 @@ def main():
         device = "cpu"
     model = SentenceTransformer(MODEL_NAME, device=device)
 
-    # Collecter tous les PDFs : static/ (récursif, inclut static/journal/)
+    all_docs, all_metadatas = [], []
+    skipped = []
+
+    # ── 1. Fichiers .md (sites web) en premier ───────────────────────────────────
+    md_files = []
+    if KNOWLEDGE_DIR.exists():
+        md_files = sorted(KNOWLEDGE_DIR.glob("*.md"))
+        if md_files:
+            print(f"\n--- Fichiers .md / sites web ({len(md_files)} fichier(s)) ---\n")
+        for md_path in md_files:
+            try:
+                raw = md_path.read_text(encoding="utf-8")
+                source_url = ""
+                for line in raw.split("\n")[:10]:
+                    if line.strip().lower().startswith("source :"):
+                        source_url = line.split(":", 1)[-1].strip()
+                        break
+                if "---" in raw:
+                    content = raw.split("---", 1)[-1].strip()
+                else:
+                    content = raw
+                chunks = chunk_text(content)
+                if not chunks and len(content) > 80:
+                    chunks = [content]
+                if not chunks:
+                    skipped.append(md_path.name)
+                    continue
+                label = f"[Web] {md_path.stem}"
+                print(f"  [web] {md_path.name} -> {len(chunks)} chunks")
+                for i, chunk in enumerate(chunks):
+                    all_docs.append(chunk)
+                    meta = {
+                        "filename": label,
+                        "rel_path": source_url or md_path.name,
+                        "date": "web",
+                        "year": "web",
+                        "chunk": i,
+                        "total_chunks": len(chunks),
+                    }
+                    if source_url:
+                        meta["source_url"] = source_url
+                    all_metadatas.append(meta)
+            except Exception as e:
+                print(f"  ERREUR {md_path.name} : {e}")
+                skipped.append(md_path.name)
+
+    if md_files:
+        print(f"\n  .md / sites web : {sum(m['year'] == 'web' for m in all_metadatas)} chunks.\n")
+
+    # ── 2. PDFs (PV, L'ECHO) si demandé ─────────────────────────────────────────
     pdf_files = []
     if STATIC_DIR.exists():
         for p in sorted(STATIC_DIR.rglob("*.pdf")):
             if p.is_file():
                 pdf_files.append(p)
-    print(f"{len(pdf_files)} fichiers PDF trouves (static + journal).\n")
 
-    all_docs, all_metadatas = [], []
-    skipped = []
+    do_pdfs = not getattr(args, "md_only", False)
+    if not do_pdfs:
+        print("--- PDFs : non indexes (--md-only). ---\n")
+    else:
+        print(f"--- PDFs (static + journal) : {len(pdf_files)} fichier(s) ---\n")
 
     for pdf_path in pdf_files:
+        if not do_pdfs:
+            break
         date_iso, year = extract_date(pdf_path.name)
-        # rel_path : pour l'URL Streamlit (app/static/...)
         if "journal" in str(pdf_path).replace("\\", "/"):
             rel_path = f"journal/{pdf_path.name}"
         else:
@@ -244,8 +305,12 @@ def main():
             with pdfplumber.open(pdf_path) as pdf:
                 pages_text = [p.extract_text() for p in pdf.pages if p.extract_text()]
 
-            # Si aucun texte (PDF image type L'ECHO), tenter l'OCR
+            is_journal = "journal" in str(pdf_path).replace("\\", "/")
             if not pages_text and _OCR_AVAILABLE:
+                if is_journal and not OCR_JOURNAL:
+                    print("ignore (OCR journaux desactive, INGEST_OCR_JOURNAL=1 pour activer)")
+                    skipped.append(pdf_path.name)
+                    continue
                 try:
                     pages_text = extract_text_ocr(pdf_path)
                     if pages_text:
@@ -283,50 +348,6 @@ def main():
             print(f"ERREUR : {e}")
             skipped.append(pdf_path.name)
 
-    # ── Fichiers .md (connaissance web) ─────────────────────────────────────────
-    if KNOWLEDGE_DIR.exists():
-        md_files = sorted(KNOWLEDGE_DIR.glob("*.md"))
-        if md_files:
-            print(f"\n{len(md_files)} fichier(s) .md (sites web) trouve(s).\n")
-        for md_path in md_files:
-            try:
-                raw = md_path.read_text(encoding="utf-8")
-                # Extraire source_url depuis "Source : URL" en début de fichier
-                source_url = ""
-                for line in raw.split("\n")[:10]:
-                    if line.strip().lower().startswith("source :"):
-                        source_url = line.split(":", 1)[-1].strip()
-                        break
-                # Ignorer l'en-tête (titre + source + ---) pour le contenu
-                if "---" in raw:
-                    content = raw.split("---", 1)[-1].strip()
-                else:
-                    content = raw
-                chunks = chunk_text(content)
-                if not chunks and len(content) > 80:
-                    chunks = [content]
-                if not chunks:
-                    skipped.append(md_path.name)
-                    continue
-                label = f"[Web] {md_path.stem}"
-                print(f"  [web] {md_path.name} -> {len(chunks)} chunks")
-                for i, chunk in enumerate(chunks):
-                    all_docs.append(chunk)
-                    meta = {
-                        "filename": label,
-                        "rel_path": source_url or md_path.name,
-                        "date": "web",
-                        "year": "web",
-                        "chunk": i,
-                        "total_chunks": len(chunks),
-                    }
-                    if source_url:
-                        meta["source_url"] = source_url
-                    all_metadatas.append(meta)
-            except Exception as e:
-                print(f"  ERREUR {md_path.name} : {e}")
-                skipped.append(md_path.name)
-
     # Génération des embeddings
     print(f"\nGeneration de {len(all_docs)} embeddings...")
     BATCH = 64
@@ -358,4 +379,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Indexation .md (sites web) et PDFs pour Casimir.")
+    parser.add_argument("--md-only", action="store_true", help="Indexer uniquement les .md (sites web), pas les PDFs")
+    main(parser.parse_args())
