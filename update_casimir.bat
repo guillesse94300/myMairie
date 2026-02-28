@@ -56,6 +56,16 @@ if errorlevel 1 (
 echo   OK. Base mise a jour avec les sites web.
 echo.
 
+:: Copie des .md dans static pour la page Sources et Documents
+echo Copie des .md dans static...
+python copy_md_to_static.py
+if errorlevel 1 (
+    echo   ATTENTION : echec copy_md_to_static.py
+) else (
+    echo   OK.
+)
+echo.
+
 :: 2. Proposer d'indexer aussi les PDFs
 echo.
 set CHOICE=
