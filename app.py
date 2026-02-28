@@ -17,7 +17,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import Counter, defaultdict
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
@@ -36,6 +36,84 @@ MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # URL de base pour les PDFs (fonctionne local ET sur Streamlit Cloud)
 PDF_BASE_URL = "app/static"
+
+
+def _safe_pdf_url(rel_path: str) -> str:
+    """
+    Retourne une URL relative sûre pour un PDF (pas de .. ni de scheme malveillant).
+    En cas de valeur suspecte, retourne '#' pour désactiver le lien.
+    """
+    if not rel_path or not isinstance(rel_path, str):
+        return "#"
+    # Supprimer tout scheme (javascript:, data:, etc.)
+    if ":" in rel_path and rel_path.split(":")[0].strip().lower() in ("javascript", "data", "vbscript"):
+        return "#"
+    # Pas de path traversal
+    if ".." in rel_path or rel_path.startswith("/"):
+        return "#"
+    # Nettoyer les backslashes
+    clean = rel_path.replace("\\", "/").strip()
+    if not clean:
+        return "#"
+    return f"{PDF_BASE_URL}/{clean}"
+
+
+def _safe_source_url(url: str) -> str | None:
+    """Accepte uniquement http/https. Sinon retourne None."""
+    if not url or not isinstance(url, str):
+        return None
+    u = url.strip().lower()
+    if u.startswith("https://") or u.startswith("http://"):
+        return url.strip()
+    return None
+
+
+# ── Rate limiting par IP (recherche + agent) ───────────────────────────────────
+RATE_LIMIT_MAX = 10
+RATE_LIMIT_WINDOW = timedelta(hours=1)
+RATE_LIMIT_WHITELIST = {"86.208.120.20"}
+_rate_limit_store: dict[str, list[float]] = {}  # ip -> timestamps
+
+
+def get_client_ip() -> str | None:
+    """IP du client (X-Forwarded-For / X-Real-Ip sur Cloud, sinon st.context)."""
+    try:
+        ctx = st.context
+        if hasattr(ctx, "headers") and ctx.headers:
+            xff = ctx.headers.get("x-forwarded-for") or ctx.headers.get("X-Forwarded-For")
+            if xff:
+                return xff.split(",")[0].strip()
+            xri = ctx.headers.get("x-real-ip") or ctx.headers.get("X-Real-Ip")
+            if xri:
+                return xri.strip()
+        if hasattr(ctx, "ip_address") and ctx.ip_address:
+            return str(ctx.ip_address)
+    except Exception:
+        pass
+    return None
+
+
+def rate_limit_check_and_consume() -> tuple[bool, int | None]:
+    """
+    Vérifie la limite (10 recherches / heure par IP) et consomme 1 si autorisé.
+    Retourne (autorisé, restant). restant est None si IP whitelistée ou inconnue.
+    """
+    ip = get_client_ip()
+    if not ip:
+        return (True, None)
+    if ip in RATE_LIMIT_WHITELIST:
+        return (True, None)
+    now = datetime.now().timestamp()
+    cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
+    if ip not in _rate_limit_store:
+        _rate_limit_store[ip] = []
+    times = [t for t in _rate_limit_store[ip] if t > cutoff]
+    if len(times) >= RATE_LIMIT_MAX:
+        return (False, 0)
+    times.append(now)
+    _rate_limit_store[ip] = times
+    return (True, RATE_LIMIT_MAX - len(times))
+
 
 SUGGESTIONS = [
     "Bois D'Haucourt",
@@ -407,11 +485,11 @@ def _liens_sources(text: str, passages: list) -> str:
     for i, (_, meta, _) in enumerate(passages, 1):
         fname = meta.get("filename", "")
         source_url = meta.get("source_url", "")
-        if source_url:
-            url, icon = source_url, "🌐"
+        if source_url and _safe_source_url(source_url):
+            url, icon = _safe_source_url(source_url), "🌐"
         else:
             rel_path = meta.get("rel_path", fname)
-            url = f"{PDF_BASE_URL}/{rel_path}"
+            url = _safe_pdf_url(rel_path)
             icon = "📄"
         id_map[str(i)] = (fname, url, icon)
         if fname:
@@ -627,40 +705,47 @@ def main():
             )
             search_question = question.strip() if question.strip() else (auto_question or "")
             if do_search and search_question:
-                with st.spinner("Recherche des passages pertinents…"):
-                    passages = search_agent(
-                        search_question, embeddings, documents, metadata,
-                        n=n_passages, year_filter=agent_years,
+                allowed, remaining = rate_limit_check_and_consume()
+                if not allowed:
+                    st.error(
+                        "Limite de 10 recherches par heure atteinte pour votre adresse IP. "
+                        "Réessayez plus tard."
                     )
-                if not passages:
-                    st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
                 else:
-                    st.markdown("#### Réponse")
-                    placeholder = st.empty()
-                    full_text = ""
-                    try:
-                        for chunk in ask_claude_stream(search_question, passages):
-                            full_text += chunk
-                            placeholder.markdown(full_text + " ▌")
-                        placeholder.markdown(_liens_sources(full_text, passages))
-                    except ValueError as e:
-                        placeholder.empty()
-                        st.error(str(e))
-                    except Exception as e:
-                        placeholder.empty()
-                        st.error(f"Erreur lors de l'appel à l'API : {e}")
-                    with st.expander(f"📚 {len(passages)} passages consultés"):
-                        for rank, (doc, meta, score) in enumerate(passages, 1):
-                            color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
-                            rel_path = meta.get("rel_path", meta["filename"])
-                            pdf_url = f"{PDF_BASE_URL}/{rel_path}"
-                            st.markdown(
-                                f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
-                                f"`{meta['date']}` · "
-                                f"<span style='color:{color}'>{score:.0%}</span>",
-                                unsafe_allow_html=True,
-                            )
-                            st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
+                    with st.spinner("Recherche des passages pertinents…"):
+                        passages = search_agent(
+                            search_question, embeddings, documents, metadata,
+                            n=n_passages, year_filter=agent_years,
+                        )
+                    if not passages:
+                        st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
+                    else:
+                        st.markdown("#### Réponse")
+                        placeholder = st.empty()
+                        full_text = ""
+                        try:
+                            for chunk in ask_claude_stream(search_question, passages):
+                                full_text += chunk
+                                placeholder.markdown(full_text + " ▌")
+                            placeholder.markdown(_liens_sources(full_text, passages))
+                        except ValueError as e:
+                            placeholder.empty()
+                            st.error(str(e))
+                        except Exception as e:
+                            placeholder.empty()
+                            st.error(f"Erreur lors de l'appel à l'API : {e}")
+                        with st.expander(f"📚 {len(passages)} passages consultés"):
+                            for rank, (doc, meta, score) in enumerate(passages, 1):
+                                color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                                rel_path = meta.get("rel_path", meta["filename"])
+                                pdf_url = _safe_pdf_url(rel_path)
+                                st.markdown(
+                                    f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
+                                    f"`{meta['date']}` · "
+                                    f"<span style='color:{color}'>{score:.0%}</span>",
+                                    unsafe_allow_html=True,
+                                )
+                                st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
             elif not question.strip():
                 st.info("Saisissez une question ou cliquez sur un exemple pour lancer la recherche.")
 
@@ -702,47 +787,54 @@ def main():
             st.divider()
 
             if query:
-                with st.spinner("Recherche…"):
-                    results = search(query, embeddings, documents, metadata,
-                                     n=n_results, year_filter=year_filter, exact=exact_mode)
+                allowed, remaining = rate_limit_check_and_consume()
+                if not allowed:
+                    st.error(
+                        "Limite de 10 recherches par heure atteinte pour votre adresse IP. "
+                        "Réessayez plus tard."
+                    )
+                else:
+                    with st.spinner("Recherche…"):
+                        results = search(query, embeddings, documents, metadata,
+                                        n=n_results, year_filter=year_filter, exact=exact_mode)
 
-                terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
-                mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
-                st.markdown(f"### {len(results)} résultats pour « {query} » *({mode_label})*")
-                if not results:
-                    st.warning("Aucun résultat. Désactivez le mode 'Mot(s) exact(s) obligatoire' pour une recherche sémantique plus large.")
-                if year_filter:
-                    st.markdown(f"*Filtrés sur : {', '.join(map(str, sorted(year_filter)))}*")
+                    terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
+                    mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
+                    st.markdown(f"### {len(results)} résultats pour « {query} » *({mode_label})*")
+                    if not results:
+                        st.warning("Aucun résultat. Désactivez le mode 'Mot(s) exact(s) obligatoire' pour une recherche sémantique plus large.")
+                    if year_filter:
+                        st.markdown(f"*Filtrés sur : {', '.join(map(str, sorted(year_filter)))}*")
 
-                for rank, (doc, meta, score) in enumerate(results, 1):
-                    color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
-                    with st.container(border=True):
-                        c1, c2, c3 = st.columns([5, 1, 1])
-                        with c1:
-                            st.markdown(f"**#{rank} — {meta['filename']}**")
-                            if admin:
-                                chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
-                                st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
-                            else:
-                                st.markdown(f"Date : `{meta['date']}`")
-                        with c2:
-                            st.markdown(
-                                f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
-                                f"{score:.0%}</span>",
-                                unsafe_allow_html=True,
-                            )
-                        with c3:
-                            rel_path = meta.get("rel_path", meta["filename"])
-                            pdf_url = f"{PDF_BASE_URL}/{rel_path}"
-                            st.markdown(
-                                f'<a href="{pdf_url}" target="_blank">'
-                                f'<button style="width:100%;padding:6px;cursor:pointer;'
-                                f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
-                                f'📄 Ouvrir</button></a>',
-                                unsafe_allow_html=True,
-                            )
-                        extract = excerpt(doc, terms)
-                        st.markdown(f"> {highlight(extract, terms)}")
+                    for rank, (doc, meta, score) in enumerate(results, 1):
+                        color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
+                        with st.container(border=True):
+                            c1, c2, c3 = st.columns([5, 1, 1])
+                            with c1:
+                                st.markdown(f"**#{rank} — {meta['filename']}**")
+                                if admin:
+                                    chunk_info = f"partie {meta.get('chunk', 0)+1}/{meta.get('total_chunks','?')}"
+                                    st.markdown(f"Date : `{meta['date']}` · {chunk_info}")
+                                else:
+                                    st.markdown(f"Date : `{meta['date']}`")
+                            with c2:
+                                st.markdown(
+                                    f"<span style='color:{color};font-size:1.3em;font-weight:bold'>"
+                                    f"{score:.0%}</span>",
+                                    unsafe_allow_html=True,
+                                )
+                            with c3:
+                                rel_path = meta.get("rel_path", meta["filename"])
+                                pdf_url = _safe_pdf_url(rel_path)
+                                st.markdown(
+                                    f'<a href="{pdf_url}" target="_blank">'
+                                    f'<button style="width:100%;padding:6px;cursor:pointer;'
+                                    f'border:1px solid #ccc;border-radius:4px;background:#f0f2f6;">'
+                                    f'📄 Ouvrir</button></a>',
+                                    unsafe_allow_html=True,
+                                )
+                            extract = excerpt(doc, terms)
+                            st.markdown(f"> {highlight(extract, terms)}")
             else:
                 st.info(
                     "Saisissez une requête ou cliquez sur une suggestion. "
@@ -957,7 +1049,7 @@ def main():
                     dt = _pdf_date_key(p)
                     label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
                     rel_path = str(p.relative_to(static_dir)).replace("\\", "/")
-                    doc_url = f"{PDF_BASE_URL}/{rel_path}"
+                    doc_url = _safe_pdf_url(rel_path)
                     icon = "📄" if p.suffix.lower() == ".pdf" else "📝"
                     st.markdown(
                         f"`{label_date}` — [{icon} {p.name}]({doc_url})",
