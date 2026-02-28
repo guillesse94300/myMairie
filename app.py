@@ -949,8 +949,8 @@ def main():
             st.divider()
             st.markdown("**Documents disponibles** (PV, L'ECHO, .md — triés par date décroissante)")
             static_dir = APP_DIR / "static"
-            pdfs_static = list(static_dir.rglob("*.pdf"))
-            mds_static = list(static_dir.rglob("*.md"))
+            pdfs_static = list(static_dir.rglob("*.pdf")) if static_dir.exists() else []
+            mds_static = list(static_dir.rglob("*.md")) if static_dir.exists() else []
             all_docs = sorted(pdfs_static + mds_static, key=_pdf_date_key, reverse=True)
             if all_docs:
                 for p in all_docs:
