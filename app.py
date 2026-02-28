@@ -4,6 +4,7 @@ Usage  : streamlit run app.py
 """
 
 import re
+import sqlite3
 import warnings
 
 # Supprimer les warnings non bloquants (pin_memory, HF Hub)
@@ -30,8 +31,10 @@ except ImportError:
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 APP_DIR  = Path(__file__).parent
+DATA_DIR = APP_DIR / "data"
 PDF_DIR  = APP_DIR / "static"          # PDFs servis par Streamlit static serving
 DB_DIR   = APP_DIR / "vector_db"
+SEARCHES_DB = DATA_DIR / "searches.db"  # SQLite : IP, timestamp, requête
 MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # URL de base pour les PDFs (fonctionne local ET sur Streamlit Cloud)
@@ -747,8 +750,8 @@ def main():
         st.markdown("<br>", unsafe_allow_html=True)
 
         CARDS = [
-            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …", "agent"),
             ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
+            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …", "agent"),
             ("📊", "Statistiques des séances du Conseil Municipal", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
             ("📄", "Sources et Documents", "Liste des sources utilisées par Casimir et la recherche sémantique.", "docs"),
         ]
