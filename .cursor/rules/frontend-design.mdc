@@ -104,9 +104,10 @@ Masquer : toolbar, deploy button, footer, sidebar nav, MainMenu.
 
 ### Patterns Streamlit
 
-- **Page d'accueil** : 4 cartes en grille 2×2 (Agent, Recherche, Statistiques, Sources)
+- **Page d'accueil** : 4 cartes en grille 2×2, sans sidebar
+- **Bandeau supérieur** (toujours visible) : Accueil, Déployé le, IP, Version
+- **Sidebar** : visible uniquement sur section Recherche (thèmes)
 - **Navigation** : `st.session_state["current_section"]` (home, agent, search, stats, docs)
-- **Sidebar** : bouton Accueil, thèmes (redirigent vers Recherche avec requête préremplie)
 - `st.columns([3,1,1])` ou `[5,1,1]` pour les layouts
 - `st.container(border=True)` pour les cartes de résultats
 - `st.expander` pour les sections repliables

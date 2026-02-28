@@ -1,6 +1,12 @@
 # Sources indexées pour Casimir
 
-**Agent Casimir** interroge une base vectorielle alimentée par les documents PDF présents dans `static/` et `static/journal/`. Cette liste est extraite de la base d’indexation (`vector_db/metadata.pkl`).
+**Agent Casimir** interroge une base vectorielle alimentée par :
+- les documents PDF présents dans `static/` et `static/journal/`
+- les pages web listées dans `siteweb.txt`, récupérées via `fetch_sites.py` et stockées en `.md` dans `knowledge_sites/`
+
+Cette liste est extraite de la base d’indexation (`vector_db/metadata.pkl`).
+
+**Enrichir Casimir :** ajoutez des URLs dans `siteweb.txt`, puis exécutez `python fetch_sites.py` et `python ingest.py` (ou `update_casimir.bat`).
 
 ---
 

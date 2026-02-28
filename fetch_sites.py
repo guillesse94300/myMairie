@@ -1,5 +1,5 @@
 """
-fetch_sites.py — Récupère le contenu des URLs listées dans siteweb.txt
+fetch_sites.py — Récupère le contenu des URLs listées dans site_url.txt (ou siteweb.txt)
 et le stocke dans des fichiers .md pour enrichir la connaissance de Casimir.
 Usage : python fetch_sites.py
 """
@@ -16,6 +16,8 @@ except ImportError:
     raise SystemExit(1)
 
 APP_DIR = Path(__file__).parent
+# site_url.txt prioritaire, siteweb.txt en secours
+SITE_URL_FILE = APP_DIR / "site_url.txt"
 SITEWEB_FILE = APP_DIR / "siteweb.txt"
 OUTPUT_DIR = APP_DIR / "knowledge_sites"
 CHUNK_SIZE = 100_000  # max bytes à lire par page
@@ -84,19 +86,20 @@ def fetch_url(url: str) -> tuple[str, str] | None:
 
 
 def main():
-    if not SITEWEB_FILE.exists():
-        print(f"Fichier introuvable : {SITEWEB_FILE}")
-        print("Créez siteweb.txt avec une URL par ligne.")
+    url_file = SITE_URL_FILE if SITE_URL_FILE.exists() else SITEWEB_FILE
+    if not url_file.exists():
+        print(f"Fichier introuvable : {SITE_URL_FILE} ou {SITEWEB_FILE}")
+        print("Créez site_url.txt (ou siteweb.txt) avec une URL par ligne.")
         return
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     urls = []
-    with open(SITEWEB_FILE, encoding="utf-8") as f:
+    with open(url_file, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith("#"):
                 urls.append(line)
     if not urls:
-        print("Aucune URL trouvée dans siteweb.txt")
+        print(f"Aucune URL trouvée dans {url_file.name}")
         return
     print(f"Récupération de {len(urls)} URL(s)...\n")
     success = 0

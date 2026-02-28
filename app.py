@@ -396,22 +396,27 @@ def _liens_sources(text: str, passages: list) -> str:
     - les noms de fichiers PDF cités par le LLM
     par des liens Markdown cliquables ouvrant le PDF dans un nouvel onglet.
     """
-    # Mapping id (1-based) → (filename, url)
+    # Mapping id (1-based) → (filename, url, icon)
     id_map = {}
     fname_map = {}
     for i, (_, meta, _) in enumerate(passages, 1):
         fname = meta.get("filename", "")
-        rel_path = meta.get("rel_path", fname)
-        url   = f"{PDF_BASE_URL}/{rel_path}"
-        id_map[str(i)] = (fname, url)
+        source_url = meta.get("source_url", "")
+        if source_url:
+            url, icon = source_url, "🌐"
+        else:
+            rel_path = meta.get("rel_path", fname)
+            url = f"{PDF_BASE_URL}/{rel_path}"
+            icon = "📄"
+        id_map[str(i)] = (fname, url, icon)
         if fname:
             fname_map[fname] = url
 
     def _make_link(sid):
         if sid in id_map:
-            fname, url = id_map[sid]
-            label = fname.replace(".pdf", "")
-            return f"[📄 {label}]({url})"
+            fname, url, icon = id_map[sid]
+            label = fname.replace(".pdf", "").replace("[Web] ", "")
+            return f"[{icon} {label}]({url})"
         return f"[{sid}]"
 
     # 0. Remplacer les références [N] produites par le LLM (format principal)
@@ -431,10 +436,15 @@ def _liens_sources(text: str, passages: list) -> str:
 
 # ── Interface principale ───────────────────────────────────────────────────────
 def main():
+    if "current_section" not in st.session_state:
+        st.session_state["current_section"] = "home"
+
+    show_sidebar = st.session_state["current_section"] == "search"
     st.set_page_config(
         page_title="Procès-verbaux — Pierrefonds",
         page_icon="🏛️",
         layout="wide",
+        initial_sidebar_state="expanded" if show_sidebar else "collapsed",
     )
 
     st.markdown(
@@ -456,38 +466,44 @@ def main():
         .home-card:hover { box-shadow:0 4px 12px rgba(44,95,45,0.15); }
         .home-card h3 { color:#2c5f2d; margin:0 0 0.5rem; font-size:1.1rem; }
         .home-card p { color:#666; margin:0; font-size:0.9rem; line-height:1.4; }
+        .top-banner { background:#f0f2f6; padding:0.5rem 1rem; border-radius:6px; margin-bottom:1rem; }
         </style>""",
         unsafe_allow_html=True,
     )
-    # Masquage dynamique via JS (Streamlit Cloud injecte le bouton après le rendu)
-    components.html("""
+    # Masquage sidebar quand pas sur Recherche + masquage éléments Streamlit
+    _show_sb = st.session_state["current_section"] == "search"
+    components.html(f"""
     <script>
-    const hide = () => {
-        const sel = [
-            '[data-testid="stAppDeployButton"]',
-            '[data-testid="stToolbar"]',
-            '.stDeployButton',
-            '#MainMenu',
-            'footer',
-            '[data-testid="stSidebarNav"]',
-            '[data-testid="stSidebarNavItems"]',
-            '[data-testid="stSidebarNavSeparator"]'
-        ];
-        sel.forEach(s => {
-            window.parent.document.querySelectorAll(s)
-                .forEach(el => { el.style.display = 'none'; });
-        });
-    };
-    hide();
-    new MutationObserver(hide).observe(
-        window.parent.document.body,
-        { childList: true, subtree: true }
-    );
+    (function() {{
+        const showSidebar = {str(_show_sb).lower()};
+        const hide = () => {{
+            const sel = [
+                '[data-testid="stAppDeployButton"]',
+                '[data-testid="stToolbar"]',
+                '.stDeployButton',
+                '#MainMenu',
+                'footer',
+                '[data-testid="stSidebarNav"]',
+                '[data-testid="stSidebarNavItems"]',
+                '[data-testid="stSidebarNavSeparator"]'
+            ];
+            sel.forEach(s => {{
+                window.parent.document.querySelectorAll(s)
+                    .forEach(el => {{ el.style.display = 'none'; }});
+            }});
+            if (!showSidebar) {{
+                const sb = window.parent.document.querySelector('section[data-testid="stSidebar"]');
+                if (sb) sb.style.display = 'none';
+            }}
+        }};
+        hide();
+        new MutationObserver(hide).observe(
+            window.parent.document.body,
+            {{ childList: true, subtree: true }}
+        );
+    }})();
     </script>
     """, height=0)
-
-    if "current_section" not in st.session_state:
-        st.session_state["current_section"] = "home"
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -498,48 +514,41 @@ def main():
     if admin:
         st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs · 🔑 Mode admin")
 
-    # ── Sidebar ─────────────────────────────────────────────────────────────────
-    with st.sidebar:
-        commit_date, version = get_git_info()
-        components.html(f"""
-        <style>
-          body {{ margin:0; padding:0; background:transparent;
-                 font-family:"Source Sans Pro","Segoe UI",sans-serif; }}
-          #ip  {{ font-size:0.75em; color:#888; margin:0; padding:0; }}
-          #deploy {{ font-size:0.75em; color:#888; margin:0.25em 0 0 0; padding:0; }}
-        </style>
-        <p id="ip">🌐 Détection…</p>
-        <p id="deploy">🚀 Déployé le {commit_date}</p>
-        <script>
-        (function() {{
-            var el = document.getElementById('ip');
-            Promise.race([
-                fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip),
-                fetch('https://icanhazip.com/').then(r => r.text()).then(t => t.trim()),
-                fetch('https://checkip.amazonaws.com/').then(r => r.text()).then(t => t.trim())
-            ])
-            .then(function(ip){{ el.textContent = '🌐 ' + ip.replace(/\\s/g,''); }})
-            .catch(function(){{  el.textContent = '🌐 —'; }});
-        }})();
-        </script>
-        """, height=50)
-        if st.button("🏠 Accueil", use_container_width=True):
-            st.session_state["current_section"] = "home"
-            st.rerun()
-        st.markdown('<p style="font-weight:600;margin:0.5rem 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
-        for i, (label, tq) in enumerate(THEMES.items()):
-            if st.button(label, use_container_width=True, key=f"theme_{i}"):
-                st.session_state["current_section"] = "search"
-                st.session_state["_theme_query"] = tq
+    # ── Bandeau supérieur (toujours visible) ───────────────────────────────────
+    commit_date, version = get_git_info()
+    with st.container(border=True):
+        bc1, bc2, bc3, bc4 = st.columns(4)
+        with bc1:
+            if st.button("🏠 Accueil", key="banner_accueil"):
+                st.session_state["current_section"] = "home"
                 st.rerun()
-        st.markdown("---")
-        st.markdown(
-            f"<div style='font-size:0.78em;color:#888;line-height:1.6'>"
-            f"🏷️ Version&nbsp;&nbsp;<b>{version}</b><br>"
-            f"🕐 Commit&nbsp;&nbsp;<b>{commit_date}</b>"
-            f"</div>",
-            unsafe_allow_html=True,
-        )
+        with bc2:
+            st.markdown(f"**Déployé le** {commit_date}")
+        with bc3:
+            components.html("""
+            <div style="font-size:0.9rem;margin:0;padding:0">🌐 <span id="banner-ip">Détection…</span></div>
+            <script>
+            (function(){
+                var el = document.getElementById('banner-ip');
+                Promise.race([
+                    fetch('https://api.ipify.org?format=json').then(r=>r.json().then(d=>d.ip)),
+                    fetch('https://icanhazip.com/').then(r=>r.text().then(t=>t.trim()))
+                ]).then(ip=>{el.textContent=String(ip).replace(/\\s/g,'')}).catch(()=>{el.textContent='—'});
+            })();
+            </script>
+            """, height=28)
+        with bc4:
+            st.markdown(f"**Version** {version}")
+
+    # ── Sidebar (uniquement sur section Recherche) ─────────────────────────────
+    if _show_sb:
+        with st.sidebar:
+            st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
+            for i, (label, tq) in enumerate(THEMES.items()):
+                if st.button(label, use_container_width=True, key=f"theme_{i}"):
+                    st.session_state["current_section"] = "search"
+                    st.session_state["_theme_query"] = tq
+                    st.rerun()
 
     # ════════════════════════════════════════════════════════════════════════════
     # PAGE D'ACCUEIL — 4 cartes
@@ -564,17 +573,9 @@ def main():
                     st.caption(desc)
                     if st.button("Accéder →", key=f"card_{section}", use_container_width=True):
                         st.session_state["current_section"] = section
-                        if section == "search":
-                            st.session_state["_switch_to_search"] = True
                         st.rerun()
 
     else:
-        # ── Bouton Retour ─────────────────────────────────────────────────────
-        if st.button("← Retour à l'accueil"):
-            st.session_state["current_section"] = "home"
-            st.rerun()
-        st.markdown("<br>", unsafe_allow_html=True)
-
         # ════════════════════════════════════════════════════════════════════════
         # SECTION AGENT CASIMIR
         # ════════════════════════════════════════════════════════════════════════

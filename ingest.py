@@ -59,6 +59,7 @@ _OCR_AVAILABLE = _OCR_TESSERACT or _OCR_EASYOCR
 APP_DIR        = Path(__file__).parent
 STATIC_DIR     = APP_DIR / "static"
 JOURNAL_DIR    = APP_DIR / "journal"
+KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py
 DB_DIR         = APP_DIR / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 1000   # caractères max par chunk
@@ -263,6 +264,50 @@ def main():
         except Exception as e:
             print(f"ERREUR : {e}")
             skipped.append(pdf_path.name)
+
+    # ── Fichiers .md (connaissance web) ─────────────────────────────────────────
+    if KNOWLEDGE_DIR.exists():
+        md_files = sorted(KNOWLEDGE_DIR.glob("*.md"))
+        if md_files:
+            print(f"\n{len(md_files)} fichier(s) .md (sites web) trouve(s).\n")
+        for md_path in md_files:
+            try:
+                raw = md_path.read_text(encoding="utf-8")
+                # Extraire source_url depuis "Source : URL" en début de fichier
+                source_url = ""
+                for line in raw.split("\n")[:10]:
+                    if line.strip().lower().startswith("source :"):
+                        source_url = line.split(":", 1)[-1].strip()
+                        break
+                # Ignorer l'en-tête (titre + source + ---) pour le contenu
+                if "---" in raw:
+                    content = raw.split("---", 1)[-1].strip()
+                else:
+                    content = raw
+                chunks = chunk_text(content)
+                if not chunks and len(content) > 80:
+                    chunks = [content]
+                if not chunks:
+                    skipped.append(md_path.name)
+                    continue
+                label = f"[Web] {md_path.stem}"
+                print(f"  [web] {md_path.name} -> {len(chunks)} chunks")
+                for i, chunk in enumerate(chunks):
+                    all_docs.append(chunk)
+                    meta = {
+                        "filename": label,
+                        "rel_path": source_url or md_path.name,
+                        "date": "web",
+                        "year": "web",
+                        "chunk": i,
+                        "total_chunks": len(chunks),
+                    }
+                    if source_url:
+                        meta["source_url"] = source_url
+                    all_metadatas.append(meta)
+            except Exception as e:
+                print(f"  ERREUR {md_path.name} : {e}")
+                skipped.append(md_path.name)
 
     # Génération des embeddings
     print(f"\nGeneration de {len(all_docs)} embeddings...")
