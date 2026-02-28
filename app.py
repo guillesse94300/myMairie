@@ -100,11 +100,13 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     Retourne (autorisé, restant). restant est None si IP whitelistée ou inconnue.
     """
     ip = get_client_ip()
+    now = datetime.now().timestamp()
     if not ip:
+        _searches_today_timestamps.append(now)
         return (True, None)
     if ip in RATE_LIMIT_WHITELIST:
+        _searches_today_timestamps.append(now)
         return (True, None)
-    now = datetime.now().timestamp()
     cutoff = (datetime.now() - RATE_LIMIT_WINDOW).timestamp()
     if ip not in _rate_limit_store:
         _rate_limit_store[ip] = []
@@ -711,7 +713,9 @@ def main():
         with c_stats:
             st.components.v1.html(
                 f"""
-                <div style="font-size:0.9rem;margin:0;padding:0"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {total_today} (auj.) · {remaining_str}</div>
+                <div style="font-size:0.9rem;margin:0;padding:0.4rem 0;min-height:1.8rem;display:flex;align-items:center;box-sizing:border-box">
+                    <span><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {total_today} (auj.) · {remaining_str}</span>
+                </div>
                 <script>
                 (function() {{
                     var el = document.getElementById('banner-pubip');
@@ -722,7 +726,7 @@ def main():
                 }})();
                 </script>
                 """,
-                height=28,
+                height=44,
             )
 
     # ── Sidebar (uniquement sur section Recherche) ─────────────────────────────
