@@ -481,7 +481,8 @@ def main():
     </script>
     """, height=0)
 
-    st.title("Demande à l'Agent Casimir à propos de Pierrefonds !")
+    st.title("Demande à Casimir!")
+    st.subheader("Tout ce que tu veux savoir sur Pierrefonds")
 
     if not DB_DIR.exists():
         st.error("Base vectorielle introuvable. Lancez d'abord : `python ingest.py`")
@@ -494,26 +495,29 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        components.html("""
+        commit_date, version = get_git_info()
+        components.html(f"""
         <style>
-          body { margin:0; padding:0; background:transparent;
-                 font-family:"Source Sans Pro","Segoe UI",sans-serif; }
-          #ip  { font-size:0.75em; color:#888; margin:0; padding:0; }
+          body {{ margin:0; padding:0; background:transparent;
+                 font-family:"Source Sans Pro","Segoe UI",sans-serif; }}
+          #ip  {{ font-size:0.75em; color:#888; margin:0; padding:0; }}
+          #deploy {{ font-size:0.75em; color:#888; margin:0.25em 0 0 0; padding:0; }}
         </style>
         <p id="ip">🌐 Détection…</p>
+        <p id="deploy">🚀 Déployé le {commit_date}</p>
         <script>
-        (function() {
+        (function() {{
             var el = document.getElementById('ip');
             Promise.race([
                 fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip),
                 fetch('https://icanhazip.com/').then(r => r.text()).then(t => t.trim()),
                 fetch('https://checkip.amazonaws.com/').then(r => r.text()).then(t => t.trim())
             ])
-            .then(function(ip){ el.textContent = '🌐 ' + ip.replace(/\s/g,''); })
-            .catch(function(){  el.textContent = '🌐 —'; });
-        })();
+            .then(function(ip){{ el.textContent = '🌐 ' + ip.replace(/\\s/g,''); }})
+            .catch(function(){{  el.textContent = '🌐 —'; }});
+        }})();
         </script>
-        """, height=22)
+        """, height=50)
         st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
         theme_query = None
         for label, tq in THEMES.items():
@@ -521,7 +525,6 @@ def main():
                 theme_query = tq
                 st.session_state["_switch_to_search"] = True
         st.markdown("---")
-        commit_date, version = get_git_info()
         st.markdown(
             f"<div style='font-size:0.78em;color:#888;line-height:1.6'>"
             f"🏷️ Version&nbsp;&nbsp;<b>{version}</b><br>"

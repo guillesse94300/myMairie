@@ -9,11 +9,15 @@ echo.
 
 cd /d "%~dp0"
 
-:: Installer les dependances
+:: Installer les dependances (inclut PyMuPDF, pytesseract, Pillow pour OCR L'ECHO)
 echo Installation des dependances...
 python -m pip install --quiet -r requirements.txt
 python -m pip install --quiet groq
 echo   OK.
+echo.
+echo Pour l'OCR des PDFs L'ECHO (image), Tesseract doit etre installe :
+echo   https://github.com/UB-Mannheim/tesseract/wiki
+echo   Cocher "French" lors de l'installation.
 echo.
 
 :: Telecharger les L'ECHO (journal) si possible

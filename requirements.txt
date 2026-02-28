@@ -4,3 +4,7 @@ streamlit
 numpy
 groq
 plotly
+# OCR pour PDFs image (L'ECHO)
+PyMuPDF
+pytesseract
+Pillow

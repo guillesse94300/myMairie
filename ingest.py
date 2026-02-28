@@ -2,6 +2,9 @@
 ingest.py — Indexe tous les PDFs du Conseil Municipal + journal (L'ECHO)
 Stockage : embeddings.npy + metadata.pkl + documents.pkl
 Usage    : python ingest.py
+
+Pour les PDFs image (ex. L'ECHO), utilise l'OCR (Tesseract requis).
+Installer Tesseract : https://github.com/UB-Mannheim/tesseract/wiki
 """
 
 import re
@@ -11,6 +14,25 @@ import pdfplumber
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
+
+# OCR pour PDFs image (L'ECHO) — import optionnel
+try:
+    import fitz  # PyMuPDF
+    from PIL import Image
+    import pytesseract
+    # Détection Tesseract sur Windows (souvent pas dans le PATH)
+    import sys
+    if sys.platform == "win32":
+        for path in [
+            r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+            r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+        ]:
+            if Path(path).exists():
+                pytesseract.pytesseract.tesseract_cmd = path
+                break
+    _OCR_AVAILABLE = True
+except ImportError:
+    _OCR_AVAILABLE = False
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 APP_DIR        = Path(__file__).parent
@@ -59,6 +81,32 @@ def extract_date(filename: str) -> tuple:
             return f"{m.group(2)}-{MONTHS_FR[mon]}-01", m.group(2)
 
     return "0000-00-00", "0000"
+
+
+# ── OCR pour PDFs image (L'ECHO) ───────────────────────────────────────────────
+def extract_text_ocr(pdf_path: Path) -> list:
+    """
+    Extrait le texte d'un PDF image via OCR (PyMuPDF + Tesseract).
+    Retourne une liste de textes par page, ou [] en cas d'échec.
+    Tesseract doit être installé : https://github.com/UB-Mannheim/tesseract/wiki
+    """
+    if not _OCR_AVAILABLE:
+        return []
+    try:
+        doc = fitz.open(pdf_path)
+        pages_text = []
+        for page in doc:
+            pix = page.get_pixmap(dpi=200, alpha=False)
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            text = pytesseract.image_to_string(img, lang="fra+eng")
+            if text.strip():
+                pages_text.append(text.strip())
+        doc.close()
+        return pages_text
+    except Exception as e:
+        if "tesseract" in str(e).lower() or "not found" in str(e).lower():
+            pass  # Tesseract non installé ou pas dans le PATH
+        return []
 
 
 # ── Découpage du texte en chunks ───────────────────────────────────────────────
@@ -117,12 +165,24 @@ def main():
             with pdfplumber.open(pdf_path) as pdf:
                 pages_text = [p.extract_text() for p in pdf.pages if p.extract_text()]
 
+            # Si aucun texte (PDF image type L'ECHO), tenter l'OCR
+            if not pages_text and _OCR_AVAILABLE:
+                pages_text = extract_text_ocr(pdf_path)
+                if pages_text:
+                    print("OCR", end=" ... ")
+
             if not pages_text:
-                print("aucun texte (PDF scanne ?)")
+                if not _OCR_AVAILABLE:
+                    print("aucun texte (PDF scanne ? Installez PyMuPDF, pytesseract et Tesseract pour l'OCR)")
+                else:
+                    print("aucun texte (OCR echoue ?)")
                 skipped.append(pdf_path.name)
                 continue
 
-            chunks = chunk_text("\n".join(pages_text))
+            full_text = "\n".join(pages_text)
+            chunks = chunk_text(full_text)
+            if not chunks and len(full_text) > 80:
+                chunks = [full_text]
             print(f"{len(chunks)} chunks")
 
             for i, chunk in enumerate(chunks):
