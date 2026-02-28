@@ -106,67 +106,22 @@ def log_search(ip: str | None, query: str) -> None:
         pass
 
 
-def _is_private_ip(ip: str) -> bool:
-    """Vérifie si l'IP est une adresse privée (RFC 1918)."""
-    if not ip:
-        return False
-    parts = ip.strip().split(".")
-    if len(parts) != 4:
-        return False
-    try:
-        a, b, c, d = (int(p) for p in parts)
-        if a == 10:
-            return True
-        if a == 172 and 16 <= b <= 31:
-            return True
-        if a == 192 and b == 168:
-            return True
-    except ValueError:
-        pass
-    return False
-
-
-_PUBLIC_IP_CACHE: str | None = None
-
-
-def _get_public_ip_fallback() -> str | None:
-    """Récupère l'IP publique via un service externe (quand IP locale détectée). Mis en cache."""
-    global _PUBLIC_IP_CACHE
-    if _PUBLIC_IP_CACHE is not None:
-        return _PUBLIC_IP_CACHE
-    try:
-        import urllib.request
-        with urllib.request.urlopen("https://api.ipify.org", timeout=3) as r:
-            _PUBLIC_IP_CACHE = r.read().decode().strip() or None
-            return _PUBLIC_IP_CACHE
-    except Exception:
-        return None
-
-
 def get_client_ip() -> str | None:
-    """IP du client (X-Forwarded-For / X-Real-Ip sur Cloud, sinon st.context). Si IP privée, tente de récupérer l'IP publique."""
+    """IP du client (X-Forwarded-For, X-Real-Ip, CF-Connecting-IP, sinon st.context)."""
     try:
         ctx = st.context
-        ip = None
         if hasattr(ctx, "headers") and ctx.headers:
             xff = ctx.headers.get("x-forwarded-for") or ctx.headers.get("X-Forwarded-For")
             if xff:
-                ip = xff.split(",")[0].strip()
-            if not ip:
-                xri = ctx.headers.get("x-real-ip") or ctx.headers.get("X-Real-Ip")
-                if xri:
-                    ip = xri.strip()
-            if not ip:
-                cf = ctx.headers.get("cf-connecting-ip") or ctx.headers.get("CF-Connecting-IP")
-                if cf:
-                    ip = cf.strip()
-        if not ip and hasattr(ctx, "ip_address") and ctx.ip_address:
-            ip = str(ctx.ip_address)
-        if ip and _is_private_ip(ip):
-            public = _get_public_ip_fallback()
-            if public:
-                return public
-        return ip
+                return xff.split(",")[0].strip()
+            xri = ctx.headers.get("x-real-ip") or ctx.headers.get("X-Real-Ip")
+            if xri:
+                return xri.strip()
+            cf = ctx.headers.get("cf-connecting-ip") or ctx.headers.get("CF-Connecting-IP")
+            if cf:
+                return cf.strip()
+        if hasattr(ctx, "ip_address") and ctx.ip_address:
+            return str(ctx.ip_address)
     except Exception:
         pass
     return None
