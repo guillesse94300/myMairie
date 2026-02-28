@@ -476,38 +476,26 @@ def main():
 
     # ── Sidebar ─────────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.markdown("""
-        <p style="font-size:0.75em;color:#888;margin:0 0 0.6rem 0;padding:0" id="ip-display">🌐 Détection…</p>
+        components.html("""
+        <style>
+          body { margin:0; padding:0; background:transparent;
+                 font-family:"Source Sans Pro","Segoe UI",sans-serif; }
+          #ip  { font-size:0.75em; color:#888; margin:0; padding:0; }
+        </style>
+        <p id="ip">🌐 Détection…</p>
         <script>
         (function() {
-            var el = document.getElementById('ip-display');
-            var found = false;
-            var timeoutId = setTimeout(function() {
-                if (!found && el) el.textContent = '🌐 —';
-            }, 8000);
-
-            var services = [
+            var el = document.getElementById('ip');
+            Promise.race([
                 fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip),
-                fetch('https://icanhazip.com/').then(r => r.text()).then(ip => ip.trim()),
-                fetch('https://checkip.amazonaws.com/').then(r => r.text()).then(ip => ip.trim()),
-                fetch('https://api.my-ip.io/ip').then(r => r.text()).then(ip => ip.trim())
-            ];
-
-            Promise.race(services)
-                .then(ip => {
-                    found = true;
-                    clearTimeout(timeoutId);
-                    if (el && ip) el.textContent = '🌐 ' + ip.replace(/\s/g, '');
-                })
-                .catch(err => {
-                    if (!found) {
-                        clearTimeout(timeoutId);
-                        if (el) el.textContent = '🌐 —';
-                    }
-                });
+                fetch('https://icanhazip.com/').then(r => r.text()).then(t => t.trim()),
+                fetch('https://checkip.amazonaws.com/').then(r => r.text()).then(t => t.trim())
+            ])
+            .then(function(ip){ el.textContent = '🌐 ' + ip.replace(/\s/g,''); })
+            .catch(function(){  el.textContent = '🌐 —'; });
         })();
         </script>
-        """, unsafe_allow_html=True)
+        """, height=22)
         st.markdown('<p style="font-weight:600;margin:0 0 0.4rem 0;padding:0">Thèmes</p>', unsafe_allow_html=True)
         theme_query = None
         for label, tq in THEMES.items():

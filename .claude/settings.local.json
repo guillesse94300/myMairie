@@ -57,7 +57,9 @@
       "WebFetch(domain:www.mairie-pierrefonds.fr)",
       "WebFetch(domain:www.calameo.com)",
       "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://www.mairie-pierrefonds.fr/vie-municipale/publications/\")",
-      "Bash(python3 -c \":*)"
+      "Bash(python3 -c \":*)",
+      "Bash(curl -s \"https://www.mairie-pierrefonds.fr/vie-municipale/publications/\")",
+      "Bash(xxd)"
     ]
   }
 }
