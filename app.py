@@ -643,11 +643,11 @@ def main():
         st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs · 🔑 Mode admin")
 
     # ── Bandeau supérieur (toujours visible) ───────────────────────────────────
-    commit_date, version = get_git_info()
+    commit_date, _ = get_git_info()
     with st.container(border=True):
-        bc1, bc2, bc3, bc4 = st.columns(4)
+        bc1, bc2, bc3 = st.columns(3)
         with bc1:
-            b1, b2 = st.columns(2)
+            b1, b2, b3 = st.columns(3)
             with b1:
                 if st.button("🏠 Accueil", key="banner_accueil"):
                     st.session_state["current_section"] = "home"
@@ -655,16 +655,29 @@ def main():
             with b2:
                 if st.button("ℹ️ À propos", key="banner_about"):
                     about_casimir()
-            st.markdown("[✉ casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com)")
+            with b3:
+                st.markdown("[✉ casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com)")
         with bc2:
             st.markdown(f"**Déployé le** {commit_date}")
         with bc3:
-            ip = get_client_ip() or "—"
             remaining = rate_limit_get_remaining()
             remaining_str = "∞" if remaining is None else str(remaining)
-            st.markdown(f"**🌐** {ip} · **Recherches :** {remaining_str}/10")
-        with bc4:
-            st.markdown(f"**Version** {version}")
+            # IP publique via JS (get_client_ip() donne souvent l'IP privée derrière un proxy)
+            st.components.v1.html(
+                f"""
+                <div style="font-size:inherit"><b>🌐</b> <span id="banner-pubip">…</span> · <b>Recherches :</b> {remaining_str}/10</div>
+                <script>
+                (function() {{
+                    var el = document.getElementById('banner-pubip');
+                    if (!el) return;
+                    fetch('https://api.ipify.org?format=json').then(function(r) {{ return r.json(); }})
+                    .then(function(d) {{ el.textContent = d.ip || '—'; }})
+                    .catch(function() {{ el.textContent = '—'; }});
+                }})();
+                </script>
+                """,
+                height=32,
+            )
 
     # ── Sidebar (uniquement sur section Recherche) ─────────────────────────────
     if _show_sb:
@@ -685,7 +698,7 @@ def main():
         st.markdown("<br>", unsafe_allow_html=True)
 
         CARDS = [
-            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours et en permanence.", "agent"),
+            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …", "agent"),
             ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
             ("📊", "Statistiques des séances du Conseil Municipal", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
             ("📄", "Sources et Documents", "Liste des procès-verbaux et documents disponibles. Liens directs vers les PDF.", "docs"),
@@ -710,7 +723,7 @@ def main():
             st.caption(
                 "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus "
                 "sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! "
-                "Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours et en permanence."
+                "Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …"
             )
 
             AGENT_EXAMPLES = [
