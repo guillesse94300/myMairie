@@ -1,10 +1,11 @@
 """
-ingest.py — Indexe tous les PDFs du Conseil Municipal
+ingest.py — Indexe tous les PDFs du Conseil Municipal + journal (L'ECHO)
 Stockage : embeddings.npy + metadata.pkl + documents.pkl
 Usage    : python ingest.py
 """
 
 import re
+import shutil
 import pickle
 import pdfplumber
 import numpy as np
@@ -12,8 +13,10 @@ from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-PDF_DIR        = Path(__file__).parent / "static"   # PDFs dans static/
-DB_DIR         = Path(__file__).parent / "vector_db"
+APP_DIR        = Path(__file__).parent
+STATIC_DIR     = APP_DIR / "static"
+JOURNAL_DIR    = APP_DIR / "journal"
+DB_DIR         = APP_DIR / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 1000   # caractères max par chunk
 
@@ -48,6 +51,13 @@ def extract_date(filename: str) -> tuple:
             day = day_m.group(1).zfill(2) if day_m else "01"
             return f"{year}-{month_num}-{day}", year
 
+    # LECHO-NN-mois-YYYY  ex: LECHO-01-decembre-2020, LECHO-12-avril-2025
+    m = re.search(r"lecho-\d+-(\w+)-(\d{4})", name)
+    if m:
+        mon = m.group(1).lower().replace("é", "e").replace("è", "e").replace("û", "u").replace("à", "a")
+        if mon in MONTHS_FR:
+            return f"{m.group(2)}-{MONTHS_FR[mon]}-01", m.group(2)
+
     return "0000-00-00", "0000"
 
 
@@ -70,17 +80,37 @@ def chunk_text(text: str, size: int = CHUNK_SIZE) -> list:
 def main():
     DB_DIR.mkdir(exist_ok=True)
 
+    # Copier les PDFs du journal vers static/journal/ pour que Streamlit puisse les servir
+    static_journal = STATIC_DIR / "journal"
+    if JOURNAL_DIR.exists():
+        static_journal.mkdir(parents=True, exist_ok=True)
+        for pdf in JOURNAL_DIR.glob("*.pdf"):
+            dest = static_journal / pdf.name
+            if not dest.exists() or pdf.stat().st_mtime > dest.stat().st_mtime:
+                shutil.copy2(pdf, dest)
+                print(f"  Copie : journal/{pdf.name} -> static/journal/")
+
     print(f"Chargement du modele '{MODEL_NAME}'...")
     model = SentenceTransformer(MODEL_NAME)
 
-    pdf_files = sorted(PDF_DIR.glob("*.pdf"))
-    print(f"{len(pdf_files)} fichiers PDF trouves.\n")
+    # Collecter tous les PDFs : static/ (récursif, inclut static/journal/)
+    pdf_files = []
+    if STATIC_DIR.exists():
+        for p in sorted(STATIC_DIR.rglob("*.pdf")):
+            if p.is_file():
+                pdf_files.append(p)
+    print(f"{len(pdf_files)} fichiers PDF trouves (static + journal).\n")
 
     all_docs, all_metadatas = [], []
     skipped = []
 
     for pdf_path in pdf_files:
         date_iso, year = extract_date(pdf_path.name)
+        # rel_path : pour l'URL Streamlit (app/static/...)
+        if "journal" in str(pdf_path).replace("\\", "/"):
+            rel_path = f"journal/{pdf_path.name}"
+        else:
+            rel_path = pdf_path.name
         print(f"  [{date_iso}] {pdf_path.name}", end=" ... ")
 
         try:
@@ -99,6 +129,7 @@ def main():
                 all_docs.append(chunk)
                 all_metadatas.append({
                     "filename": pdf_path.name,
+                    "rel_path": rel_path,
                     "date": date_iso,
                     "year": year,
                     "chunk": i,

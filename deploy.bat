@@ -9,13 +9,48 @@ echo.
 
 cd /d "%~dp0"
 
-:: Installer groq localement si absent
-echo Installation locale des dependances (groq)...
+:: Installer les dependances
+echo Installation des dependances...
+python -m pip install --quiet -r requirements.txt
 python -m pip install --quiet groq
 echo   OK.
 echo.
 
-:: Vérifier qu'on est dans un dépôt git
+:: Telecharger les L'ECHO (journal) si possible
+echo Telechargement des publications L'ECHO (journal)...
+python journal/download_calameo.py
+if errorlevel 1 (
+    echo   Ignore - Playwright non installe ou echec. Les PDFs existants seront utilises.
+) else (
+    echo   OK.
+)
+echo.
+
+:: Indexation des PDFs (static + journal) pour la base vectorielle
+echo Indexation des PDFs (PV + L'ECHO)...
+python ingest.py
+if errorlevel 1 (
+    echo ERREUR lors de l'indexation.
+    pause
+    exit /b 1
+)
+echo   OK.
+echo.
+
+:: Extraction des statistiques de vote si absentes
+if not exist "%~dp0vector_db\stats.json" (
+    echo Extraction des statistiques de vote...
+    python stats_extract.py
+    if errorlevel 1 (
+        echo ERREUR lors de l'extraction des statistiques.
+        pause
+        exit /b 1
+    )
+    echo   OK.
+    echo.
+)
+
+:: Verifier qu'on est dans un depot git
 git status >nul 2>&1
 if errorlevel 1 (
     echo ERREUR : Ce dossier n'est pas un depot Git.

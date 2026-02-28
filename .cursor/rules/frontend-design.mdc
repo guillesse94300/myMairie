@@ -1,0 +1,134 @@
+---
+description: Design system et conventions frontend — Django templates et Streamlit
+globs: web/**/*.html, web/**/*.css, app.py, .streamlit/**/*
+alwaysApply: false
+---
+
+# Agent Frontend — Design myMairie Pierrefonds
+
+Règle pour maintenir la cohérence visuelle et les conventions du frontend du site de recherche dans les comptes rendus du Conseil Municipal de Pierrefonds.
+
+---
+
+## 1. Deux frontends distincts
+
+| Frontend | Fichiers | Stack |
+|----------|----------|-------|
+| **Django** | `web/search/templates/search/index.html` | Templates HTML, CSS inline |
+| **Streamlit** | `app.py`, `.streamlit/config.toml` | Streamlit, Plotly |
+
+Pas de design system partagé — chaque frontend a ses propres conventions.
+
+---
+
+## 2. Design system Django (templates)
+
+### Variables CSS (`:root`)
+
+```css
+--bg: #f5f5f0;           /* Fond de page */
+--card: #fff;            /* Fond des cartes */
+--border: #ddd;          /* Bordures */
+--primary: #2c5f2d;      /* Vert principal (titres, liens, boutons) */
+--primary-light: #97c593; /* Accents, soulignement liens */
+--text: #222;            /* Texte principal */
+--muted: #666;           /* Texte secondaire */
+```
+
+### Couleurs de feedback
+
+| Type | Fond | Texte |
+|------|------|-------|
+| Erreur | `#fde8e8` | `#a00` |
+| Avertissement | `#fff8e6` | `#8a6d00` |
+
+### Typographie
+
+- Police : `"Segoe UI", system-ui, sans-serif`
+- `line-height: 1.5`
+- `h1` : `1.5rem`, `font-weight: 600`, `color: var(--primary)`
+
+### Espacement et layout
+
+- `padding: 1.5rem` sur body
+- `max-width: 800px` pour le contenu principal (`.container`)
+- `border-radius: 6px` (inputs, boutons), `8px` (cartes)
+- `gap: 0.5rem` dans les formulaires flex
+
+### Composants Django
+
+| Classe | Usage |
+|--------|-------|
+| `.container` | Conteneur centré, max-width 800px |
+| `.form` | Formulaire flex, gap 0.5rem |
+| `input[type="search"]` | Focus ring `var(--primary)`, box-shadow rgba(44,95,45,0.15) |
+| `.form button` | Fond `var(--primary)`, hover `#234a24` |
+| `.error` | Message d'erreur (fond rouge clair) |
+| `.no-base` | Message avertissement (fond jaune) |
+| `.result` | Carte résultat : fond blanc, bordure, shadow légère |
+| `.result-meta` | Métadonnées (fichier, page) — primary, bold |
+| `.result-doc-link` | Lien PDF — primary, souligné primary-light |
+| `.footer` | Pied de page — muted, 0.85rem |
+
+### Langue
+
+- Toujours `lang="fr"` sur `<html>`
+
+---
+
+## 3. Design system Streamlit
+
+### Configuration
+
+- `layout="wide"`
+- `page_icon="🏛️"`
+- Pas de thème personnalisé dans `config.toml` (défaut Streamlit)
+
+### CSS personnalisé (masquage UI)
+
+Masquer : toolbar, deploy button, footer, sidebar nav, MainMenu.
+
+### Couleurs des scores de pertinence
+
+| Score | Couleur |
+|-------|---------|
+| > 0.6 | `green` |
+| > 0.4 | `orange` |
+| ≤ 0.4 | `red` |
+
+### Couleurs des graphiques Plotly
+
+- Barres : `#4c78a8`, `#f58518`
+- Pie : `#54a24b`, `#f58518`, `#bab0ac`
+- Palette : `#4c78a8`, `#f58518`, `#54a24b`, `#bab0ac`, `#f0f2f6`
+
+### Patterns Streamlit
+
+- `st.tabs` : Recherche, Statistiques, Sources & Documents
+- `st.columns([3,1,1])` ou `[5,1,1]` pour les layouts
+- `st.container(border=True)` pour les cartes de résultats
+- `st.expander` pour les sections repliables
+- Boutons thèmes dans la sidebar (use_container_width=True)
+
+### Typographie sidebar
+
+- `font-family: "Source Sans Pro", "Segoe UI", sans-serif`
+- Version/commit : `font-size: 0.78em`, `color: #888`
+
+---
+
+## 4. Conventions à respecter
+
+1. **Django** : réutiliser les variables CSS existantes ; ne pas introduire de nouvelles couleurs sans les ajouter à `:root`.
+2. **Streamlit** : conserver les couleurs de score (vert/orange/rouge) et la palette Plotly pour les graphiques.
+3. **Accessibilité** : focus visible sur les inputs (ring primary).
+4. **Responsive** : `viewport` meta, conteneur max-width.
+5. **Français** : tous les textes et placeholders en français.
+
+---
+
+## 5. Fichiers clés
+
+- `web/search/templates/search/index.html` — template Django unique
+- `app.py` — interface Streamlit (lignes 382–428 : CSS, 410–428 : sidebar)
+- `web/config/settings.py` — `STATIC_URL`, `TEMPLATES`

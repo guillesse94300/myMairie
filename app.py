@@ -401,7 +401,8 @@ def _liens_sources(text: str, passages: list) -> str:
     fname_map = {}
     for i, (_, meta, _) in enumerate(passages, 1):
         fname = meta.get("filename", "")
-        url   = f"{PDF_BASE_URL}/{fname}"
+        rel_path = meta.get("rel_path", fname)
+        url   = f"{PDF_BASE_URL}/{rel_path}"
         id_map[str(i)] = (fname, url)
         if fname:
             fname_map[fname] = url
@@ -537,12 +538,12 @@ def main():
         "pertinents dans les PV puis génère une réponse synthétisée."
     )
     st.caption(
-        "Exemples : *Quelles décisions ont été prises sur le Bois d'Haucourt ?* · "
-        "*Comment ont évolué les tarifs de la cantine scolaire (Louis Lesueur) ?* · "
+        "Exemples : *Comment ont évolué les tarifs de la cantine scolaire ?* · "
         "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
-        "*Quelles délibérations concernent le SE60 ou l'éclairage public ?* · "
-        "*Qu'a décidé le conseil sur l'intercommunalité avec la CCLoise ?* · "
-        "*Que sais-tu sur les logiciels Horizon ?*"
+        "*Quelles délibérations concernent l'éclairage public ?* · "
+        "*Qu'a décidé le conseil sur l'intercommunalité ?* · "
+        "*Que sais-tu sur les logiciels Horizon ?* · "
+        "*Que sais-tu de Vertefeuille ?*"
     )
 
     agent_years = []
@@ -581,7 +582,8 @@ def main():
             with st.expander(f"📚 {len(passages)} passages consultés"):
                 for rank, (doc, meta, score) in enumerate(passages, 1):
                     color = "green" if score > 0.6 else "orange" if score > 0.4 else "red"
-                    pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
+                    rel_path = meta.get("rel_path", meta["filename"])
+                    pdf_url = f"{PDF_BASE_URL}/{rel_path}"
                     st.markdown(
                         f"**#{rank}** — [{meta['filename']}]({pdf_url}) · "
                         f"`{meta['date']}` · "
@@ -675,7 +677,8 @@ def main():
                             unsafe_allow_html=True,
                         )
                     with c3:
-                        pdf_url = f"{PDF_BASE_URL}/{meta['filename']}"
+                        rel_path = meta.get("rel_path", meta["filename"])
+                        pdf_url = f"{PDF_BASE_URL}/{rel_path}"
                         st.markdown(
                             f'<a href="{pdf_url}" target="_blank">'
                             f'<button style="width:100%;padding:6px;cursor:pointer;'
@@ -887,13 +890,14 @@ def main():
             "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
         )
         st.divider()
-        st.markdown("**Documents disponibles** (triés par date décroissante)")
-        pdfs = sorted(PDF_DIR.glob("*.pdf"), key=_pdf_date_key, reverse=True)
-        if pdfs:
-            for p in pdfs:
+        st.markdown("**Documents disponibles** (PV + L'ECHO, triés par date décroissante)")
+        pdfs_static = sorted((APP_DIR / "static").rglob("*.pdf"), key=_pdf_date_key, reverse=True)
+        if pdfs_static:
+            for p in pdfs_static:
                 dt = _pdf_date_key(p)
                 label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
-                pdf_url = f"{PDF_BASE_URL}/{p.name}"
+                rel_path = str(p.relative_to(APP_DIR / "static")).replace("\\", "/")
+                pdf_url = f"{PDF_BASE_URL}/{rel_path}"
                 st.markdown(
                     f"`{label_date}` — [📄 {p.name}]({pdf_url})",
                 )

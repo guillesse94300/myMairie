@@ -140,6 +140,12 @@ def download_book(page, book_id, filename, num_pages):
 
 
 def main():
+    # Si tous les PDFs sont déjà téléchargés, passer cette étape
+    existing = [OUTPUT_DIR / f"{fn}.pdf" for _, fn, _ in BOOKS]
+    if all(p.exists() for p in existing):
+        print("L'ECHO : tous les PDFs sont déjà téléchargés, étape ignorée.")
+        return
+
     print("Telechargement des publications L'ECHO depuis Calameo")
     print("=" * 60)
 
