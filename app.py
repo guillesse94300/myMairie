@@ -590,14 +590,23 @@ def main():
                 "Posez une question en langage naturel. Casimir recherche les passages "
                 "pertinents dans les PV puis génère une réponse synthétisée."
             )
-            st.caption(
-                "Exemples : *Comment ont évolué les tarifs de la cantine scolaire ?* · "
-                "*Quels travaux de voirie ont été votés et pour quel montant ?* · "
-                "*Quelles délibérations concernent l'éclairage public ?* · "
-                "*Qu'a décidé le conseil sur l'intercommunalité ?* · "
-                "*Que sais-tu sur les logiciels Horizon ?* · "
-                "*Que sais-tu de Vertefeuille ?*"
-            )
+
+            AGENT_EXAMPLES = [
+                "Comment ont évolué les tarifs de la cantine scolaire ?",
+                "Quels travaux de voirie ont été votés et pour quel montant ?",
+                "Quelles délibérations concernent l'éclairage public ?",
+                "Qu'a décidé le conseil sur l'intercommunalité ?",
+                "Que sais-tu sur les logiciels Horizon ?",
+                "Que sais-tu de Vertefeuille ?",
+            ]
+            st.caption("Exemples (cliquez pour remplir et lancer la recherche) :")
+            ex_c1, ex_c2 = st.columns(2)
+            for i, ex in enumerate(AGENT_EXAMPLES):
+                with (ex_c1 if i % 2 == 0 else ex_c2):
+                    if st.button(f"🔗 {ex}", key=f"agent_ex_{i}", use_container_width=True):
+                        st.session_state["agent_question"] = ex
+                        st.session_state["agent_auto_search"] = True
+                        st.rerun()
 
             agent_years = []
             n_passages  = 15
@@ -607,9 +616,14 @@ def main():
                 placeholder="Ex : Comment ont évolué les tarifs de la cantine scolaire ?",
                 height=80,
                 label_visibility="collapsed",
+                key="agent_question",
             )
 
-            if st.button("Obtenir une réponse", type="primary", disabled=not question.strip(), key="agent_btn"):
+            do_search = (
+                st.button("Obtenir une réponse", type="primary", disabled=not question.strip(), key="agent_btn")
+                or st.session_state.pop("agent_auto_search", False)
+            )
+            if do_search and question.strip():
                 with st.spinner("Recherche des passages pertinents…"):
                     passages = search_agent(
                         question, embeddings, documents, metadata,
@@ -645,7 +659,7 @@ def main():
                             )
                             st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
             elif not question.strip():
-                st.info("Saisissez une question ci-dessus puis cliquez sur **Obtenir une réponse**.")
+                st.info("Saisissez une question ou cliquez sur un exemple ci-dessus.")
 
         # ════════════════════════════════════════════════════════════════════════
         # SECTION RECHERCHE

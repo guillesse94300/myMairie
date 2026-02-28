@@ -23,6 +23,9 @@ OUTPUT_DIR = APP_DIR / "knowledge_sites"
 CHUNK_SIZE = 100_000  # max bytes à lire par page
 TIMEOUT = 15
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+# Sites qui bloquent les User-Agent génériques : utiliser Googlebot (autorisé dans leur robots.txt)
+USER_AGENT_GOOGLEBOT = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+BOT_FRIENDLY_DOMAINS = ("courrier-picard.fr",)
 
 
 def url_to_filename(url: str) -> str:
@@ -54,13 +57,26 @@ def extract_text(html: str, url: str) -> str:
     return "\n\n".join(lines)
 
 
+def _user_agent_for(url: str) -> str:
+    """User-Agent adapté au domaine (certains sites n'autorisent que Googlebot)."""
+    domain = urlparse(url).netloc.lower().replace("www.", "")
+    if any(d in domain for d in BOT_FRIENDLY_DOMAINS):
+        return USER_AGENT_GOOGLEBOT
+    return USER_AGENT
+
+
 def fetch_url(url: str) -> tuple[str, str] | None:
     """Récupère une URL et retourne (titre, contenu_markdown) ou None."""
+    headers = {
+        "User-Agent": _user_agent_for(url),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
+    }
     try:
         r = requests.get(
             url,
             timeout=TIMEOUT,
-            headers={"User-Agent": USER_AGENT},
+            headers=headers,
             stream=True,
         )
         r.raise_for_status()
