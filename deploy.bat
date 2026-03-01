@@ -41,7 +41,7 @@ if errorlevel 1 (
 )
 
 :: Afficher les fichiers modifiés
-echo Fichiers modifies :
+echo Fichiers modifies ^(vector_db doit apparaitre si vous venez de reindexer^) :
 git status --short
 echo.
 
@@ -59,15 +59,16 @@ echo.
 
 :: Stager tous les changements (dont toute la base vectorielle)
 git add -A
-:: Forcer l'ajout de toute la base vector_db : documents.pkl, embeddings.npy, metadata.pkl, stats.json
+:: Forcer l'ajout de toute la base vector_db (-f pour etre sur que les derniers fichiers sont pris)
 if exist "%~dp0vector_db" (
     echo Inclusion de toute la base vector_db dans le commit...
-    git add "%~dp0vector_db\documents.pkl"
-    git add "%~dp0vector_db\embeddings.npy"
-    git add "%~dp0vector_db\metadata.pkl"
-    git add "%~dp0vector_db\stats.json"
-    git add "%~dp0vector_db"
-    echo   documents.pkl, embeddings.npy, metadata.pkl, stats.json
+    git add -f "%~dp0vector_db\documents.pkl"
+    git add -f "%~dp0vector_db\embeddings.npy"
+    git add -f "%~dp0vector_db\metadata.pkl"
+    git add -f "%~dp0vector_db\stats.json"
+    git add -f "%~dp0vector_db"
+    echo   Fichiers vector_db stages pour commit :
+    git status --short vector_db/
     echo.
 )
 if errorlevel 1 (
