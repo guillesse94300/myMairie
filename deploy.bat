@@ -57,8 +57,9 @@ echo.
 echo Message : !MSG!
 echo.
 
-:: Stager tous les changements
+:: Stager tous les changements (dont la base vectorielle pour Casimir)
 git add -A
+git add vector_db/
 if errorlevel 1 (
     echo ERREUR lors du git add.
     pause
@@ -92,7 +93,7 @@ if errorlevel 1 (
 :: Confirmer le push de tous les fichiers
 set CONFIRM_PUSH=
 echo.
-set /p CONFIRM_PUSH="Pousser tous les fichiers vers GitHub ^(deploiement app^) ? (o/n) [o] : "
+set /p CONFIRM_PUSH="Pousser vers GitHub ^(dont base vectorielle vector_db^) ? (o/n) [o] : "
 if /i "!CONFIRM_PUSH!"=="n" goto skip_push
 if /i "!CONFIRM_PUSH!"=="non" goto skip_push
 echo.
