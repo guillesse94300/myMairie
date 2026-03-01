@@ -441,11 +441,16 @@ def search_agent(question: str, embeddings, documents, metadata,
                         .replace('ê','e').replace('û','u') not in _STOP_FR]
 
     query_wants_figures = bool(_QUERY_TARIF_MONTANT.search(question))
+    query_wants_voirie = bool(_QUERY_RECENT_DELIB.search(question))  # travaux, voirie, etc.
 
     def _score_with_bonus(doc, meta, score):
-        # Bonus léger si la question porte sur tarifs/montants et le passage contient des chiffres
+        # Bonus si la question porte sur tarifs/montants et le passage contient des chiffres
         if query_wants_figures and _CHUNK_HAS_NUMBER.search(doc):
             score = score + 0.04
+        # Bonus pour les chunks issus de PDF (PV) quand la question porte sur voirie/travaux/montants
+        fname = meta.get("filename", "")
+        if (query_wants_figures or query_wants_voirie) and str(fname).lower().endswith(".pdf"):
+            score = score + 0.05
         return (doc, meta, min(score, 1.0))
 
     seen: dict = {}
@@ -554,13 +559,13 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
 2. Si un passage ne traite pas directement du sujet de la question, ignore-le.
 3. Ne cite un montant ou un chiffre QUE s'il est explicitement associé au sujet \
    exact de la question dans le passage.
-4. Si l'information est absente ou insuffisante, dis-le clairement et brièvement.
-4b. Pour les questions sur les montants (travaux de voirie, budget, délibérations) : si les \
-   passages ne contiennent pas le montant demandé, indique où le trouver : les montants précis \
-   figurent dans les procès-verbaux (PV) et délibérations sur mairie-pierrefonds.fr \
-   (vie municipale > conseil municipal > procès-verbaux). Le maire-adjoint voirie est \
-   Jean-Jacques Carretero ; les crédits voirie peuvent apparaître dans les délibérations \
-   budget, décisions modificatives ou éclairage public.
+4. Si l'information est absente ou insuffisante, dis-le clairement et brièvement. Ne liste jamais \
+   tous les numéros de source (ex. [1, 2, 3, ... 28]) pour dire que l'info manque ; formule en une phrase.
+4b. Pour les questions sur les montants (travaux de voirie, budget, délibérations) : avant de conclure \
+   que les montants sont absents, cherche dans les passages tout chiffre (€, HT, TTC, euros) lié à la \
+   voirie, aux travaux ou au budget ; cite-les avec leur source si tu les trouves. Si vraiment aucun \
+   montant pertinent n'apparaît, indique alors où le trouver : procès-verbaux sur mairie-pierrefonds.fr \
+   (vie municipale > conseil municipal). Maire-adjoint voirie : Jean-Jacques Carretero.
 4c. Tarifs et barèmes : si les passages disent par exemple « les tarifs sont les suivants » ou \
    « barème selon quotient familial » mais ne contiennent pas les montants ou le tableau, \
    indique explicitement que les chiffres détaillés ne figurent pas dans les extraits fournis \
