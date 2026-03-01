@@ -6,6 +6,9 @@ echo ============================================
 echo   Deploiement vers Streamlit Cloud
 echo ============================================
 echo.
+echo   OneDrive : si vector_db ne se met pas a jour sur GitHub, faites clic droit
+echo   sur le dossier vector_db ^> Toujours conserver sur cet appareil
+echo.
 
 cd /d "%~dp0"
 
@@ -57,6 +60,15 @@ echo.
 echo Message : !MSG!
 echo.
 
+:: OneDrive : forcer les fichiers vector_db a etre bien sur disque avant que git les lise
+if exist "%~dp0vector_db" (
+    echo Preparation vector_db pour commit ^(OneDrive peut retarder l'ecriture^)...
+    git update-index --refresh
+    python -c "import os; d=os.path.join(os.getcwd(),'vector_db'); [open(os.path.join(d,f),'rb').read(1) for f in ['documents.pkl','embeddings.npy','metadata.pkl','stats.json'] if os.path.exists(os.path.join(d,f))]"
+    timeout /t 2 /nobreak >nul
+    echo.
+)
+
 :: Stager tous les changements (dont toute la base vectorielle)
 git add -A
 :: Forcer l'ajout de toute la base vector_db (-f pour etre sur que les derniers fichiers sont pris)
@@ -69,6 +81,7 @@ if exist "%~dp0vector_db" (
     git add -f "%~dp0vector_db"
     echo   Fichiers vector_db stages pour commit :
     git status --short vector_db/
+    echo   Si aucun M ci-dessus, le dossier vector_db peut etre en "Fichiers a la demande" OneDrive : clic droit vector_db - Toujours conserver sur cet appareil
     echo.
 )
 if errorlevel 1 (
