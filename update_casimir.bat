@@ -72,10 +72,30 @@ python stats_extract.py 2>nul
 if errorlevel 1 echo   ATTENTION : echec stats_extract.py
 echo.
 
+:: Commit systematique de tout vector_db dans git
+if exist "%~dp0vector_db" (
+    git status >nul 2>&1
+    if not errorlevel 1 (
+        echo Commit de tous les fichiers vector_db...
+        git add "%~dp0vector_db\*"
+        git add "%~dp0vector_db"
+        git diff --cached --quiet -- vector_db
+        if errorlevel 1 (
+            git commit -m "vector_db: reindex documents.pkl embeddings.npy metadata.pkl stats.json"
+            if not errorlevel 1 (
+                echo   Commit vector_db effectue : documents.pkl, embeddings.npy, metadata.pkl, stats.json
+            )
+        ) else (
+            echo   vector_db deja a jour dans le dernier commit.
+        )
+        echo.
+    )
+)
+
 echo ============================================
 echo   Reindex termine.
 echo ============================================
 echo.
-echo   Pour pousser vector_db sur GitHub : lancez  deploy.bat
+echo   Pour pousser sur GitHub : lancez  deploy.bat
 echo.
 if not "%~1"=="-q" pause

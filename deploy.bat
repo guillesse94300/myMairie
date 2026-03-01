@@ -57,12 +57,17 @@ echo.
 echo Message : !MSG!
 echo.
 
-:: Stager tous les changements (dont la base vectorielle pour Casimir)
+:: Stager tous les changements (dont toute la base vectorielle)
 git add -A
-:: Forcer l'ajout de vector_db pour que la base Casimir soit toujours poussee
+:: Forcer l'ajout de toute la base vector_db : documents.pkl, embeddings.npy, metadata.pkl, stats.json
 if exist "%~dp0vector_db" (
-    echo Inclusion de vector_db/ ^(base Casimir^) dans le commit...
+    echo Inclusion de toute la base vector_db dans le commit...
+    git add "%~dp0vector_db\documents.pkl"
+    git add "%~dp0vector_db\embeddings.npy"
+    git add "%~dp0vector_db\metadata.pkl"
+    git add "%~dp0vector_db\stats.json"
     git add "%~dp0vector_db"
+    echo   documents.pkl, embeddings.npy, metadata.pkl, stats.json
     echo.
 )
 if errorlevel 1 (
