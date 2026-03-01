@@ -849,7 +849,7 @@ def main():
         /* Bandeau : padding interne, contenu ne touche pas les bords */
         [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child { margin-bottom: 0.5rem !important; padding: 0.5rem 0.75rem !important; box-sizing: border-box !important; }
         [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child [data-testid="stVerticalBlock"] { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
-        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; }
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; white-space: nowrap !important; }
         </style>""",
         unsafe_allow_html=True,
     )
