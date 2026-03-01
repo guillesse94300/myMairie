@@ -90,7 +90,7 @@ Gratuit
 
 École des Beaux-Arts
 
-28 février
+01 mars
 
 Exposition - Foire - Portes ouvertes
 
@@ -98,27 +98,35 @@ Gravures & Monotypes – Travaux d’hier et d’aujourd’hui
 
 COMPIEGNE
 
+Commune de Cuise-la-Motte
+
+01 mars à 08h00
+
+Marché
+
+Marché de Cuise-la-Motte
+
+CUISE-LA-MOTTE
+
 Gratuit
 
-Non contractuelle - jacqueline macou / Pixabay
+Photo libre de droit
 
-28 février à 10h00
+01 mars à 09h00
 
-Initiation - atelier
+Brocantes - Braderies
 
-Labo-écriture
+Vide-dressing adultes, à Pierrefonds
 
-MARGNY-LES-COMPIEGNE
+PIERREFONDS
 
-à partir de 45 €
+Non contractuelle - © Alexey Marcov / Pixabay
 
-La Dame aux Fleurs
+01 mars à 10h00
 
-28 février à 10h00
+Loisirs et détente
 
-Initiation - atelier
-
-Atelier floral | Fête des grands-mères
+Méga Loto | Compiègne
 
 COMPIEGNE
 
@@ -126,7 +134,7 @@ Gratuit
 
 Rémi Courgeon
 
-28 février à 10h00
+01 mars à 10h00
 
 Exposition - Foire - Portes ouvertes
 
@@ -136,27 +144,15 @@ MARGNY-LES-COMPIEGNE
 
 Gratuit
 
-Dominique de Dieuleveult
+Corrine Thybaud
 
-28 février à 10h00
-
-Exposition - Foire - Portes ouvertes
-
-Entrelacs et transparences
-
-MARGNY-LES-COMPIEGNE
-
-Gratuit
-
-ARC
-
-28 février à 10h00
+01 mars à 10h00
 
 Exposition - Foire - Portes ouvertes
 
-Les visages de l’industrie
+Au-dehors, au-dedans | Corinne Thybaud
 
-COMPIEGNE
+PIERREFONDS
 
 Éclats d'hiver...
 

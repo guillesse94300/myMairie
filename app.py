@@ -512,17 +512,27 @@ def search_agent(question: str, embeddings, documents, metadata,
                     score_h = 0.58 if y == 2025 else 0.48
                     seen[key] = (doc, meta, score_h)
                     added_h += 1
-            # Recherche sémantique ciblée en complément
+            # Recherche sémantique ciblée en complément (2025/2024)
             for kw in ("logiciels métiers", "renouvellement contrat", "Horizon"):
                 extra = search(kw, embeddings, documents, metadata, n=10, year_filter=[2025, 2024], exact=True)
                 for doc, meta, score in extra:
                     key = (meta.get("filename", ""), meta.get("chunk", 0))
                     if key not in seen:
                         seen[key] = _score_with_bonus(doc, meta, score + 0.12)
+            # Secours : inclure tout passage qui mentionne "Horizon" ou "logiciel" (toutes années),
+            # pour ne jamais répondre "aucune information sur Horizon" quand des PV en parlent (ex. 2022).
+            for kw in ("Horizon", "logiciel", "logiciels"):
+                extra = search(kw, embeddings, documents, metadata, n=18, year_filter=None, exact=True)
+                for doc, meta, score in extra:
+                    key = (meta.get("filename", ""), meta.get("chunk", 0))
+                    if key not in seen:
+                        y = meta.get("year") or ""
+                        bonus = 0.18 if y == "2025" else 0.12 if y == "2024" else 0.06
+                        seen[key] = _score_with_bonus(doc, meta, score + bonus)
 
-    # Pour voirie/travaux/montant : forcer l'inclusion de chunks qui contiennent "voirie" ou "travaux" (exact)
+    # Pour voirie/travaux/montant : forcer l'inclusion de chunks qui contiennent "voirie", "travaux", "crédit", "Armistice"
     if query_wants_voirie or query_wants_figures:
-        for exact_query in ("voirie travaux", "voirie", "travaux"):
+        for exact_query in ("voirie travaux", "voirie", "travaux", "crédit", "Armistice", "rue de l'Armistice"):
             exact_chunks = search(exact_query, embeddings, documents, metadata, n=10, year_filter=year_filter, exact=True)
             for doc, meta, score in exact_chunks:
                 key = (meta.get("filename", ""), meta.get("chunk", 0))
@@ -582,7 +592,8 @@ def search_agent(question: str, embeddings, documents, metadata,
     }
     if (query_wants_figures or query_wants_voirie) and pdf_files_in_context:
         added = 0
-        max_extra_amount_chunks = 12
+        # Plus de chunks financiers du même PV pour les questions voirie/montants (réponse plus complète)
+        max_extra_amount_chunks = 22 if query_wants_voirie else 12
         for i, (doc, meta) in enumerate(zip(documents, metadata)):
             if added >= max_extra_amount_chunks:
                 break
@@ -667,11 +678,12 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    exact de la question dans le passage.
 4. Si l'information est absente ou insuffisante, dis-le clairement et brièvement. Ne liste jamais \
    tous les numéros de source (ex. [1, 2, 3, ... 28]) pour dire que l'info manque ; formule en une phrase.
-4b. Pour les questions sur les montants (travaux de voirie, budget, délibérations) : avant de conclure \
-   que les montants sont absents, cherche dans les passages tout chiffre (€, HT, TTC, euros) lié à la \
-   voirie, aux travaux ou au budget ; cite-les avec leur source si tu les trouves. Si vraiment aucun \
-   montant pertinent n'apparaît, indique alors où le trouver : procès-verbaux sur mairie-pierrefonds.fr \
-   (vie municipale > conseil municipal). Maire-adjoint voirie : Jean-Jacques Carretero.
+4b. Pour les questions sur les montants (travaux de voirie, budget, délibérations) : fournis une réponse \
+   complète avec les éléments financiers disponibles. Parcours TOUS les passages fournis pour repérer \
+   tout chiffre (€, HT, TTC, euros, crédit, subvention) lié à la voirie, aux travaux ou au budget ; \
+   cite-les avec leur source [N]. Si aucun montant pertinent n'apparaît dans les extraits, indique alors \
+   où le trouver : procès-verbaux complets sur mairie-pierrefonds.fr (Vie municipale > Conseil municipal). \
+   Maire-adjoint voirie : Jean-Jacques Carretero.
 4c. Tarifs et barèmes : si les passages disent par exemple « les tarifs sont les suivants » ou \
    « barème selon quotient familial » mais ne contiennent pas les montants ou le tableau, \
    indique explicitement que les chiffres détaillés ne figurent pas dans les extraits fournis \
@@ -679,15 +691,17 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    le barème complet. Les tableaux (cantine, périscolaire, etc.) sont désormais mieux indexés ; \
    si un passage contient un tableau avec des chiffres, cite-les avec leur source.
 4d. Sujets récurrents (logiciels, Horizon, contrats) : pour les questions sur Horizon ou les logiciels \
-   métiers, structure ta réponse en détaillant d'abord la situation en 2025 (ou la plus récente année \
-   présente dans les passages) : décisions, montants votés, renouvellement, DETR, etc. avec la source [N]. \
-   Ensuite seulement rapporte l'historique (ex. 2022). Ne pas se contenter de citer uniquement les anciens \
-   PV (ex. 2022) ; si des passages 2025 sont fournis, tu DOIS les exploiter et les détailler en premier.
-4e. Travaux de voirie et montants : quand l'utilisateur demande les travaux de voirie votés et leurs \
-   montants, si les passages fournis contiennent des informations sur des travaux (rue, chaussée, voirie) \
-   et des montants (€, crédit, budget) pour les dernières années, liste-les explicitement : indiquer \
-   l'année ou la date, le type de travaux / la rue concernée, et le montant avec sa source [N]. \
-   Ne pas se contenter de dire que les montants ne figurent pas si des chiffres apparaissent dans les passages.
+   métiers, utilise TOUS les passages qui mentionnent Horizon, logiciel, renouvellement ou DETR. \
+   Détaille d'abord la plus récente année présente (ex. 2025), puis l'historique (ex. 2022). \
+   Si les passages ne contiennent que des délibérations plus anciennes (ex. 2022), réponds quand même \
+   en t'appuyant sur elles et indique que « les extraits fournis concernent notamment la délibération de [date] » \
+   avec les montants et décisions. Ne réponds jamais « aucune information sur Horizon dans les passages » \
+   dès qu'au moins un passage mentionne Horizon ou les logiciels métiers.
+4e. Travaux de voirie et montants : donne une réponse complète avec des éléments financiers quand c'est possible. \
+   (1) Résume ce que disent les passages : quels travaux (ex. rue de l'Armistice), où, contexte (circulation alternée, etc.) avec la source [N]. \
+   (2) Cite tout montant, crédit, subvention ou budget trouvé dans les passages (€, HT, TTC) avec sa source [N]. \
+   (3) Si le montant exact n'est pas dans les extraits, indique-le clairement et renvoie vers les procès-verbaux complets (mairie, Vie municipale > Conseil municipal). \
+   Structure la réponse (titres courts ou paragraphes) pour que les éléments financiers soient visibles ; ne te contente pas d'un seul paragraphe vague.
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.

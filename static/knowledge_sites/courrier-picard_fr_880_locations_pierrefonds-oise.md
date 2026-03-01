@@ -512,35 +512,35 @@ Carburant
 
 Le fil info
 
-9h25
+22h16
 
-France Monde
+Sports
 
-Guerre au Moyen-Orient : frappes sur l’Iran, sur une base navale américaine… On fait le point
+Hockey sur glace (Ligue Magnus) : Amiens s’offre Marseille dans un match tendu
 
-11h38
+21h58
 
-Amiens et Métropole
+Sports
 
-Un homme interpellé à la gare d’Amiens pour masturbation
+Athlétisme (Championnats de France en salle) : l’or de Vanessa Lokuli à la longueur embellit le bilan de l’Amiens UC
 
-22h36
+21h43
 
-Santerre
+Picardie
 
-Deux personnes blessées par arme blanche près d’un village de l’est de la Somme
+Comment se portent les finances du Département de la Somme ?
 
-8h56
+21h33
 
-Ham et environs
+Edito
 
-Eppeville : deux jeunes pris au piège dans l’incendie de leur maison
+Édito. Frapper d’abord, parler ensuite
 
-8h34
+20h42
 
-Nord amiénois
+Péronne et sa région
 
-Incendie dans une habitation de Bernaville, un blessé léger
+Agriculture : un nouveau feu de la colère à Estrées-Deniécourt
 
 Voir tout le Fil info
 

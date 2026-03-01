@@ -8,7 +8,7 @@ Aller au contenu
 
 Bienvenue sur la page du Collectif PEPITES
 
-Essayer gratuitement
+Crée avec
 
 Bienvenue sur la page du Collectif PEPITES
 
