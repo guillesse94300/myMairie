@@ -67,6 +67,7 @@ KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py
 DB_DIR         = APP_DIR / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 1000   # caractères max par chunk
+CHUNK_OVERLAP  = 180    # recouvrement entre chunks (évite de couper tableaux/chiffres)
 
 # OCR des PDFs journal (L'ECHO) : très lent en CPU. Mettre INGEST_OCR_JOURNAL=1 pour l'activer.
 OCR_JOURNAL    = os.environ.get("INGEST_OCR_JOURNAL", "0").strip().lower() in ("1", "true", "yes")
@@ -171,14 +172,23 @@ def extract_text_ocr(pdf_path: Path) -> list:
         return []
 
 
-# ── Découpage du texte en chunks ───────────────────────────────────────────────
-def chunk_text(text: str, size: int = CHUNK_SIZE) -> list:
+# ── Découpage du texte en chunks (avec overlap pour préserver tableaux/chiffres) ─
+def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list:
     paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
     chunks, current = [], ""
     for para in paragraphs:
         if len(current) + len(para) + 1 > size and current:
             chunks.append(current.strip())
-            current = para
+            # Garder un recouvrement : repartir de la fin du chunk pour ne pas couper barèmes/tarifs
+            if overlap > 0 and len(current) > overlap:
+                tail = current[-overlap:].strip()
+                # couper au dernier espace pour éviter de tronquer un mot
+                last_space = tail.rfind(" ")
+                if last_space > 50:
+                    tail = tail[last_space + 1:].strip()
+                current = (tail + " " + para).strip() if tail else para
+            else:
+                current = para
         else:
             current = (current + " " + para).strip() if current else para
     if current:

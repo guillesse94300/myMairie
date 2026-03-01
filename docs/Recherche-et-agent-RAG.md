@@ -14,9 +14,9 @@ Ce document décrit les choix techniques de la recherche vectorielle, du chunkin
 
 ## 2. Chunking (découpage des textes)
 
-- **Taille** : `CHUNK_SIZE = 1000` caractères (défini dans `ingest.py`).
+- **Taille** : `CHUNK_SIZE = 1000` caractères, `CHUNK_OVERLAP = 180` (définis dans `ingest.py`).
 - **Règle** : découpage par paragraphes (splits sur `\n`), accumulation de paragraphes jusqu’à dépassement de la taille ; les chunks de moins de 80 caractères sont ignorés.
-- **Pas d’overlap explicite** dans `ingest.py` (contrairement à `build_vector_store.py` qui utilise `CHUNK_OVERLAP = 150` pour la base Django).
+- **Overlap** : recouvrement de 180 caractères entre chunks pour ne pas couper tableaux et barèmes.
 
 Pour les fichiers `.md`, le contenu après le premier `---` est seul utilisé pour éviter d’indexer le front matter.
 
@@ -50,9 +50,10 @@ Objectif : combiner sémantique et présence de termes importants, puis élargir
 1. **Recherche sémantique** : appel à `search(question, ..., exact=False)` → premiers candidats.
 2. **Mots significatifs** : extraction des mots de la question (≥ 4 caractères, hors liste de stop words français `_STOP_FR`).
 3. **Recherche exacte** : si des mots significatifs existent, appel à `search(focused_query, ..., exact=True)` avec ces mots ; bonus de +0,05 au score pour les chunks retenus.
-4. **Fusion** : union des résultats par clé `(filename, chunk)` ; en cas de doublon, conservation du meilleur score.
-5. **Expansion de contexte** : pour chaque chunk retenu, ajout des chunks voisins du même fichier (chunk ± 1 et ± 2) avec un score dégressif (score − 0,05 × |delta|).
-6. Tri par score décroissant et retour des `n` premiers résultats (scores plafonnés à 1,0).
+4. **Bonus chiffres** : si la question contient des mots liés aux tarifs/montants (tarif, barème, prix, quotient, etc.), les chunks contenant au moins un chiffre reçoivent un bonus de +0,04 pour favoriser les passages avec barèmes.
+5. **Fusion** : union des résultats par clé `(filename, chunk)` ; en cas de doublon, conservation du meilleur score.
+6. **Expansion de contexte** : pour chaque chunk retenu, ajout des chunks voisins du même fichier (chunk ± 1 et ± 2) avec un score dégressif (score − 0,05 × |delta|).
+7. Tri par score décroissant et retour des `n` premiers résultats (scores plafonnés à 1,0).
 
 Cela permet d’inclure des délibérations ou paragraphes adjacents pour améliorer la cohérence de la réponse du LLM.
 
@@ -64,7 +65,7 @@ Cela permet d’inclure des délibérations ou paragraphes adjacents pour améli
 
 1. L’utilisateur envoie une question.
 2. **Rate limit** : vérification 5 requêtes/heure par IP (sauf whitelist) ; si dépassé, message d’erreur et pas d’appel API.
-3. **Récupération des passages** : `search_agent(question, ...)` avec `n=15` et filtre année optionnel.
+3. **Récupération des passages** : `search_agent(question, ...)` avec `n=22` et filtre année optionnel.
 4. **Construction du contexte** : les passages sont formatés en XML avec balises `<source id="i" fichier="...">...</source>` et envoyés au LLM.
 5. **Appel LLM** : API Groq, modèle `llama-3.3-70b-versatile`, streaming des tokens ; prompt système fixe + message utilisateur (question + contexte).
 6. **Post-traitement** : les références `[N]` dans la réponse sont remplacées par des liens Markdown vers le PDF ou l’URL source ; suppression des balises `<source>` résiduelles.

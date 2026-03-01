@@ -393,6 +393,14 @@ def excerpt(text: str, terms: list, window: int = 450) -> str:
     return ("…" if start else "") + text[start:end] + ("…" if end < len(text) else "")
 
 
+# Mots-clés indiquant une recherche de chiffres (tarifs, montants) → bonus aux chunks contenant des nombres
+_QUERY_TARIF_MONTANT = re.compile(
+    r"\b(tarif|tarifs|montant|montants|prix|barème|barèmes|coût|coûts|euro|euros|taux|cotisation|grille|quotient)\b",
+    re.IGNORECASE
+)
+# Chunk contient au moins un nombre (améliore le ranking pour les questions tarifaires)
+_CHUNK_HAS_NUMBER = re.compile(r"\d")
+
 # Mots vides français exclus de la recherche exacte
 _STOP_FR = {
     'les', 'des', 'une', 'que', 'qui', 'est', 'pas', 'par', 'sur',
@@ -413,6 +421,7 @@ def search_agent(question: str, embeddings, documents, metadata,
     """
     Combine recherche sémantique et recherche exacte filtrée sur les noms
     significatifs de la question (sans mots vides ni mots de question).
+    Bonus pour les chunks contenant des chiffres quand la question porte sur tarifs/montants.
     """
     sem = search(question, embeddings, documents, metadata,
                  n=n, year_filter=year_filter, exact=False)
@@ -424,6 +433,14 @@ def search_agent(question: str, embeddings, documents, metadata,
            and t.lower().replace('é','e').replace('è','e')
                         .replace('ê','e').replace('û','u') not in _STOP_FR]
 
+    query_wants_figures = bool(_QUERY_TARIF_MONTANT.search(question))
+
+    def _score_with_bonus(doc, meta, score):
+        # Bonus léger si la question porte sur tarifs/montants et le passage contient des chiffres
+        if query_wants_figures and _CHUNK_HAS_NUMBER.search(doc):
+            score = score + 0.04
+        return (doc, meta, min(score, 1.0))
+
     seen: dict = {}
     if sig:
         focused = " ".join(sig)
@@ -431,12 +448,12 @@ def search_agent(question: str, embeddings, documents, metadata,
                        n=n, year_filter=year_filter, exact=True)
         for doc, meta, score in exact:
             key = (meta.get("filename", ""), meta.get("chunk", 0))
-            seen[key] = (doc, meta, score + 0.05)   # bonus priorité
+            seen[key] = _score_with_bonus(doc, meta, score + 0.05)
 
     for doc, meta, score in sem:
         key = (meta.get("filename", ""), meta.get("chunk", 0))
         if key not in seen:
-            seen[key] = (doc, meta, score)
+            seen[key] = _score_with_bonus(doc, meta, score)
 
     # Expansion de contexte : pour chaque chunk trouvé, ajouter les voisins
     # immédiats (±1, ±2) du même fichier — capture les délibérations adjacentes
@@ -528,6 +545,10 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    (vie municipale > conseil municipal > procès-verbaux). Le maire-adjoint voirie est \
    Jean-Jacques Carretero ; les crédits voirie peuvent apparaître dans les délibérations \
    budget, décisions modificatives ou éclairage public.
+4c. Tarifs et barèmes : si les passages disent par exemple « les tarifs sont les suivants » ou \
+   « barème selon quotient familial » mais ne contiennent pas les montants ou le tableau, \
+   indique explicitement que les chiffres détaillés ne figurent pas dans les extraits fournis \
+   et renvoie vers la source (lien vers la page ou les PV) pour consulter le barème complet.
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
@@ -926,6 +947,9 @@ def main():
                 "sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! "
                 "Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …"
             )
+            st.info(
+                "**Tarifs et montants :** les barèmes détaillés (ex. cantine, périscolaire) figurent parfois dans des tableaux non extraits dans la base. Si la réponse ne donne pas les chiffres, ouvrez les sources proposées ou consultez [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr). L'indexation des PDFs (procès-verbaux) améliore les réponses sur les délibérations."
+            )
 
             AGENT_EXAMPLES = [
                 "Comment ont évolué les tarifs de la cantine scolaire ?",
@@ -945,7 +969,7 @@ def main():
                         st.rerun()
 
             agent_years = []
-            n_passages  = 15
+            n_passages  = 22
 
             question = st.text_area(
                 "Votre question",
