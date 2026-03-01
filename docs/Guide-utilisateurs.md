@@ -171,4 +171,13 @@ Il est hébergé sur Streamlit et utilise des modèles d’IA (ex. via Groq). Le
 
 ---
 
+## 12. Documentation technique (développeurs / mainteneurs)
+
+Pour une description technique détaillée du projet (architecture, pipeline d’indexation, recherche sémantique, agent RAG) :
+
+- **[Architecture technique](Architecture-technique.md)** — Structure du projet, pipeline (ALL.bat, fetch_sites, ingest, stats_extract), déploiement, dépendances et variables d’environnement.
+- **[Recherche et agent RAG](Recherche-et-agent-RAG.md)** — Modèle d’embeddings, chunking, base vectorielle, recherche hybride pour l’agent, prompt système, API Groq, rate limiting, sécurité.
+
+---
+
 *Documentation générée pour les utilisateurs du site Casimir — Mairie Pierrefonds (Oise).*

@@ -620,6 +620,14 @@ GUIDE_MD = APP_DIR / "static" / "Guide-utilisateurs.md"
 if not GUIDE_MD.exists():
     GUIDE_MD = APP_DIR / "docs" / "Guide-utilisateurs.md"
 
+# ── Chemins du guide technique (static prioritaire) ─────────────────────────────
+TECH_ARCH_MD = APP_DIR / "static" / "Architecture-technique.md"
+if not TECH_ARCH_MD.exists():
+    TECH_ARCH_MD = APP_DIR / "docs" / "Architecture-technique.md"
+TECH_RAG_MD = APP_DIR / "static" / "Recherche-et-agent-RAG.md"
+if not TECH_RAG_MD.exists():
+    TECH_RAG_MD = APP_DIR / "docs" / "Recherche-et-agent-RAG.md"
+
 
 @st.dialog("Guide Utilisateur", width="large", icon="📖")
 def guide_utilisateur():
@@ -632,6 +640,23 @@ def guide_utilisateur():
         st.markdown(content)
     except Exception as e:
         st.error(f"Impossible de charger le guide : {e}")
+
+
+@st.dialog("Technical Guide", width="large", icon="🔧")
+def technical_guide():
+    """Affiche la documentation technique (Architecture + Recherche/agent RAG) dans une popup."""
+    if not TECH_ARCH_MD.exists() and not TECH_RAG_MD.exists():
+        st.warning("Les fichiers de documentation technique sont introuvables. Exécutez ALL.bat pour les copier vers static.")
+        return
+    try:
+        if TECH_ARCH_MD.exists():
+            with st.expander("Architecture technique", expanded=True):
+                st.markdown(TECH_ARCH_MD.read_text(encoding="utf-8"))
+        if TECH_RAG_MD.exists():
+            with st.expander("Recherche sémantique et agent RAG", expanded=True):
+                st.markdown(TECH_RAG_MD.read_text(encoding="utf-8"))
+    except Exception as e:
+        st.error(f"Impossible de charger le guide technique : {e}")
 
 
 # ── Popup À propos ─────────────────────────────────────────────────────────────
@@ -794,7 +819,7 @@ def main():
     with st.container(border=True):
         c_nav, c_mail_deploy, c_stats = st.columns([2, 2.4, 1.4])
         with c_nav:
-            nav_cols = 4 if admin else 3
+            nav_cols = 5 if admin else 4
             btn_cols = st.columns(nav_cols)
             with btn_cols[0]:
                 if st.button("🏠 Accueil", key="banner_accueil"):
@@ -806,8 +831,11 @@ def main():
             with btn_cols[2]:
                 if st.button("📖 Guide utilisateur", key="banner_guide"):
                     guide_utilisateur()
+            with btn_cols[3]:
+                if st.button("🔧 Technical Guide", key="banner_tech_guide"):
+                    technical_guide()
             if admin:
-                with btn_cols[3]:
+                with btn_cols[4]:
                     if st.button("🔑 ADMIN", key="banner_admin"):
                         admin_searches_db()
         with c_mail_deploy:

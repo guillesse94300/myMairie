@@ -19,13 +19,21 @@ if errorlevel 1 (
 )
 echo.
 
-:: 2. Copie du Guide utilisateur vers static (pour la popup du site)
-echo [2/4] Guide utilisateur - Copie docs\Guide-utilisateurs.md vers static\...
+:: 2. Copie Guide utilisateur + doc technique vers static (pour les popups du site)
+echo [2/4] Documentation - Copie docs\ vers static\...
 if exist "%~dp0docs\Guide-utilisateurs.md" (
     copy /Y "%~dp0docs\Guide-utilisateurs.md" "%~dp0static\Guide-utilisateurs.md" >nul
-    echo   OK.
+    echo   Guide-utilisateurs.md OK.
 ) else (
     echo   ATTENTION : docs\Guide-utilisateurs.md introuvable.
+)
+if exist "%~dp0docs\Architecture-technique.md" (
+    copy /Y "%~dp0docs\Architecture-technique.md" "%~dp0static\Architecture-technique.md" >nul
+    echo   Architecture-technique.md OK.
+)
+if exist "%~dp0docs\Recherche-et-agent-RAG.md" (
+    copy /Y "%~dp0docs\Recherche-et-agent-RAG.md" "%~dp0static\Recherche-et-agent-RAG.md" >nul
+    echo   Recherche-et-agent-RAG.md OK.
 )
 echo.
 
