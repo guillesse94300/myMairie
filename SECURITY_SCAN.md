@@ -1,114 +1,144 @@
 # Scan de sécurité — Déploiement myMairie (Streamlit)
 
-**URL cible :** https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/  
-**Date du scan :** 28 février 2025 (mise à jour complète)
-
-**Méthode :** Analyse statique du code source et des configurations. Le chargement direct de l’URL a expiré côté outil ; le rapport s’appuie sur le dépôt Git et les fichiers du projet.
+**URL cible :** https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/
+**Date du scan :** 1er mars 2026 (analyse statique complète du code source)
+**Méthode :** Analyse statique exhaustive de `app.py`, `web/`, `requirements.txt`, configurations et templates.
 
 ---
 
 ## Résumé
 
-| Niveau   | Nombre | Évolution depuis dernier scan      |
-|----------|--------|-------------------------------------|
-| Critique | 0      | —                                   |
-| Élevé    | 1      | Rate limiting désormais en place    |
-| Moyen    | 3      | + exposition possible du rapport   |
-| Info     | 3      | —                                   |
+| Niveau   | Nombre | Évolution                                |
+|----------|--------|------------------------------------------|
+| Critique | 0      | —                                        |
+| Élevé    | 1      | Inchangé                                 |
+| Moyen    | 4      | +1 (exposition rapport corrigée)         |
+| Info     | 4      | +1 (IPs hardcodées)                      |
 
 ---
 
 ## 1. Secrets et gestion des accès
 
-### 1.1 Fichier `secrets.toml` (non versionné)
+### 1.1 Fichier `secrets.toml` (non versionné) ✅
 
-- **Vérification :** `.streamlit/secrets.toml` est listé dans `.gitignore` et **n’est pas suivi** par Git (`git check-ignore` confirme).
-- **En production (Streamlit Cloud) :** Les secrets doivent être configurés dans le dashboard (Settings → Secrets), pas via le dépôt.
-- **Action recommandée :** Vérifier l’historique au cas où le fichier aurait été commité par le passé :  
-  `git log -p --all -- .streamlit/secrets.toml`  
+- `.streamlit/secrets.toml` est listé dans `.gitignore` et n'est pas suivi par Git.
+- En production (Streamlit Cloud) : secrets configurés dans le dashboard (Settings → Secrets).
+- **Action :** Vérifier l'historique pour s'assurer qu'il n'a jamais été commité :
+  `git log -p --all -- .streamlit/secrets.toml`
   Si des secrets apparaissent : révoquer/régénérer la clé Groq et changer le token admin.
 
-### 1.2 Authentification admin (`?admin=TOKEN`) — **Élevé**
+### 1.2 Authentification admin (`?admin=TOKEN`) — **[ÉLEVÉ]**
 
-- **Comportement :** Le token admin est passé en query string (`st.query_params.get("admin")`) et comparé à `st.secrets.get("ADMIN_TOKEN")`.
-- **Risques :** Le token apparaît dans l’historique du navigateur, les logs serveur, les en-têtes Referer et les partages de lien.
+- **Comportement :** Le token est passé en query string (`st.query_params.get("admin")`) et comparé à `st.secrets.get("ADMIN_TOKEN")`.
+- **Risques :** Token visible dans l'historique du navigateur, logs serveur, en-têtes Referer, partages de lien.
 - **Recommandations :**
-  - Utiliser un token long et aléatoire (ex. 32 caractères hex).
-  - À terme : ne pas mettre le token dans l’URL (formulaire POST ou session après login).
+  - Utiliser un token long et aléatoire (minimum 32 caractères hex).
+  - À terme : remplacer par un formulaire POST ou une session après authentification (ne pas mettre le secret en URL).
 
 ---
 
-## 2. Rate limiting — **En place**
+## 2. Rate limiting — **En place** ✅
 
-- **Implémentation :** Limite de **5 recherches par heure** par IP (`RATE_LIMIT_MAX = 5`, `RATE_LIMIT_WINDOW = 1 h`).
-- **Whitelist :** IP `86.208.120.20` exemptée.
-- **Périmètre :** Recherche sémantique et requêtes Agent Casimir (même compteur).
-- **Stockage :** En mémoire (`_rate_limit_store`). Les timestamps au-delà de la fenêtre sont purgés.
-- **Affichage :** IP et nombre de recherches restantes (X/5 ou ∞) dans le bandeau.
+- **Implémentation :** Limite de **5 recherches par jour** par IP (`RATE_LIMIT_MAX = 5`).
+- **Whitelist :** IPs exemptées configurées dans le code.
+- **Stockage :** SQLite (`data/searches.db`) — persistant entre redémarrages.
+- **Périmètre :** Recherche sémantique et requêtes Agent (même compteur).
+
+### 2.1 Bypass possible via IP spoofing — **[MOYEN]**
+
+- **Constat :** `get_client_ip()` fait confiance à `X-Forwarded-For`, `X-Real-Ip`, `CF-Connecting-IP` dans cet ordre. Un attaquant sur certains environnements pourrait forger ces headers pour contourner la limite ou usurper une IP whitelistée.
+- **Contexte atténuant :** Sur Streamlit Cloud, l'infrastructure contrôle ces headers ; le risque est réduit en production.
+- **Recommandation :** Si le déploiement change (reverse proxy custom), ne faire confiance qu'au dernier IP de la chaîne `X-Forwarded-For` (IP du proxy connu), pas au premier (client potentiellement forgé).
 
 ---
 
 ## 3. Risques moyens
 
-### 3.1 Exposition du rapport de sécurité via `static/`
+### 3.1 Exposition du rapport de sécurité — **CORRIGÉ** ✅
 
-- **Constat :** Une copie de `SECURITY_SCAN.md` est présente dans `static/`. Avec `enableStaticServing = true` dans `.streamlit/config.toml`, les fichiers sous `static/` sont servis (ex. `…/app/static/…`).
-- **Risque :** Un attaquant peut lire le rapport et s’appuyer sur les recommandations pour cibler l’app.
-- **Recommandation :** Retirer `SECURITY_SCAN.md` du dossier `static/` (ou ne pas le copier dedans). Garder le rapport uniquement à la racine du projet et ne pas le déployer en tant que ressource statique publique.
+- **Constat antérieur :** `SECURITY_SCAN.md` était présent dans `static/`, servi publiquement via `enableStaticServing = true`.
+- **Correction appliquée :** Le fichier a été retiré de `static/`. Le rapport est uniquement conservé à la racine du projet (non servi).
 
-### 3.2 Liens construits à partir des métadonnées (XSS / URL)
+### 3.2 Dépendances sans versions fixées — **[MOYEN]**
 
-- **Mitigation en place :** `_safe_pdf_url(rel_path)` rejette `..`, `/`, et les schemes `javascript:`, `data:`, `vbscript:`. `_safe_source_url(url)` n’accepte que `http://` et `https://`.
-- **Utilisation :** Ces helpers sont utilisés pour les liens PDF, les sources de l’Agent et la section Documents.
-- **Risque résiduel :** Faible tant que les métadonnées (pickle) ne sont pas modifiées par un acteur malveillant.
+- **Constat :** `requirements.txt` ne fixe aucune version (`pdfplumber`, `requests`, `beautifulsoup4`, `sentence-transformers`, `groq`, etc.).
+- **Risque :** Mises à jour involontaires pouvant introduire des CVE ou casser des comportements.
+- **Recommandation :** Figer les versions en production :
+  ```
+  pip freeze > requirements-lock.txt
+  ```
+  Auditer régulièrement avec `pip audit` ou activer Dependabot.
 
-### 3.3 Chargement de pickle (`documents.pkl`, `metadata.pkl`)
+### 3.3 Chargement pickle (`documents.pkl`, `metadata.pkl`) — **[MOYEN]**
 
-- **Risque :** La désérialisation `pickle.load()` peut exécuter du code si les fichiers sont altérés.
-- **Contexte :** Sur Streamlit Cloud, les fichiers sous `vector_db/` proviennent du dépôt ou du build ; un utilisateur distant ne peut pas les remplacer.
-- **Recommandation :** Pour tout déploiement où des utilisateurs pourraient fournir ou modifier des données, privilégier un format non exécutable (JSON, base vectorielle externe).
+- **Risque :** `pickle.load()` peut exécuter du code arbitraire si les fichiers sont altérés.
+- **Contexte :** Sur Streamlit Cloud, `vector_db/` provient du build ; un utilisateur distant ne peut pas remplacer ces fichiers.
+- **Recommandation :** Pour tout déploiement où des fichiers externes pourraient être fournis, privilégier JSON ou un format non exécutable.
 
----
+### 3.4 Django — configuration de développement exposée — **[MOYEN]**
 
-## 4. Autres points
-
-### 4.1 Dépendances (`requirements.txt`)
-
-- Aucune version fixée (pas de `package==x.y.z`). Cela peut faciliter des mises à jour involontaires ou des failles connues.
-- **Recommandation :** Figer les versions en production (`pip freeze` ou outil type `pip-tools`) et auditer régulièrement (ex. `pip audit` ou Dependabot).
-
-### 4.2 Sous-processus (`subprocess`)
-
-- Utilisation limitée à `git log` et `git describe` pour les infos de déploiement (avec repli sur `deploy_date.txt`). Commandes fixes, pas d’entrée utilisateur → risque faible.
-
-### 4.3 HTML dynamique
-
-- Quelques `st.markdown(..., unsafe_allow_html=True)` avec chaînes contrôlées (styles, liens construits via `_safe_pdf_url` / `_safe_source_url`). Pas d’injection de contenu utilisateur brut en HTML.
-
-### 4.4 Django (`web/config/settings.py`)
-
-- `SECRET_KEY = "dev-secret-change-in-production"` et `ALLOWED_HOSTS = ["*"]`. À corriger si l’application Django est un jour exposée en production.
+- **Constat :** `web/config/settings.py` contient :
+  - `SECRET_KEY = "dev-secret-change-in-production"` (valeur par défaut connue)
+  - `DEBUG = True` (affiche les tracebacks complets)
+  - `ALLOWED_HOSTS = ["*"]` (accepte toutes les origines)
+- **Contexte :** Django ne semble pas déployé en production actuellement.
+- **Recommandation :** Si Django est un jour exposé, corriger ces trois paramètres avant tout déploiement.
 
 ---
 
-## 5. Bonnes pratiques en place
+## 4. Points informatifs
 
-- Secrets lus via `st.secrets` (pas de clés en dur pour la prod dans le code).
-- Validation des URLs des PDF et des sources avant affichage.
-- Rate limiting par IP avec whitelist.
-- Pas d’exposition de `secrets.toml` dans le dépôt (vérifié).
-- Contenu utilisateur affiché via les widgets Streamlit (échappement par défaut).
+### 4.1 IPs hardcodées dans le code source
+
+- **Constat :** `RATE_LIMIT_WHITELIST` et `RATE_LIMIT_CREDITS_BONUS` dans `app.py` contiennent des IPs en clair dans le code source versionné.
+- **Risque :** Ces IPs peuvent identifier des utilisateurs spécifiques si le dépôt est public ; elles seront dans l'historique Git.
+- **Recommandation :** Déplacer ces IPs dans `st.secrets` (ex. `st.secrets.get("RATE_LIMIT_WHITELIST", "").split(",")`).
+
+### 4.2 Erreurs Django exposées à l'utilisateur
+
+- **Constat :** Dans `web/search/views.py` : `error = str(e)` est renvoyé au template et affiché.
+- **Risque :** Peut exposer des chemins de fichiers système ou des détails d'implémentation.
+- **Recommandation :** Logger `e` côté serveur et afficher un message générique à l'utilisateur.
+
+### 4.3 Sous-processus (`subprocess`)
+
+- Usage limité à `git log -1 --format=%ci` et `git describe --tags --abbrev=0` (app.py lignes 314–326).
+- Commandes fixes, pas d'entrée utilisateur → risque faible. ✅
+
+### 4.4 HTML dynamique avec `unsafe_allow_html=True`
+
+- Les `st.markdown(..., unsafe_allow_html=True)` injectent uniquement :
+  - Des styles CSS statiques (ligne 782)
+  - Des scores numériques formatés `score:.0%` et couleurs hardcodées (lignes 1001, 1077)
+  - Des URLs passées par `_safe_pdf_url()` ou `_safe_source_url()` (ligne 1087)
+  - `commit_date` tronqué à 16 caractères depuis `deploy_date.txt` (ligne 860)
+- Pas d'injection de contenu utilisateur brut en HTML. Risque résiduel faible. ✅
+
+---
+
+## 5. Bonnes pratiques en place ✅
+
+- Secrets via `st.secrets` (pas de clés en dur pour la prod).
+- Validation des URLs PDF (`_safe_pdf_url`) et sources (`_safe_source_url`) avant affichage.
+- Requêtes SQLite paramétrées (pas d'injection SQL possible).
+- Rate limiting par IP avec persistance SQLite.
+- `secrets.toml` exclu du dépôt (`.gitignore` vérifié).
+- Contenu utilisateur affiché via widgets Streamlit (échappement par défaut) ou via Markdown sans HTML.
+- Django template : `{{ query }}` et `{{ error }}` auto-échappés par défaut (pas de `|safe`).
+- Protection path traversal dans Django (`/documents/<filename>` vérifie `..` et `/`).
 
 ---
 
 ## 6. Checklist post-scan
 
-- [ ] Vérifier l’historique Git pour `.streamlit/secrets.toml` et révoquer les clés si besoin.
-- [ ] Changer le token admin pour une valeur longue et aléatoire ; éviter de le mettre en URL si possible.
-- [ ] **Retirer `SECURITY_SCAN.md` du dossier `static/`** (ou ne pas le servir publiquement).
+- [x] Retirer `SECURITY_SCAN.md` du dossier `static/` (**FAIT**)
+- [ ] Vérifier l'historique Git pour `.streamlit/secrets.toml` — révoquer si trouvé.
+- [ ] Changer le token admin pour ≥32 caractères aléatoires ; envisager de ne plus le mettre en URL.
+- [ ] Déplacer les IPs whitelistées dans `st.secrets` (hors historique Git).
+- [ ] Figer les versions des dépendances (`pip freeze`) et auditer régulièrement.
+- [ ] Si Django est déployé : corriger `SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS`.
 - [ ] Garder les secrets uniquement dans Streamlit Cloud (Settings → Secrets).
-- [ ] En production : figer les versions des dépendances et les auditer régulièrement.
 
 ---
 
-*Rapport généré par analyse du code source et des configurations. URL live non chargée (timeout).*
+*Rapport généré par analyse statique complète du code source (1er mars 2026).*
