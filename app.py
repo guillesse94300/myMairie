@@ -476,6 +476,19 @@ def search_agent(question: str, embeddings, documents, metadata,
                 if key not in seen:
                     seen[key] = _score_with_bonus(doc, meta, score + 0.06)  # bonus pour PV récents
 
+    # Pour voirie/travaux/montant : forcer l'inclusion de chunks qui contiennent "voirie" ou "travaux" (exact)
+    if query_wants_voirie or query_wants_figures:
+        for exact_query in ("voirie travaux", "voirie", "travaux"):
+            exact_chunks = search(exact_query, embeddings, documents, metadata, n=10, year_filter=year_filter, exact=True)
+            for doc, meta, score in exact_chunks:
+                key = (meta.get("filename", ""), meta.get("chunk", 0))
+                if key not in seen:
+                    # Priorité aux PDF (PV) et aux chunks avec des chiffres
+                    bonus = 0.08 if str(meta.get("filename", "")).lower().endswith(".pdf") else 0.04
+                    if _CHUNK_HAS_NUMBER.search(doc):
+                        bonus += 0.04
+                    seen[key] = _score_with_bonus(doc, meta, score + bonus)
+
     # Expansion de contexte : pour chaque chunk trouvé, ajouter les voisins
     # immédiats (±1, ±2) du même fichier — capture les délibérations adjacentes
     all_by_key = {
