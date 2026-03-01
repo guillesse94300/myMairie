@@ -406,6 +406,11 @@ _CHUNK_HAS_AMOUNT = re.compile(
     r"\d[\d\s]{2,}(?:\.\d{2})?\s*(?:€|euro)",
     re.IGNORECASE
 )
+# Chunk parle de voirie / travaux publics (rue, chaussée, route)
+_CHUNK_VOIRIE = re.compile(
+    r"\b(travaux|voirie|chauss[eé]e|route|rue|réfection|enrobé)\b",
+    re.IGNORECASE
+)
 
 # Questions sur sujets récurrents (logiciels, voirie, contrats) → inclure les PV récents (2025, 2024, 2023)
 _QUERY_RECENT_DELIB = re.compile(
@@ -485,10 +490,31 @@ def search_agent(question: str, embeddings, documents, metadata,
                 key = (meta.get("filename", ""), meta.get("chunk", 0))
                 if key not in seen:
                     seen[key] = _score_with_bonus(doc, meta, score + year_bonus[y])
-        # Pour logiciels/Horizon : forcer l'inclusion de chunks 2025 contenant "logiciels" ou "renouvellement"
+        # Pour logiciels/Horizon : forcer l'inclusion de tous les chunks 2025 (puis 2024) qui parlent d'Horizon/logiciels,
+        # pour que la réponse détaille la situation récente (2025) et pas seulement l'historique (ex. 2022).
         if re.search(r"\b(logiciel|logiciels|horizon|renouvellement)\b", question, re.IGNORECASE):
+            _HORIZON_KW = re.compile(r"\b(horizon|logiciel|logiciels|renouvellement|villages\s*cloud|DETR)\b", re.IGNORECASE)
+            for y in (2025, 2024):
+                added_h = 0
+                for doc, meta in zip(documents, metadata):
+                    if added_h >= 25:
+                        break
+                    if meta.get("year") != str(y):
+                        continue
+                    if not str(meta.get("filename", "")).lower().endswith(".pdf"):
+                        continue
+                    if not _HORIZON_KW.search(doc):
+                        continue
+                    key = (meta.get("filename", ""), meta.get("chunk", 0))
+                    if key in seen:
+                        continue
+                    # 2025 très prioritaire pour détailler la situation actuelle
+                    score_h = 0.58 if y == 2025 else 0.48
+                    seen[key] = (doc, meta, score_h)
+                    added_h += 1
+            # Recherche sémantique ciblée en complément
             for kw in ("logiciels métiers", "renouvellement contrat", "Horizon"):
-                extra = search(kw, embeddings, documents, metadata, n=8, year_filter=[2025, 2024], exact=True)
+                extra = search(kw, embeddings, documents, metadata, n=10, year_filter=[2025, 2024], exact=True)
                 for doc, meta, score in extra:
                     key = (meta.get("filename", ""), meta.get("chunk", 0))
                     if key not in seen:
@@ -521,6 +547,31 @@ def search_agent(question: str, embeddings, documents, metadata,
                 # Score décroissant avec la distance
                 neighbor_score = max(0.0, score - 0.05 * abs(delta))
                 seen[nkey] = (nd, nm, neighbor_score)
+
+    # Travaux de voirie + montants des 2 dernières années : inclure explicitement les passages
+    # (PV) qui parlent de voirie/travaux ET de montants pour que l'agent puisse les citer.
+    if query_wants_voirie or query_wants_figures:
+        last_2_years = {str(datetime.now().year), str(datetime.now().year - 1)}
+        added_voirie = 0
+        for doc, meta in zip(documents, metadata):
+            if added_voirie >= 20:
+                break
+            fname = meta.get("filename", "")
+            if not str(fname).lower().endswith(".pdf"):
+                continue
+            if meta.get("year") not in last_2_years:
+                continue
+            if not _CHUNK_VOIRIE.search(doc):
+                continue
+            if not _CHUNK_HAS_NUMBER.search(doc):
+                continue
+            key = (fname, meta.get("chunk", 0))
+            if key in seen:
+                continue
+            # Priorité aux chunks qui contiennent un montant explicite (€, crédit, etc.)
+            score_voirie = 0.52 if _CHUNK_HAS_AMOUNT.search(doc) else 0.45
+            seen[key] = (doc, meta, score_voirie)
+            added_voirie += 1
 
     # Quand la question porte sur les montants (travaux, voirie, budget) : ajouter les chunks
     # du même PV qui mentionnent des montants (€, crédit, HT, etc.) pour que le montant voté
@@ -627,9 +678,16 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    et renvoie l'utilisateur vers la source (lien PDF ou page mairie-pierrefonds.fr) pour consulter \
    le barème complet. Les tableaux (cantine, périscolaire, etc.) sont désormais mieux indexés ; \
    si un passage contient un tableau avec des chiffres, cite-les avec leur source.
-4d. Sujets récurrents (logiciels, Horizon, contrats) : tu DOIS citer le PV le plus récent (ex. 2025) \
-   s'il figure dans les passages, en plus des anciens. Mentionne explicitement la décision récente \
-   (ex. D2025-039, renouvellement 2025) en premier ou en complément, pour donner la situation à jour.
+4d. Sujets récurrents (logiciels, Horizon, contrats) : pour les questions sur Horizon ou les logiciels \
+   métiers, structure ta réponse en détaillant d'abord la situation en 2025 (ou la plus récente année \
+   présente dans les passages) : décisions, montants votés, renouvellement, DETR, etc. avec la source [N]. \
+   Ensuite seulement rapporte l'historique (ex. 2022). Ne pas se contenter de citer uniquement les anciens \
+   PV (ex. 2022) ; si des passages 2025 sont fournis, tu DOIS les exploiter et les détailler en premier.
+4e. Travaux de voirie et montants : quand l'utilisateur demande les travaux de voirie votés et leurs \
+   montants, si les passages fournis contiennent des informations sur des travaux (rue, chaussée, voirie) \
+   et des montants (€, crédit, budget) pour les dernières années, liste-les explicitement : indiquer \
+   l'année ou la date, le type de travaux / la rue concernée, et le montant avec sa source [N]. \
+   Ne pas se contenter de dire que les montants ne figurent pas si des chiffres apparaissent dans les passages.
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
