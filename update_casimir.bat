@@ -77,13 +77,27 @@ if exist "%~dp0vector_db" (
     git status >nul 2>&1
     if not errorlevel 1 (
         echo Commit de tous les fichiers vector_db...
-        git add "%~dp0vector_db\*"
-        git add "%~dp0vector_db"
+        git add -f "%~dp0vector_db\*"
+        git add -f "%~dp0vector_db"
         git diff --cached --quiet -- vector_db
         if errorlevel 1 (
             git commit -m "vector_db: reindex documents.pkl embeddings.npy metadata.pkl stats.json"
             if not errorlevel 1 (
-                echo   Commit vector_db effectue : documents.pkl, embeddings.npy, metadata.pkl, stats.json
+                echo   Commit vector_db effectue.
+                if not "%~1"=="-q" (
+                    set PUSH_NOW=
+                    set /p PUSH_NOW="Pousser vector_db sur GitHub maintenant ? (o/n) [o] : "
+                    if "!PUSH_NOW!"=="" set PUSH_NOW=o
+                    if /i "!PUSH_NOW:~0,1!"=="o" (
+                        echo   Pull + Push en cours...
+                        git pull origin main --rebase 2>nul
+                        git push origin main
+                        if not errorlevel 1 (
+                            echo   vector_db a jour sur https://github.com/guillesse94300/myMairie/tree/main/vector_db
+                        )
+                        echo.
+                    )
+                )
             )
         ) else (
             echo   vector_db deja a jour dans le dernier commit.
@@ -96,6 +110,6 @@ echo ============================================
 echo   Reindex termine.
 echo ============================================
 echo.
-echo   Pour pousser sur GitHub : lancez  deploy.bat
+echo   Pour deploiement complet ^(date, static^) : lancez  deploy.bat
 echo.
 if not "%~1"=="-q" pause
