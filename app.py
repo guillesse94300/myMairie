@@ -80,7 +80,7 @@ def _safe_source_url(url: str) -> str | None:
 
 # ── Rate limiting par IP (recherche + agent) : 5 recherches / jour ──────────────
 RATE_LIMIT_MAX = 5
-RATE_LIMIT_WHITELIST = {"86.208.120.20"}
+RATE_LIMIT_WHITELIST = {"86.208.120.20", "90.22.160.8"}
 # Bonus de crédits par IP (ex. 20 = 5+20 = 25 recherches/jour)
 RATE_LIMIT_CREDITS_BONUS = {"80.214.57.209": 20}
 QUOTA_EPUISE_MSG = "Quota de recherche épuisé, attendez minuit !"
@@ -401,9 +401,10 @@ _QUERY_TARIF_MONTANT = re.compile(
 # Chunk contient au moins un nombre (améliore le ranking pour les questions tarifaires)
 _CHUNK_HAS_NUMBER = re.compile(r"\d")
 
-# Questions sur des sujets récurrents (logiciels, contrats) → inclure les PV récents (2025, 2024)
+# Questions sur sujets récurrents (logiciels, voirie, contrats) → inclure les PV récents (2025, 2024, 2023)
 _QUERY_RECENT_DELIB = re.compile(
-    r"\b(logiciel|logiciels|horizon|contrat\s+m[eé]tier|renouvellement\s+contrat)\b",
+    r"\b(logiciel|logiciels|horizon|contrat\s+m[eé]tier|renouvellement\s+contrat|"
+    r"travaux|voirie|chauss[eé]e|route)\b",
     re.IGNORECASE
 )
 
@@ -461,14 +462,14 @@ def search_agent(question: str, embeddings, documents, metadata,
         if key not in seen:
             seen[key] = _score_with_bonus(doc, meta, score)
 
-    # Pour les questions sur logiciels / Horizon / contrats métiers : inclure des passages des PV récents (2025, 2024)
+    # Pour les questions sur logiciels, voirie, contrats : inclure des passages des PV récents (2025, 2024, 2023)
     if (year_filter is None or len(year_filter) == 0) and _QUERY_RECENT_DELIB.search(question):
-        for y in (2025, 2024):
-            extra = search(question, embeddings, documents, metadata, n=8, year_filter=[y], exact=False)
+        for y in (2025, 2024, 2023):
+            extra = search(question, embeddings, documents, metadata, n=12, year_filter=[y], exact=False)
             for doc, meta, score in extra:
                 key = (meta.get("filename", ""), meta.get("chunk", 0))
                 if key not in seen:
-                    seen[key] = _score_with_bonus(doc, meta, score + 0.03)  # léger bonus pour récence
+                    seen[key] = _score_with_bonus(doc, meta, score + 0.06)  # bonus pour PV récents
 
     # Expansion de contexte : pour chaque chunk trouvé, ajouter les voisins
     # immédiats (±1, ±2) du même fichier — capture les délibérations adjacentes
@@ -1002,7 +1003,7 @@ def main():
                         st.rerun()
 
             agent_years = []
-            n_passages  = 22
+            n_passages  = 28
 
             question = st.text_area(
                 "Votre question",
