@@ -956,10 +956,10 @@ def main():
                 if st.button("ℹ️ À propos", key="banner_about"):
                     about_casimir()
             with btn_cols[2]:
-                if st.button("📖 Guide utilisateur", key="banner_guide"):
+                if st.button("📖 Guide\u00a0utilisateur", key="banner_guide"):
                     guide_utilisateur()
             with btn_cols[3]:
-                if st.button("🔧 Technical Guide", key="banner_tech_guide"):
+                if st.button("🔧 Technical\u00a0Guide", key="banner_tech_guide"):
                     technical_guide()
             if admin:
                 with btn_cols[4]:
