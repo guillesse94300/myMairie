@@ -400,6 +400,12 @@ _QUERY_TARIF_MONTANT = re.compile(
 )
 # Chunk contient au moins un nombre (améliore le ranking pour les questions tarifaires)
 _CHUNK_HAS_NUMBER = re.compile(r"\d")
+# Chunk évoque un montant (€, crédit, HT, TTC, "euro") → à inclure quand on cherche les coûts des travaux
+_CHUNK_HAS_AMOUNT = re.compile(
+    r"\d[\d\s]*(?:€|euro|euros|HT|TTC)|(?:crédit|montant|budget|alloué|ouvrir)[^\n]{0,80}\d|"
+    r"\d[\d\s]{2,}(?:\.\d{2})?\s*(?:€|euro)",
+    re.IGNORECASE
+)
 
 # Questions sur sujets récurrents (logiciels, voirie, contrats) → inclure les PV récents (2025, 2024, 2023)
 _QUERY_RECENT_DELIB = re.compile(
@@ -515,6 +521,30 @@ def search_agent(question: str, embeddings, documents, metadata,
                 # Score décroissant avec la distance
                 neighbor_score = max(0.0, score - 0.05 * abs(delta))
                 seen[nkey] = (nd, nm, neighbor_score)
+
+    # Quand la question porte sur les montants (travaux, voirie, budget) : ajouter les chunks
+    # du même PV qui mentionnent des montants (€, crédit, HT, etc.) pour que le montant voté
+    # soit fourni s'il figure ailleurs dans le procès-verbal (ex. rue de l'Armistice).
+    pdf_files_in_context = {
+        meta.get("filename") for _, meta, _ in seen.values()
+        if str(meta.get("filename", "")).lower().endswith(".pdf")
+    }
+    if (query_wants_figures or query_wants_voirie) and pdf_files_in_context:
+        added = 0
+        max_extra_amount_chunks = 12
+        for i, (doc, meta) in enumerate(zip(documents, metadata)):
+            if added >= max_extra_amount_chunks:
+                break
+            fname = meta.get("filename", "")
+            if fname not in pdf_files_in_context:
+                continue
+            key = (fname, meta.get("chunk", 0))
+            if key in seen:
+                continue
+            if not _CHUNK_HAS_AMOUNT.search(doc) or not _CHUNK_HAS_NUMBER.search(doc):
+                continue
+            seen[key] = (doc, meta, 0.38)
+            added += 1
 
     merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)[:n]
     return [(doc, meta, min(score, 1.0)) for doc, meta, score in merged]
@@ -850,6 +880,7 @@ def main():
         [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child { margin-bottom: 0.5rem !important; padding: 0.5rem 0.75rem !important; box-sizing: border-box !important; }
         [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child [data-testid="stVerticalBlock"] { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
         [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; white-space: nowrap !important; }
+        [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]:first-child .stButton button * { white-space: nowrap !important; }
         </style>""",
         unsafe_allow_html=True,
     )
@@ -913,7 +944,7 @@ def main():
     max_display = rate_limit_get_max_for_display()
     remaining_str = "∞" if remaining is None else f"{remaining}/{max_display}"
     with st.container(border=True):
-        c_nav, c_mail_deploy, c_stats = st.columns([2, 2.4, 1.4])
+        c_nav, c_mail_deploy, c_stats = st.columns([3, 2.2, 1.4])
         with c_nav:
             nav_cols = 5 if admin else 4
             btn_cols = st.columns(nav_cols)
