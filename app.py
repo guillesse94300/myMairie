@@ -401,6 +401,12 @@ _QUERY_TARIF_MONTANT = re.compile(
 # Chunk contient au moins un nombre (améliore le ranking pour les questions tarifaires)
 _CHUNK_HAS_NUMBER = re.compile(r"\d")
 
+# Questions sur des sujets récurrents (logiciels, contrats) → inclure les PV récents (2025, 2024)
+_QUERY_RECENT_DELIB = re.compile(
+    r"\b(logiciel|logiciels|horizon|contrat\s+m[eé]tier|renouvellement\s+contrat)\b",
+    re.IGNORECASE
+)
+
 # Mots vides français exclus de la recherche exacte
 _STOP_FR = {
     'les', 'des', 'une', 'que', 'qui', 'est', 'pas', 'par', 'sur',
@@ -454,6 +460,15 @@ def search_agent(question: str, embeddings, documents, metadata,
         key = (meta.get("filename", ""), meta.get("chunk", 0))
         if key not in seen:
             seen[key] = _score_with_bonus(doc, meta, score)
+
+    # Pour les questions sur logiciels / Horizon / contrats métiers : inclure des passages des PV récents (2025, 2024)
+    if (year_filter is None or len(year_filter) == 0) and _QUERY_RECENT_DELIB.search(question):
+        for y in (2025, 2024):
+            extra = search(question, embeddings, documents, metadata, n=8, year_filter=[y], exact=False)
+            for doc, meta, score in extra:
+                key = (meta.get("filename", ""), meta.get("chunk", 0))
+                if key not in seen:
+                    seen[key] = _score_with_bonus(doc, meta, score + 0.03)  # léger bonus pour récence
 
     # Expansion de contexte : pour chaque chunk trouvé, ajouter les voisins
     # immédiats (±1, ±2) du même fichier — capture les délibérations adjacentes
@@ -549,6 +564,9 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    « barème selon quotient familial » mais ne contiennent pas les montants ou le tableau, \
    indique explicitement que les chiffres détaillés ne figurent pas dans les extraits fournis \
    et renvoie vers la source (lien vers la page ou les PV) pour consulter le barème complet.
+4d. Sujets récurrents (ex. logiciels métiers, Horizon, renouvellement de contrats) : si plusieurs \
+   PV de différentes années sont fournis, cite aussi la décision la plus récente (ex. D2025-039, \
+   PV 2025) lorsqu'elle figure dans les passages, pour donner la situation à jour.
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
@@ -959,7 +977,8 @@ def main():
             if not base_has_pdfs:
                 st.warning(
                     "**Les procès-verbaux (PDF) ne sont pas indexés** dans la base actuelle. Casimir ne peut s'appuyer que sur les pages web (.md). "
-                    "Pour qu'il consulte aussi les délibérations et PV : exécutez **Update_Casimir.bat**, répondez **« oui »** à « Indexer aussi les PDFs ? », puis **redéployez le site** (git push / Streamlit) pour que l'app en ligne utilise la nouvelle base."
+                    "Pour qu'il consulte aussi les délibérations et PV : 1) exécutez **Update_Casimir.bat** et répondez **« oui »** à « Indexer aussi les PDFs ? » ; "
+                    "2) **commitez et poussez le dossier vector_db** (git add vector_db/ ; git commit ; git push) ; 3) redéployez l'app sur Streamlit. Sans l’étape 2, le site en ligne garde l’ancienne base."
                 )
             st.info(
                 "**Tarifs et montants :** les barèmes détaillés (ex. cantine, périscolaire) figurent parfois dans des tableaux non extraits dans la base. Si la réponse ne donne pas les chiffres, ouvrez les sources proposées ou consultez [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr). L'indexation des PDFs (procès-verbaux) améliore les réponses sur les délibérations."
