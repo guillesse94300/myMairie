@@ -69,13 +69,20 @@ if errorlevel 1 (
 git diff --cached --quiet
 if not errorlevel 1 (
     echo Aucun changement a committer. Le depot est a jour.
-    echo.
-    pause
-    exit /b 0
+    set FORCE_PUSH=
+    set /p FORCE_PUSH="Forcer le push de tous les fichiers pour redeployer l'app ? (o/n) [n] : "
+    if /i not "!FORCE_PUSH!"=="o" if /i not "!FORCE_PUSH!"=="oui" (
+        echo   Push annule.
+        echo.
+        if not "%~1"=="-q" pause
+        exit /b 0
+    )
+    echo   Commit vide pour forcer le redeploiement...
+    git commit --allow-empty -m "!MSG! ^(redeploiement force^)"
+) else (
+    :: Committer les changements
+    git commit -m "!MSG!"
 )
-
-:: Committer
-git commit -m "!MSG!"
 if errorlevel 1 (
     echo ERREUR lors du commit.
     pause
