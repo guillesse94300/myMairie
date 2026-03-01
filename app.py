@@ -843,8 +843,12 @@ def main():
 
     admin = is_admin()
     embeddings, documents, metadata = load_db()
+    # Détecter si la base contient des chunks issus de PDFs (procès-verbaux, etc.)
+    _pdf_filenames = {m.get("filename", "") for m in metadata if str(m.get("filename", "")).lower().endswith(".pdf")}
+    base_has_pdfs = len(_pdf_filenames) > 0
     if admin:
-        st.caption(f"Base indexée : **{len(documents)} passages** issus des PDFs · 🔑 Mode admin")
+        base_desc = f"**{len(documents)} passages**" + (f" (dont {len(_pdf_filenames)} fichier(s) PDF)" if base_has_pdfs else " (sites web uniquement, PDFs non indexés)")
+        st.caption(f"Base indexée : {base_desc} · 🔑 Mode admin")
 
     # ── Bandeau supérieur (une ligne, compact) ─────────────────────────────────
     commit_date, _ = get_git_info()
@@ -947,6 +951,11 @@ def main():
                 "sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! "
                 "Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA …"
             )
+            if not base_has_pdfs:
+                st.warning(
+                    "**Les procès-verbaux (PDF) ne sont pas indexés** dans la base actuelle. Casimir ne peut s'appuyer que sur les pages web (.md). "
+                    "Pour qu'il consulte aussi les délibérations et PV du conseil municipal, réexécutez la mise à jour (**Update_Casimir.bat**) et répondez **« oui »** à la question « Indexer aussi les PDFs ? »."
+                )
             st.info(
                 "**Tarifs et montants :** les barèmes détaillés (ex. cantine, périscolaire) figurent parfois dans des tableaux non extraits dans la base. Si la réponse ne donne pas les chiffres, ouvrez les sources proposées ou consultez [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr). L'indexation des PDFs (procès-verbaux) améliore les réponses sur les délibérations."
             )

@@ -75,13 +75,13 @@ if errorlevel 1 (
 )
 echo.
 
-:: 2. Proposer d'indexer aussi les PDFs
+:: 2. Proposer d'indexer aussi les PDFs (indispensable pour que Casimir consulte les PV et délibérations)
 echo.
 set CHOICE=
-set /p CHOICE="Indexer aussi les PDFs ^(PV conseil municipal, L'ECHO^) ? Cela peut prendre du temps. (o/n) [n] : "
+set /p CHOICE="Indexer aussi les PDFs ^(PV conseil municipal, L'ECHO^) ? Sans cela, Casimir ne consulte QUE les sites web. (o/n) [n] : "
 if /i "!CHOICE!"=="o" goto do_pdfs
 if /i "!CHOICE!"=="oui" goto do_pdfs
-echo   PDFs non indexes. Casimir utilise les .md / sites web.
+echo   PDFs non indexes. Casimir utilise uniquement les .md / sites web.
 goto index_done
 
 :do_pdfs
