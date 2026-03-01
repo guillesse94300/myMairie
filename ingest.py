@@ -297,7 +297,7 @@ def main(args=None):
 
     do_pdfs = not getattr(args, "md_only", False)
     if not do_pdfs:
-        print("--- PDFs : non indexes (--md-only). ---\n")
+        print("--- PDFs : non indexés (--md-only). ---\n")
     else:
         print(f"--- PDFs (static + journal) : {len(pdf_files)} fichier(s) ---\n")
 
