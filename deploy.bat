@@ -11,7 +11,7 @@ cd /d "%~dp0"
 
 :: Mettre a jour Streamlit (pour st.dialog, etc.)
 echo Mise a jour de Streamlit...
-pip install -U streamlit
+python -m pip install -U streamlit
 echo.
 
 :: Dossier data pour la base SQLite des recherches (cree par l'app si absent)
