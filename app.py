@@ -451,6 +451,9 @@ def search_agent(question: str, embeddings, documents, metadata,
         fname = meta.get("filename", "")
         if (query_wants_figures or query_wants_voirie) and str(fname).lower().endswith(".pdf"):
             score = score + 0.05
+        # Fort bonus pour les chunks "tableau" (barèmes, tarifs cantine/périscolaire) quand la question porte sur les chiffres
+        if query_wants_figures and meta.get("is_table"):
+            score = score + 0.12
         return (doc, meta, min(score, 1.0))
 
     seen: dict = {}
@@ -467,14 +470,23 @@ def search_agent(question: str, embeddings, documents, metadata,
         if key not in seen:
             seen[key] = _score_with_bonus(doc, meta, score)
 
-    # Pour les questions sur logiciels, voirie, contrats : inclure des passages des PV récents (2025, 2024, 2023)
+    # Pour les questions sur logiciels, voirie, contrats : inclure des passages des PV récents (2025 prioritaire)
     if (year_filter is None or len(year_filter) == 0) and _QUERY_RECENT_DELIB.search(question):
+        year_bonus = {2025: 0.14, 2024: 0.09, 2023: 0.06}  # 2025 fortement favorisé pour donner la situation à jour
         for y in (2025, 2024, 2023):
             extra = search(question, embeddings, documents, metadata, n=12, year_filter=[y], exact=False)
             for doc, meta, score in extra:
                 key = (meta.get("filename", ""), meta.get("chunk", 0))
                 if key not in seen:
-                    seen[key] = _score_with_bonus(doc, meta, score + 0.06)  # bonus pour PV récents
+                    seen[key] = _score_with_bonus(doc, meta, score + year_bonus[y])
+        # Pour logiciels/Horizon : forcer l'inclusion de chunks 2025 contenant "logiciels" ou "renouvellement"
+        if re.search(r"\b(logiciel|logiciels|horizon|renouvellement)\b", question, re.IGNORECASE):
+            for kw in ("logiciels métiers", "renouvellement contrat", "Horizon"):
+                extra = search(kw, embeddings, documents, metadata, n=8, year_filter=[2025, 2024], exact=True)
+                for doc, meta, score in extra:
+                    key = (meta.get("filename", ""), meta.get("chunk", 0))
+                    if key not in seen:
+                        seen[key] = _score_with_bonus(doc, meta, score + 0.12)
 
     # Pour voirie/travaux/montant : forcer l'inclusion de chunks qui contiennent "voirie" ou "travaux" (exact)
     if query_wants_voirie or query_wants_figures:
@@ -582,10 +594,12 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
 4c. Tarifs et barèmes : si les passages disent par exemple « les tarifs sont les suivants » ou \
    « barème selon quotient familial » mais ne contiennent pas les montants ou le tableau, \
    indique explicitement que les chiffres détaillés ne figurent pas dans les extraits fournis \
-   et renvoie vers la source (lien vers la page ou les PV) pour consulter le barème complet.
-4d. Sujets récurrents (ex. logiciels métiers, Horizon, renouvellement de contrats) : si plusieurs \
-   PV de différentes années sont fournis, cite aussi la décision la plus récente (ex. D2025-039, \
-   PV 2025) lorsqu'elle figure dans les passages, pour donner la situation à jour.
+   et renvoie l'utilisateur vers la source (lien PDF ou page mairie-pierrefonds.fr) pour consulter \
+   le barème complet. Les tableaux (cantine, périscolaire, etc.) sont désormais mieux indexés ; \
+   si un passage contient un tableau avec des chiffres, cite-les avec leur source.
+4d. Sujets récurrents (logiciels, Horizon, contrats) : tu DOIS citer le PV le plus récent (ex. 2025) \
+   s'il figure dans les passages, en plus des anciens. Mentionne explicitement la décision récente \
+   (ex. D2025-039, renouvellement 2025) en premier ou en complément, pour donner la situation à jour.
 5. Tu réponds toujours en français, de façon concise et structurée.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
@@ -1000,7 +1014,7 @@ def main():
                     "2) **commitez et poussez le dossier vector_db** (git add vector_db/ ; git commit ; git push) ; 3) redéployez l'app sur Streamlit. Sans l’étape 2, le site en ligne garde l’ancienne base."
                 )
             st.info(
-                "**Tarifs et montants :** les barèmes détaillés (ex. cantine, périscolaire) figurent parfois dans des tableaux non extraits dans la base. Si la réponse ne donne pas les chiffres, ouvrez les sources proposées ou consultez [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr). L'indexation des PDFs (procès-verbaux) améliore les réponses sur les délibérations."
+                "**Tarifs et montants :** les tableaux (cantine, périscolaire, barèmes) sont maintenant extraits et indexés. Si la réponse ne donne pas les chiffres, ouvrez les **sources** proposées ci‑dessous ou consultez [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr). L'indexation des PDFs (procès-verbaux) améliore les réponses sur les délibérations."
             )
 
             AGENT_EXAMPLES = [

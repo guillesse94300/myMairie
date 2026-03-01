@@ -59,7 +59,12 @@ echo.
 
 :: Stager tous les changements (dont la base vectorielle pour Casimir)
 git add -A
-git add vector_db/
+:: Forcer l'ajout de vector_db pour que la base Casimir soit toujours poussee
+if exist "%~dp0vector_db" (
+    echo Inclusion de vector_db/ ^(base Casimir^) dans le commit...
+    git add "%~dp0vector_db"
+    echo.
+)
 if errorlevel 1 (
     echo ERREUR lors du git add.
     pause

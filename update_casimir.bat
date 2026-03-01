@@ -75,4 +75,7 @@ if not exist "%~dp0vector_db\stats.json" (
 echo ============================================
 echo   Reindex termine.
 echo ============================================
+echo.
+echo   Pour pousser vector_db sur GitHub : lancez  deploy.bat
+echo.
 if not "%~1"=="-q" pause

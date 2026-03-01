@@ -4,6 +4,9 @@ Stockage : embeddings.npy + metadata.pkl + documents.pkl
 Usage    : python ingest.py           # .md puis PDFs
            python ingest.py --md-only # uniquement .md (sites web)
 
+- Tableaux PDF : extraction des tableaux (barèmes, tarifs cantine/périscolaire) via pdfplumber
+  extract_tables(), en plus du texte ; chaque tableau est aussi indexé comme chunk dédié.
+
 Pour les PDFs image (ex. L'ECHO), utilise l'OCR :
 - Tesseract si installé (https://github.com/UB-Mannheim/tesseract/wiki)
 - Sinon EasyOCR (pip install easyocr) — pas de binaire externe
@@ -172,6 +175,42 @@ def extract_text_ocr(pdf_path: Path) -> list:
         return []
 
 
+# ── Conversion des tableaux PDF en texte (barèmes, tarifs cantine/périscolaire) ─
+def _table_to_text(table: list) -> str:
+    """Convertit un tableau pdfplumber (liste de listes) en texte lisible pour l'indexation."""
+    if not table:
+        return ""
+    lines = []
+    for row in table:
+        cells = [str(c).strip() if c is not None else "" for c in row]
+        if any(cells):
+            lines.append(" | ".join(cells))
+    return "\n".join(lines) if lines else ""
+
+
+def _extract_page_text_and_tables(page):
+    """
+    Extrait le texte d'une page PDF et y ajoute le contenu des tableaux détectés.
+    Retourne (texte_complet, liste_des_texte_tableaux) pour permettre d'indexer
+    aussi chaque tableau comme chunk dédié (meilleure recherche tarifs/barèmes).
+    """
+    text = page.extract_text() or ""
+    table_texts = []
+    try:
+        tables = page.extract_tables() or []
+    except Exception:
+        tables = []
+    for tbl in tables:
+        if not tbl:
+            continue
+        table_text = _table_to_text(tbl)
+        if table_text.strip():
+            text += "\n\n[Tableau]\n" + table_text
+            # Chunks dédiés aux tableaux pour améliorer la recherche "tarif cantine", "barème"
+            table_texts.append(table_text)
+    return text.strip(), table_texts
+
+
 # ── Découpage du texte en chunks (avec overlap pour préserver tableaux/chiffres) ─
 def chunk_text(text: str, size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list:
     paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
@@ -313,7 +352,13 @@ def main(args=None):
 
         try:
             with pdfplumber.open(pdf_path) as pdf:
-                pages_text = [p.extract_text() for p in pdf.pages if p.extract_text()]
+                pages_text = []
+                all_table_texts = []
+                for p in pdf.pages:
+                    page_content, table_texts = _extract_page_text_and_tables(p)
+                    if page_content:
+                        pages_text.append(page_content)
+                    all_table_texts.extend(table_texts)
 
             is_journal = "journal" in str(pdf_path).replace("\\", "/")
             if not pages_text and _OCR_AVAILABLE:
@@ -341,7 +386,11 @@ def main(args=None):
             chunks = chunk_text(full_text)
             if not chunks and len(full_text) > 80:
                 chunks = [full_text]
-            print(f"{len(chunks)} chunks")
+            total_chunks = len(chunks) + len(all_table_texts)
+            if all_table_texts:
+                print(f"{len(chunks)} chunks + {len(all_table_texts)} tableau(x)", end=" ")
+            else:
+                print(f"{len(chunks)} chunks", end=" ")
 
             for i, chunk in enumerate(chunks):
                 all_docs.append(chunk)
@@ -351,8 +400,23 @@ def main(args=None):
                     "date": date_iso,
                     "year": year,
                     "chunk": i,
-                    "total_chunks": len(chunks),
+                    "total_chunks": total_chunks,
                 })
+            # Chunks dédiés aux tableaux (barèmes, tarifs) pour améliorer la recherche sémantique
+            for j, table_str in enumerate(all_table_texts):
+                if len(table_str.strip()) < 20:
+                    continue
+                all_docs.append("[Tableau] " + table_str.strip())
+                all_metadatas.append({
+                    "filename": pdf_path.name,
+                    "rel_path": rel_path,
+                    "date": date_iso,
+                    "year": year,
+                    "chunk": len(chunks) + j,
+                    "total_chunks": total_chunks,
+                    "is_table": True,
+                })
+            print("")
 
         except Exception as e:
             print(f"ERREUR : {e}")
