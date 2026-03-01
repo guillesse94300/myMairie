@@ -89,8 +89,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Synchroniser avec le distant avant de pusher
+:: Confirmer le push de tous les fichiers
+set CONFIRM_PUSH=
 echo.
+set /p CONFIRM_PUSH="Pousser tous les fichiers vers GitHub ^(deploiement app^) ? (o/n) [o] : "
+if /i "!CONFIRM_PUSH!"=="n" goto skip_push
+if /i "!CONFIRM_PUSH!"=="non" goto skip_push
+echo.
+
+:: Synchroniser avec le distant avant de pusher
 echo Synchronisation avec GitHub...
 git pull origin main --rebase
 if errorlevel 1 (
@@ -116,3 +123,10 @@ echo   https://share.streamlit.io
 echo ============================================
 echo.
 if not "%~1"=="-q" pause
+exit /b 0
+
+:skip_push
+echo   Push annule.
+echo.
+if not "%~1"=="-q" pause
+exit /b 0
