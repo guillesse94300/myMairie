@@ -81,6 +81,8 @@ def _safe_source_url(url: str) -> str | None:
 # ── Rate limiting par IP (recherche + agent) : 5 recherches / jour ──────────────
 RATE_LIMIT_MAX = 5
 RATE_LIMIT_WHITELIST = {"86.208.120.20"}
+# Bonus de crédits par IP (ex. 20 = 5+20 = 25 recherches/jour)
+RATE_LIMIT_CREDITS_BONUS = {"80.214.57.209": 20}
 QUOTA_EPUISE_MSG = "Quota de recherche épuisé, attendez minuit !"
 
 
@@ -158,6 +160,11 @@ def _get_searches_today_count_for_ip(ip: str) -> int:
         return 0
 
 
+def _get_rate_limit_max_for_ip(ip: str) -> int:
+    """Limite max pour cette IP (base + bonus crédits)."""
+    return RATE_LIMIT_MAX + RATE_LIMIT_CREDITS_BONUS.get(ip, 0)
+
+
 def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     """
     Vérifie la limite (5 recherches / jour par IP). La consommation a lieu lors de log_search().
@@ -169,10 +176,10 @@ def rate_limit_check_and_consume() -> tuple[bool, int | None]:
     if ip in RATE_LIMIT_WHITELIST:
         return (True, None)
     count_today = _get_searches_today_count_for_ip(ip)
-    if count_today >= RATE_LIMIT_MAX:
+    max_allowed = _get_rate_limit_max_for_ip(ip)
+    if count_today >= max_allowed:
         return (False, 0)
-    # Après cette recherche il restera 5 - (count_today + 1)
-    return (True, RATE_LIMIT_MAX - count_today - 1)
+    return (True, max_allowed - count_today - 1)
 
 
 def rate_limit_get_remaining() -> int | None:
@@ -181,7 +188,14 @@ def rate_limit_get_remaining() -> int | None:
     if not ip or ip in RATE_LIMIT_WHITELIST:
         return None
     count_today = _get_searches_today_count_for_ip(ip)
-    return max(0, RATE_LIMIT_MAX - count_today)
+    max_allowed = _get_rate_limit_max_for_ip(ip)
+    return max(0, max_allowed - count_today)
+
+
+def rate_limit_get_max_for_display() -> int:
+    """Max affiché pour l'IP courante (pour le bandeau X/max)."""
+    ip = get_client_ip_for_log() or get_client_ip()
+    return _get_rate_limit_max_for_ip(ip) if ip else RATE_LIMIT_MAX
 
 
 def get_searches_today_count() -> int:
@@ -815,7 +829,8 @@ def main():
     commit_date, _ = get_git_info()
     total_today = get_searches_today_count()
     remaining = rate_limit_get_remaining()
-    remaining_str = "∞" if remaining is None else f"{remaining}/{RATE_LIMIT_MAX}"
+    max_display = rate_limit_get_max_for_display()
+    remaining_str = "∞" if remaining is None else f"{remaining}/{max_display}"
     with st.container(border=True):
         c_nav, c_mail_deploy, c_stats = st.columns([2, 2.4, 1.4])
         with c_nav:
