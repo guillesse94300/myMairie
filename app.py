@@ -411,6 +411,11 @@ _CHUNK_VOIRIE = re.compile(
     r"\b(travaux|voirie|chauss[eé]e|route|rue|réfection|enrobé)\b",
     re.IGNORECASE
 )
+# Chunk parle d'Horizon / logiciels métiers (pour prioriser ces passages en sortie)
+_CHUNK_HORIZON = re.compile(
+    r"\b(horizon|logiciel|logiciels|renouvellement|villages\s*cloud|DETR)\b",
+    re.IGNORECASE
+)
 
 # Questions sur sujets récurrents (logiciels, voirie, contrats) → inclure les PV récents (2025, 2024, 2023)
 _QUERY_RECENT_DELIB = re.compile(
@@ -493,7 +498,6 @@ def search_agent(question: str, embeddings, documents, metadata,
         # Pour logiciels/Horizon : forcer l'inclusion de tous les chunks 2025 (puis 2024) qui parlent d'Horizon/logiciels,
         # pour que la réponse détaille la situation récente (2025) et pas seulement l'historique (ex. 2022).
         if re.search(r"\b(logiciel|logiciels|horizon|renouvellement)\b", question, re.IGNORECASE):
-            _HORIZON_KW = re.compile(r"\b(horizon|logiciel|logiciels|renouvellement|villages\s*cloud|DETR)\b", re.IGNORECASE)
             for y in (2025, 2024):
                 added_h = 0
                 for doc, meta in zip(documents, metadata):
@@ -503,7 +507,7 @@ def search_agent(question: str, embeddings, documents, metadata,
                         continue
                     if not str(meta.get("filename", "")).lower().endswith(".pdf"):
                         continue
-                    if not _HORIZON_KW.search(doc):
+                    if not _CHUNK_HORIZON.search(doc):
                         continue
                     key = (meta.get("filename", ""), meta.get("chunk", 0))
                     if key in seen:
@@ -519,8 +523,7 @@ def search_agent(question: str, embeddings, documents, metadata,
                     key = (meta.get("filename", ""), meta.get("chunk", 0))
                     if key not in seen:
                         seen[key] = _score_with_bonus(doc, meta, score + 0.12)
-            # Secours : inclure tout passage qui mentionne "Horizon" ou "logiciel" (toutes années),
-            # pour ne jamais répondre "aucune information sur Horizon" quand des PV en parlent (ex. 2022).
+            # Secours : inclure tout passage qui mentionne "Horizon" ou "logiciel" (toutes années).
             for kw in ("Horizon", "logiciel", "logiciels"):
                 extra = search(kw, embeddings, documents, metadata, n=18, year_filter=None, exact=True)
                 for doc, meta, score in extra:
@@ -529,6 +532,23 @@ def search_agent(question: str, embeddings, documents, metadata,
                         y = meta.get("year") or ""
                         bonus = 0.18 if y == "2025" else 0.12 if y == "2024" else 0.06
                         seen[key] = _score_with_bonus(doc, meta, score + bonus)
+            # Force : parcourir toute la base et ajouter tout chunk qui mentionne Horizon/logiciel (PDF),
+            # pour ne jamais exclure ces passages quand ils existent (ex. PV 2022).
+            added_any = 0
+            for doc, meta in zip(documents, metadata):
+                if added_any >= 35:
+                    break
+                if not str(meta.get("filename", "")).lower().endswith(".pdf"):
+                    continue
+                if not _CHUNK_HORIZON.search(doc):
+                    continue
+                key = (meta.get("filename", ""), meta.get("chunk", 0))
+                if key in seen:
+                    continue
+                y = meta.get("year") or ""
+                score_force = 0.50 if y == "2025" else 0.42 if y == "2024" else 0.35
+                seen[key] = (doc, meta, score_force)
+                added_any += 1
 
     # Pour voirie/travaux/montant : forcer l'inclusion de chunks qui contiennent "voirie", "travaux", "crédit", "Armistice"
     if query_wants_voirie or query_wants_figures:
@@ -608,7 +628,14 @@ def search_agent(question: str, embeddings, documents, metadata,
             seen[key] = (doc, meta, 0.38)
             added += 1
 
-    merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)[:n]
+    merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)
+    # Pour les questions sur Horizon/logiciels : placer les passages qui en parlent en tête,
+    # pour qu'ils ne soient jamais exclus du top n et que l'agent ait toujours du contexte.
+    if re.search(r"\b(logiciel|logiciels|horizon|renouvellement)\b", question, re.IGNORECASE):
+        horizon_first = [x for x in merged if _CHUNK_HORIZON.search(x[0])]
+        others = [x for x in merged if x not in horizon_first]
+        merged = horizon_first + others
+    merged = merged[:n]
     return [(doc, meta, min(score, 1.0)) for doc, meta, score in merged]
 
 
@@ -695,8 +722,9 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    Détaille d'abord la plus récente année présente (ex. 2025), puis l'historique (ex. 2022). \
    Si les passages ne contiennent que des délibérations plus anciennes (ex. 2022), réponds quand même \
    en t'appuyant sur elles et indique que « les extraits fournis concernent notamment la délibération de [date] » \
-   avec les montants et décisions. Ne réponds jamais « aucune information sur Horizon dans les passages » \
-   dès qu'au moins un passage mentionne Horizon ou les logiciels métiers.
+   avec les montants et décisions. \
+   INTERDICTION : Tu ne dois JAMAIS écrire « il n'y a aucune information sur les logiciels Horizon dans les passages fournis » \
+   dès qu'au moins un passage contient le mot « Horizon » ou « logiciel » ; dans ce cas, tu DOIS répondre en t'appuyant sur ces passages.
 4e. Travaux de voirie et montants : donne une réponse complète avec des éléments financiers quand c'est possible. \
    (1) Résume ce que disent les passages : quels travaux (ex. rue de l'Armistice), où, contexte (circulation alternée, etc.) avec la source [N]. \
    (2) Cite tout montant, crédit, subvention ou budget trouvé dans les passages (€, HT, TTC) avec sa source [N]. \
@@ -735,8 +763,19 @@ def ask_claude_stream(question: str, passages: list):
         context_parts.append(f"<source id=\"{i}\" fichier=\"{fname}\">\n{doc}\n</source>")
     context = "\n\n".join(context_parts)
 
+    # Quand la question porte sur Horizon/logiciels et qu'au moins un passage en parle, forcer le LLM à s'en servir
+    question_about_horizon = bool(re.search(r"\b(horizon|logiciel|logiciels)\b", question, re.IGNORECASE))
+    passages_mention_horizon = any(_CHUNK_HORIZON.search(doc) for doc, _, _ in passages)
+    horizon_note = ""
+    if question_about_horizon and passages_mention_horizon:
+        horizon_note = (
+            "IMPORTANT : Au moins un des passages ci-dessous mentionne les logiciels Horizon ou les logiciels métiers. "
+            "Tu DOIS t'appuyer sur ces passages pour répondre. Il est interdit d'écrire qu'il n'y a aucune information sur Horizon.\n\n"
+        )
+
     user_msg = (
         f"Question : {question}\n\n"
+        f"{horizon_note}"
         f"Passages pertinents issus des procès-verbaux :\n\n{context}\n\n"
         "Réponds à la question en te basant exclusivement sur ces passages."
     )
@@ -1168,6 +1207,15 @@ def main():
                     if not passages:
                         st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
                     else:
+                        # Si la question porte sur Horizon mais aucun passage ne le mentionne, alerter (données manquantes)
+                        if (re.search(r"\b(horizon|logiciel|logiciels)\b", search_question, re.IGNORECASE)
+                                and not any(_CHUNK_HORIZON.search(doc) for doc, _, _ in passages)):
+                            st.info(
+                                "ℹ️ Aucun passage indexé ne mentionne les logiciels Horizon. "
+                                "Pour que Casimir puisse répondre sur ce sujet, indexez les procès-verbaux : "
+                                "lancez **Update_Casimir.bat** (ou `python ingest.py` sans --md-only), "
+                                "puis commitez et déployez le dossier **vector_db**."
+                            )
                         st.markdown("#### Réponse")
                         placeholder = st.empty()
                         full_text = ""
