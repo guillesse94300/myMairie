@@ -66,11 +66,11 @@ echo Copie .md vers static...
 python copy_md_to_static.py 2>nul
 echo.
 
-if not exist "%~dp0vector_db\stats.json" (
-    echo Extraction stats vote...
-    python stats_extract.py
-    echo.
-)
+:: Toujours regenerer stats.json pour qu'il soit a jour avec les PV (sinon il reste ancien sur GitHub)
+echo Extraction stats vote ^(stats.json^)...
+python stats_extract.py 2>nul
+if errorlevel 1 echo   ATTENTION : echec stats_extract.py
+echo.
 
 echo ============================================
 echo   Reindex termine.
