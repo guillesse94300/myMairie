@@ -870,7 +870,7 @@ def _bloc_references(text: str, passages: list) -> str:
             rel_path = meta.get("rel_path", fname)
             url = _safe_pdf_url(rel_path)
         label = (fname or rel_path or "").replace(".pdf", "").replace("[Web] ", "")
-        lines.append(f"{i}. [{label}]({url})")
+        lines.append(f"Passage {i} : [{label}]({url})")
     return "\n".join(lines)
 
 
