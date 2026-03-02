@@ -832,8 +832,8 @@ def _liens_sources(text: str, passages: list) -> str:
     def _make_link(sid):
         if sid in id_map:
             fname, url, icon = id_map[sid]
-            label = fname.replace(".pdf", "").replace("[Web] ", "")
-            return f"[{icon} {label}]({url})"
+            # Dans le texte : uniquement le numéro [1], [2], [3] (cliquable)
+            return f"[{sid}]({url})"
         return f"[{sid}]"
 
     # 0. Remplacer les références [N] produites par le LLM (format principal)
@@ -849,6 +849,24 @@ def _liens_sources(text: str, passages: list) -> str:
     text = re.sub(r'<source[^>]*>', "", text)
 
     return text
+
+
+def _bloc_references(passages: list) -> str:
+    """Construit le bloc « Références » en fin de réponse : 1. [label](url), 2. ..."""
+    if not passages:
+        return ""
+    lines = ["**Références**", ""]
+    for i, (_, meta, _) in enumerate(passages, 1):
+        fname = meta.get("filename", "")
+        source_url = meta.get("source_url", "")
+        if source_url and _safe_source_url(source_url):
+            url = _safe_source_url(source_url)
+        else:
+            rel_path = meta.get("rel_path", fname)
+            url = _safe_pdf_url(rel_path)
+        label = (fname or rel_path or "").replace(".pdf", "").replace("[Web] ", "")
+        lines.append(f"{i}. [{label}]({url})")
+    return "\n".join(lines)
 
 
 # ── Chemins du guide utilisateur (static prioritaire pour déploiement) ─────────
@@ -1131,7 +1149,7 @@ def main():
         st.markdown("<br>", unsafe_allow_html=True)
 
         CARDS = [
-            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA … Vous avez quelques exemples ci-dessous. Je travaille à améliorer les réponses, à affiner les modèles d'IA.", "agent"),
+            ("🤖", "Interroger l'Agent Casimir", "Posez une question en langage naturel. **Casimir** a lu beaucoup d'articles et de comptes rendus sur **Pierrefonds**, il synthétise une réponse pour vous ! **Attention, comme chaque IA, il peut se tromper !** Vous avez accès aux sources pour vérifier. **Casimir** apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA … Vous avez quelques exemples ci-dessous. Je travaille à améliorer les réponses, à affiner les modèles d'IA.", "agent"),
             ("📊", "Statistiques des séances du Conseil Municipal", "Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers.", "stats"),
             ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
             ("📄", "Sources et Documents", "Liste des sources utilisées par Casimir et la recherche sémantique.", "docs"),
@@ -1154,9 +1172,9 @@ def main():
         if st.session_state["current_section"] == "agent":
             st.title("🤖 Interroger l'Agent Casimir")
             st.caption(
-                "Posez une question en langage naturel. Casimir a lu beaucoup d'articles et de comptes rendus "
-                "sur Pierrefonds, il synthétise une réponse pour vous ! Attention, comme chaque IA, il peut se tromper ! "
-                "Vous avez accès aux sources pour vérifier. Casimir apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA … "
+                "Posez une question en langage naturel. **Casimir** a lu beaucoup d'articles et de comptes rendus "
+                "sur **Pierrefonds**, il synthétise une réponse pour vous ! **Attention, comme chaque IA, il peut se tromper !** "
+                "Vous avez accès aux sources pour vérifier. **Casimir** apprend tous les jours, mais doit se reposer de temps en temps pour regagner des crédits des fournisseurs d'IA … "
                 "Vous avez quelques exemples ci-dessous. Je travaille à améliorer les réponses, à affiner les modèles d'IA."
             )
             if not base_has_pdfs:
@@ -1229,6 +1247,7 @@ def main():
                                 full_text += chunk
                                 placeholder.markdown(full_text + " ▌")
                             placeholder.markdown(_liens_sources(full_text, passages))
+                            st.markdown(_bloc_references(passages))
                         except ValueError as e:
                             placeholder.empty()
                             st.error(str(e))
