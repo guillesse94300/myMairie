@@ -629,11 +629,15 @@ def search_agent(question: str, embeddings, documents, metadata,
             added += 1
 
     merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)
-    # Pour les questions sur Horizon/logiciels : placer les passages qui en parlent en tête,
-    # pour qu'ils ne soient jamais exclus du top n et que l'agent ait toujours du contexte.
+    # Pour les questions sur Horizon/logiciels : placer les passages qui en parlent en tête (2025 avant 2024 avant le reste).
     if re.search(r"\b(logiciel|logiciels|horizon|renouvellement)\b", question, re.IGNORECASE):
         horizon_first = [x for x in merged if _CHUNK_HORIZON.search(x[0])]
         others = [x for x in merged if x not in horizon_first]
+        # 2025 en premier, puis 2024, puis les autres années
+        def _year_prio(t):
+            y = (t[1].get("year") or "").strip()
+            return (0 if y == "2025" else 1 if y == "2024" else 2, -(t[2]))
+        horizon_first.sort(key=_year_prio)
         merged = horizon_first + others
     merged = merged[:n]
     return [(doc, meta, min(score, 1.0)) for doc, meta, score in merged]
@@ -719,7 +723,8 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    si un passage contient un tableau avec des chiffres, cite-les avec leur source.
 4d. Sujets récurrents (logiciels, Horizon, contrats) : pour les questions sur Horizon ou les logiciels \
    métiers, utilise TOUS les passages qui mentionnent Horizon, logiciel, renouvellement ou DETR. \
-   Détaille d'abord la plus récente année présente (ex. 2025), puis l'historique (ex. 2022). \
+   Si des passages de 2025 sont fournis, tu DOIS les détailler en priorité (décisions, montants, renouvellement). \
+   Puis détaille la plus récente autre année (ex. 2024), puis l'historique (ex. 2022). \
    Si les passages ne contiennent que des délibérations plus anciennes (ex. 2022), réponds quand même \
    en t'appuyant sur elles et indique que « les extraits fournis concernent notamment la délibération de [date] » \
    avec les montants et décisions. \
@@ -766,12 +771,16 @@ def ask_claude_stream(question: str, passages: list):
     # Quand la question porte sur Horizon/logiciels et qu'au moins un passage en parle, forcer le LLM à s'en servir
     question_about_horizon = bool(re.search(r"\b(horizon|logiciel|logiciels)\b", question, re.IGNORECASE))
     passages_mention_horizon = any(_CHUNK_HORIZON.search(doc) for doc, _, _ in passages)
+    has_2025 = any((m.get("year") or "").strip() == "2025" for _, m, _ in passages)
     horizon_note = ""
     if question_about_horizon and passages_mention_horizon:
         horizon_note = (
             "IMPORTANT : Au moins un des passages ci-dessous mentionne les logiciels Horizon ou les logiciels métiers. "
-            "Tu DOIS t'appuyer sur ces passages pour répondre. Il est interdit d'écrire qu'il n'y a aucune information sur Horizon.\n\n"
+            "Tu DOIS t'appuyer sur ces passages pour répondre. Il est interdit d'écrire qu'il n'y a aucune information sur Horizon."
         )
+        if has_2025:
+            horizon_note += " Des passages de 2025 sont présents : détaille-les en priorité (décisions, montants, renouvellement, DETR)."
+        horizon_note += "\n\n"
 
     user_msg = (
         f"Question : {question}\n\n"
@@ -1057,7 +1066,7 @@ def main():
     with st.container(border=True):
         c_nav, c_mail_deploy, c_stats = st.columns([3, 2.2, 1.4])
         with c_nav:
-            nav_cols = 5 if admin else 4
+            nav_cols = 5 if admin else 3
             btn_cols = st.columns(nav_cols)
             with btn_cols[0]:
                 if st.button("🏠 Accueil", key="banner_accueil"):
@@ -1069,10 +1078,10 @@ def main():
             with btn_cols[2]:
                 if st.button("📖 Guide\u00a0utilisateur", key="banner_guide"):
                     guide_utilisateur()
-            with btn_cols[3]:
-                if st.button("🔧 Technical\u00a0Guide", key="banner_tech_guide"):
-                    technical_guide()
             if admin:
+                with btn_cols[3]:
+                    if st.button("🔧 Technical\u00a0Guide", key="banner_tech_guide"):
+                        technical_guide()
                 with btn_cols[4]:
                     if st.button("🔑 ADMIN", key="banner_admin"):
                         admin_searches_db()
@@ -1155,10 +1164,6 @@ def main():
                     "Pour qu'il consulte aussi les délibérations et PV : 1) exécutez **Update_Casimir.bat** et répondez **« oui »** à « Indexer aussi les PDFs ? » ; "
                     "2) **commitez et poussez le dossier vector_db** (git add vector_db/ ; git commit ; git push) ; 3) redéployez l'app sur Streamlit. Sans l’étape 2, le site en ligne garde l’ancienne base."
                 )
-            st.info(
-                "**Tarifs et montants :** les tableaux (cantine, périscolaire, barèmes) sont maintenant extraits et indexés. Si la réponse ne donne pas les chiffres, ouvrez les **sources** proposées ci‑dessous ou consultez [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr). L'indexation des PDFs (procès-verbaux) améliore les réponses sur les délibérations."
-            )
-
             AGENT_EXAMPLES = [
                 "Comment ont évolué les tarifs de la cantine scolaire ?",
                 "Quels travaux de voirie ont été votés et pour quel montant ?",
