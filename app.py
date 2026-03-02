@@ -80,7 +80,7 @@ def _safe_source_url(url: str) -> str | None:
 
 # ── Rate limiting par IP (recherche + agent) : 5 recherches / jour ──────────────
 RATE_LIMIT_MAX = 5
-RATE_LIMIT_WHITELIST = {"86.208.120.20", "90.22.160.8"}
+RATE_LIMIT_WHITELIST = {"86.208.120.20", "90.22.160.8", "37.64.40.130"}
 # Bonus de crédits par IP (ex. 20 = 5+20 = 25 recherches/jour)
 RATE_LIMIT_CREDITS_BONUS = {"80.214.57.209": 20}
 QUOTA_EPUISE_MSG = "Quota de recherche épuisé, attendez minuit !"
