@@ -851,12 +851,17 @@ def _liens_sources(text: str, passages: list) -> str:
     return text
 
 
-def _bloc_references(passages: list) -> str:
-    """Construit le bloc « Références » en fin de réponse : 1. [label](url), 2. ..."""
+def _bloc_references(text: str, passages: list) -> str:
+    """Construit le bloc « Références » en fin de réponse : uniquement les sources citées dans le texte."""
     if not passages:
         return ""
+    # Extraire les numéros [N] ou [N](url) mentionnés dans le texte
+    nums = sorted({int(m) for m in re.findall(r"\[(\d+)\]", text) if 1 <= int(m) <= len(passages)})
+    if not nums:
+        return ""
     lines = ["**Références**", ""]
-    for i, (_, meta, _) in enumerate(passages, 1):
+    for i in nums:
+        _, meta, _ = passages[i - 1]
         fname = meta.get("filename", "")
         source_url = meta.get("source_url", "")
         if source_url and _safe_source_url(source_url):
@@ -1246,8 +1251,11 @@ def main():
                             for chunk in ask_claude_stream(search_question, passages):
                                 full_text += chunk
                                 placeholder.markdown(full_text + " ▌")
-                            placeholder.markdown(_liens_sources(full_text, passages))
-                            st.markdown(_bloc_references(passages))
+                            processed = _liens_sources(full_text, passages)
+                            placeholder.markdown(processed)
+                            refs = _bloc_references(processed, passages)
+                            if refs:
+                                st.markdown(refs)
                         except ValueError as e:
                             placeholder.empty()
                             st.error(str(e))
