@@ -1,0 +1,12 @@
+Bienvenue à Casimir!
+Casimir est un agent conversationel créé via l'intelligence artificielle.
+Son but est de tout connaître sur notre belle ville de Pierrefonds et de converser avec nous, répondre à nos questions.
+Pour cela il a « appris » à partir de tous les documents publics disponibles : documents de la Mairie, sites Web, journaux.
+Le site permet également d'avoir des recherches avancées.
+Rencontrez Casimir ici : https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/
+Écrivez-lui à casimir.pierrefonds@outlook.com pour tout feedback!
+
+PS. Bien sur : aucune opinion ici, aucun but financier, ni politique.
+PS2 : l'IA peut se tromper !
+PS3 : Sans connaisance particulière en code, j'ai fait ce site en quelques heures, l'IA est très puissant et va révolutionner nos métiers ...
+PS4 : je travaille encore sur un mode conversationel plus avancé - mode chat/whatsapp

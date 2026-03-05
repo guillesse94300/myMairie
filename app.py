@@ -13,6 +13,8 @@ warnings.filterwarnings("ignore", message=".*HF_TOKEN.*", category=UserWarning)
 import json
 import pickle
 import subprocess
+import csv
+import io
 import numpy as np
 import streamlit as st
 import streamlit.components.v1 as components
@@ -965,6 +967,37 @@ def admin_searches_db():
         st.error(f"Impossible de charger la base : {e}")
 
 
+def export_searches_csv() -> None:
+    """
+    Exporte la table des recherches au format CSV brut.
+    Utilisé par un workflow GitHub (curl) pour prendre un snapshot.
+    """
+    try:
+        _init_searches_db()
+        with sqlite3.connect(SEARCHES_DB) as conn:
+            rows = conn.execute(
+                "SELECT ip, timestamp, query FROM searches ORDER BY timestamp ASC"
+            ).fetchall()
+        tz_paris = ZoneInfo("Europe/Paris")
+        buf = io.StringIO()
+        writer = csv.writer(buf, delimiter=";")
+        writer.writerow(["ip", "timestamp_paris_iso", "query"])
+        for ip, ts, q in rows:
+            if ts:
+                dt = datetime.fromtimestamp(ts, tz=tz_paris).isoformat()
+            else:
+                dt = ""
+            # Aplatir les retours à la ligne dans la requête
+            qq = (q or "").replace("\r", " ").replace("\n", " ")
+            writer.writerow([ip or "", dt, qq])
+        csv_content = buf.getvalue()
+        # Sortie minimale : un seul bloc de texte, facile à récupérer via curl
+        st.text(csv_content)
+    except Exception as e:
+        st.error(f"Impossible d'exporter la base des recherches : {e}")
+        st.stop()
+
+
 # ── Interface principale ───────────────────────────────────────────────────────
 def main():
     if "current_section" not in st.session_state:
@@ -986,6 +1019,13 @@ def main():
             st.session_state["client_public_ip"] = ip_js.strip()
         elif ip_js is None:
             st.stop()
+
+    admin = is_admin()
+    # Mode export CSV pour GitHub Actions : ?admin=TOKEN&export_searches=1
+    export_flag = st.query_params.get("export_searches", "")
+    if admin and str(export_flag).strip() == "1":
+        export_searches_csv()
+        return
 
     show_sidebar = st.session_state["current_section"] == "search"
     st.set_page_config(
