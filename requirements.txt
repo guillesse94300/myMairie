@@ -9,6 +9,7 @@ playwright
 sentence-transformers
 streamlit
 altair<5
+imghdr
 streamlit-javascript
 numpy
 groq
