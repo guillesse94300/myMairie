@@ -1108,16 +1108,16 @@ def main():
 
     admin = is_admin()
     embeddings, documents, metadata = load_db()
-    # Détecter si la base contient des chunks issus de PDFs (procès-verbaux, etc.)
-    def _is_pdf_meta(m: dict) -> bool:
+    # Détecter si la base contient des chunks issus de procès-verbaux (CM-*, compte-rendu-*, PV*)
+    _PV_PATTERNS = ("cm-", "compte-rendu-", "pv-", "pv ", "-pv.", "lecho-", "l'echo")
+    def _is_pv_meta(m: dict) -> bool:
         fn = str(m.get("filename", "")).lower()
-        rp = str(m.get("rel_path", "")).lower()
-        return fn.endswith(".pdf") or rp.endswith(".pdf")
-    _pdf_filenames = {m.get("filename") or m.get("rel_path") for m in metadata if _is_pdf_meta(m)}
-    _pdf_filenames.discard(None)
-    base_has_pdfs = len(_pdf_filenames) > 0
+        return any(fn.startswith(p) or p in fn for p in _PV_PATTERNS)
+    _pv_filenames = {m.get("filename") or m.get("rel_path") for m in metadata if _is_pv_meta(m)}
+    _pv_filenames.discard(None)
+    base_has_pdfs = len(_pv_filenames) > 0   # conservé pour compatibilité des conditions existantes
     if admin:
-        base_desc = f"**{len(documents)} passages**" + (f" (dont {len(_pdf_filenames)} fichier(s) PDF)" if base_has_pdfs else " (sites web uniquement, PDFs non indexés)")
+        base_desc = f"**{len(documents)} passages**" + (f" (dont {len(_pv_filenames)} PV/délibération(s))" if base_has_pdfs else " (sites web uniquement, PVs non indexés)")
         st.caption(f"Base indexée : {base_desc} · 🔑 Mode admin")
 
     # ── Bandeau supérieur (une ligne, compact) ─────────────────────────────────
@@ -1224,9 +1224,8 @@ def main():
             )
             if not base_has_pdfs:
                 st.warning(
-                    "**Les procès-verbaux (PDF) ne sont pas indexés** dans la base actuelle. Casimir ne peut s'appuyer que sur les pages web (.md). "
-                    "Pour qu'il consulte aussi les délibérations et PV : 1) exécutez **Update_Casimir.bat** et répondez **« oui »** à « Indexer aussi les PDFs ? » ; "
-                    "2) **commitez et poussez le dossier vector_db** (git add vector_db/ ; git commit ; git push) ; 3) redéployez l'app sur Streamlit. Sans l’étape 2, le site en ligne garde l’ancienne base."
+                    "**Les procès-verbaux ne sont pas indexés** dans la base actuelle. Casimir ne peut s’appuyer que sur les pages web. "
+                    "Pour mettre à jour : exécutez **update_casimir.bat**, puis **deploy.bat**."
                 )
             AGENT_EXAMPLES = [
                 "Comment ont évolué les tarifs de la cantine scolaire ?",
@@ -1605,21 +1604,14 @@ def main():
                 "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
             )
             st.divider()
-            st.markdown("**Documents disponibles** (PV, L'ECHO, .md — triés par date décroissante)")
-            static_dir = APP_DIR / "static"
-            pdfs_static = list(static_dir.rglob("*.pdf")) if static_dir.exists() else []
-            mds_static = list(static_dir.rglob("*.md")) if static_dir.exists() else []
-            all_docs = sorted(pdfs_static + mds_static, key=_pdf_date_key, reverse=True)
+            st.markdown("**Documents indexés** (triés par date décroissante)")
+            input_dir = APP_DIR / "input"
+            all_docs = sorted(input_dir.glob("*.md"), key=_pdf_date_key, reverse=True) if input_dir.exists() else []
             if all_docs:
                 for p in all_docs:
                     dt = _pdf_date_key(p)
                     label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
-                    rel_path = str(p.relative_to(static_dir)).replace("\\", "/")
-                    doc_url = _safe_pdf_url(rel_path)
-                    icon = "📄" if p.suffix.lower() == ".pdf" else "📝"
-                    st.markdown(
-                        f"`{label_date}` — [{icon} {p.name}]({doc_url})",
-                    )
+                    st.markdown(f"`{label_date}` — 📝 {p.stem}")
             else:
                 st.caption("Aucun document trouvé.")
 
