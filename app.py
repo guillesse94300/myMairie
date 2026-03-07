@@ -332,9 +332,9 @@ def _lier_noms_propres(text: str) -> str:
         else:
             for nom, question in sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0])):
                 q_enc = urllib.parse.quote(question)
-                # onclick navigue window.parent = la page Streamlit réelle (pas l'iframe)
-                js = f"window.parent.location.href='?q={q_enc}'; return false;"
-                lien = (f'<a href="#" onclick="{js}"'
+                # target="_parent" : navigue le frame parent (page Streamlit réelle)
+                # sans JavaScript → Streamlit ne strip pas cet attribut
+                lien = (f'<a href="?q={q_enc}" target="_parent"'
                         f' title="Poser cette question à Casimir"'
                         f' style="{_NOM_LINK_STYLE}">{nom}</a>')
                 # Remplacer **nom** et __nom__ (bold Markdown) → lien propre sans marqueurs
