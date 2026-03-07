@@ -313,12 +313,21 @@ NOMS_PROPRES_LIENS: dict[str, str] = {
 _NOM_LINK_STYLE = "color:#1565c0;text-decoration:underline dotted;cursor:pointer"
 
 def _lier_noms_propres(text: str) -> str:
-    """Remplace les noms propres connus par des liens HTML ?q=... vers Casimir."""
-    # Traiter uniquement les nœuds texte (pas les balises HTML ni les citations [N])
+    """Remplace les noms propres connus par des liens HTML ?q=... vers Casimir.
+    Ne touche pas au contenu à l'intérieur des balises <a> existantes."""
     parts = re.split(r'(<[^>]+>)', text)
     result = []
+    inside_anchor = False
     for part in parts:
         if part.startswith('<'):
+            tag_lower = part.lower()
+            if tag_lower.startswith('<a ') or tag_lower == '<a>':
+                inside_anchor = True
+            elif tag_lower.startswith('</a'):
+                inside_anchor = False
+            result.append(part)
+        elif inside_anchor:
+            # Ne pas modifier le texte à l'intérieur d'un <a> existant
             result.append(part)
         else:
             for nom, question in sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0])):
@@ -328,7 +337,7 @@ def _lier_noms_propres(text: str) -> str:
                 # Remplacer **nom** et __nom__ (bold Markdown) → lien propre sans marqueurs
                 part = part.replace(f"**{nom}**", lien)
                 part = part.replace(f"__{nom}__", lien)
-                # Remplacer le nom nu s'il n'est pas déjà dans un lien
+                # Remplacer le nom nu
                 if nom in part:
                     part = part.replace(nom, lien)
             result.append(part)
@@ -1381,6 +1390,7 @@ def main():
             _q_link = st.query_params.get("q", "")
             if _q_link and not st.session_state.get("agent_auto_search"):
                 st.session_state["agent_auto_search"] = _q_link
+                st.session_state["agent_question"] = _q_link   # pré-remplit le champ
                 st.query_params.clear()
 
             agent_years = []
