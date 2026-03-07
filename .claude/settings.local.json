@@ -91,7 +91,13 @@
       "Bash(python transform.py --help)",
       "Bash(dir /b \"C:\\\\Users\\\\gilles.kammerer\\\\OneDrive\\\\immobilier\\\\Pierrefonds\\\\Mairie\\\\source\")",
       "Bash(echo.)",
-      "Bash(python3 -c \"open\\(r''C:/Users/gilles.kammerer/OneDrive/immobilier/Pierrefonds/Mairie/.gitignore'', ''w''\\).write\\(''''\\)\")"
+      "Bash(python3 -c \"open\\(r''C:/Users/gilles.kammerer/OneDrive/immobilier/Pierrefonds/Mairie/.gitignore'', ''w''\\).write\\(''''\\)\")",
+      "Bash(pip install rank_bm25 -q)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py''\\).read\\(\\)\\); print\\(''OK syntaxe''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK syntaxe''\\)\")",
+      "Bash(python -m pip install rank_bm25 -q)",
+      "Bash(python -m pip install rank_bm25)",
+      "Bash(python ingest.py --md-dir input/)"
     ]
   }
 }

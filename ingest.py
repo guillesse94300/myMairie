@@ -70,8 +70,8 @@ KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py (dé
 INPUT_DIR      = APP_DIR / "input"            # .md produits par transform.py
 DB_DIR         = APP_DIR / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
-CHUNK_SIZE     = 1000   # caractères max par chunk
-CHUNK_OVERLAP  = 180    # recouvrement entre chunks (évite de couper tableaux/chiffres)
+CHUNK_SIZE     = 500    # caractères max par chunk (≈100 tokens, dans la limite du modèle MiniLM 128 tokens)
+CHUNK_OVERLAP  = 80     # recouvrement entre chunks (évite de couper tableaux/chiffres)
 
 # OCR des PDFs journal (L'ECHO) : très lent en CPU. Mettre INGEST_OCR_JOURNAL=1 pour l'activer.
 OCR_JOURNAL    = os.environ.get("INGEST_OCR_JOURNAL", "0").strip().lower() in ("1", "true", "yes")
@@ -343,7 +343,7 @@ def main(args=None):
 
     do_pdfs = not getattr(args, "md_only", False)
     if not do_pdfs:
-        print("--- PDFs : non indexés (--md-only). ---\n")
+        print("--- PDFs : déjà dans vector_db, non rechargés. ---\n")
     else:
         print(f"--- PDFs (static + journal) : {len(pdf_files)} fichier(s) ---\n")
 

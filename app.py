@@ -33,6 +33,12 @@ except ImportError:
     _GROQ_OK = False
 
 try:
+    from rank_bm25 import BM25Okapi as _BM25Okapi
+    _BM25_OK = True
+except ImportError:
+    _BM25_OK = False
+
+try:
     from streamlit_javascript import st_javascript
     _ST_JS_OK = True
 except ImportError:
@@ -275,12 +281,11 @@ def _pdf_date_key(p: Path) -> datetime:
             except ValueError:
                 pass
     # Juste une année (ex: REPERTOIRE-CHRONOLOGIQUE-2024-...)
-    m = re.search(r'(\d{4})', name)
+    m = re.search(r'\b(\d{4})\b', name)
     if m:
-        try:
-            return datetime(int(m.group(1)), 1, 1)
-        except ValueError:
-            pass
+        year = int(m.group(1))
+        if 1900 <= year <= 2100:
+            return datetime(year, 1, 1)
     return datetime.min
 
 
@@ -336,6 +341,11 @@ def load_model():
     return SentenceTransformer(MODEL_NAME)
 
 
+def _tokenize(text: str) -> list:
+    """Tokenisation simple pour BM25 : minuscules, split sur non-alphanumérique."""
+    return re.split(r"[^\w]+", text.lower())
+
+
 @st.cache_resource(show_spinner="Chargement de la base vectorielle...")
 def load_db():
     embeddings = np.load(DB_DIR / "embeddings.npy")
@@ -343,17 +353,35 @@ def load_db():
         documents = pickle.load(f)
     with open(DB_DIR / "metadata.pkl", "rb") as f:
         metadata = pickle.load(f)
-    return embeddings, documents, metadata
+    # Construction de l'index BM25 (lexical) en complément des embeddings sémantiques
+    bm25 = None
+    if _BM25_OK:
+        tokenized = [_tokenize(doc) for doc in documents]
+        bm25 = _BM25Okapi(tokenized)
+    return embeddings, documents, metadata, bm25
 
 
-# ── Recherche par similarité cosinus ──────────────────────────────────────────
+# ── Recherche hybride sémantique + BM25 ───────────────────────────────────────
+# Pondération : α × sémantique + (1-α) × BM25 normalisé
+_BM25_ALPHA = 0.6   # part sémantique ; 1-α = 0.4 pour BM25 lexical
+
 def search(query: str, embeddings, documents, metadata,
-           n: int = 15, year_filter: list = None, exact: bool = False):
+           n: int = 15, year_filter: list = None, exact: bool = False,
+           bm25=None):
     model = load_model()
     q_emb = model.encode([query], show_progress_bar=False)[0].astype(np.float32)
     q_emb = q_emb / max(np.linalg.norm(q_emb), 1e-9)
 
-    scores = embeddings @ q_emb  # cosine similarity (embeddings déjà normalisés)
+    sem_scores = embeddings @ q_emb  # cosine similarity ∈ [-1, 1]
+
+    # Score BM25 : normalisé dans [0, 1] puis combiné avec le score sémantique
+    if bm25 is not None:
+        raw_bm25 = np.array(bm25.get_scores(_tokenize(query)), dtype=np.float32)
+        bm25_max = raw_bm25.max()
+        bm25_norm = raw_bm25 / bm25_max if bm25_max > 0 else raw_bm25
+        scores = _BM25_ALPHA * sem_scores + (1 - _BM25_ALPHA) * bm25_norm
+    else:
+        scores = sem_scores
 
     # Filtre par année
     if year_filter:
@@ -418,6 +446,19 @@ _CHUNK_HORIZON = re.compile(
     r"\b(horizon|logiciel|logiciels|renouvellement|villages\s*cloud|DETR)\b",
     re.IGNORECASE
 )
+# Questions sur le château / Viollet-le-Duc / restauration patrimoniale
+_QUERY_CHATEAU = re.compile(
+    r"\b(ch[âa]teau|viollet|wyganowski|ouradou|restauration|restaur[eé]|m[eé]di[eé]val|patrimoine|"
+    r"monument|napoléon\s*III|napolé|gothic|néo.gothique|fortification|rempart|donjon|"
+    r"inspecteur\s+des\s+travaux|genie\s*civil|architecte|architecture|moyen.?[aâ]ge)\b",
+    re.IGNORECASE
+)
+# Chunk parle du château ou de Viollet-le-Duc ou des acteurs du chantier
+_CHUNK_CHATEAU = re.compile(
+    r"\b(ch[âa]teau|viollet|wyganowski|ouradou|restauration|restaur[eé]|fortification|donjon|rempart|"
+    r"patrimoine|monument|napoléon\s*III|m[eé]di[eé]val|gothic|inspecteur|chantier)\b",
+    re.IGNORECASE
+)
 
 # Questions sur sujets récurrents (logiciels, voirie, contrats) → inclure les PV récents (2025, 2024, 2023)
 _QUERY_RECENT_DELIB = re.compile(
@@ -442,14 +483,14 @@ _STOP_FR = {
 
 # ── Recherche hybride pour l'agent (sémantique + exacte sur noms clés) ────────
 def search_agent(question: str, embeddings, documents, metadata,
-                 n: int = 15, year_filter: list = None):
+                 n: int = 15, year_filter: list = None, bm25=None):
     """
-    Combine recherche sémantique et recherche exacte filtrée sur les noms
+    Combine recherche hybride (sémantique + BM25) et recherche exacte filtrée sur les noms
     significatifs de la question (sans mots vides ni mots de question).
     Bonus pour les chunks contenant des chiffres quand la question porte sur tarifs/montants.
     """
     sem = search(question, embeddings, documents, metadata,
-                 n=n, year_filter=year_filter, exact=False)
+                 n=n, year_filter=year_filter, exact=False, bm25=bm25)
 
     # Extraire uniquement les mots porteurs de sens (≥ 4 chars, hors stop words)
     raw = [t.strip("'\".,?!") for t in re.split(r'\W+', question)]
@@ -478,7 +519,7 @@ def search_agent(question: str, embeddings, documents, metadata,
     if sig:
         focused = " ".join(sig)
         exact = search(focused, embeddings, documents, metadata,
-                       n=n, year_filter=year_filter, exact=True)
+                       n=n, year_filter=year_filter, exact=True, bm25=bm25)
         for doc, meta, score in exact:
             key = (meta.get("filename", ""), meta.get("chunk", 0))
             seen[key] = _score_with_bonus(doc, meta, score + 0.05)
@@ -492,7 +533,7 @@ def search_agent(question: str, embeddings, documents, metadata,
     if (year_filter is None or len(year_filter) == 0) and _QUERY_RECENT_DELIB.search(question):
         year_bonus = {2025: 0.14, 2024: 0.09, 2023: 0.06}  # 2025 fortement favorisé pour donner la situation à jour
         for y in (2025, 2024, 2023):
-            extra = search(question, embeddings, documents, metadata, n=12, year_filter=[y], exact=False)
+            extra = search(question, embeddings, documents, metadata, n=12, year_filter=[y], exact=False, bm25=bm25)
             for doc, meta, score in extra:
                 key = (meta.get("filename", ""), meta.get("chunk", 0))
                 if key not in seen:
@@ -520,14 +561,14 @@ def search_agent(question: str, embeddings, documents, metadata,
                     added_h += 1
             # Recherche sémantique ciblée en complément (2025/2024)
             for kw in ("logiciels métiers", "renouvellement contrat", "Horizon"):
-                extra = search(kw, embeddings, documents, metadata, n=10, year_filter=[2025, 2024], exact=True)
+                extra = search(kw, embeddings, documents, metadata, n=10, year_filter=[2025, 2024], exact=True, bm25=bm25)
                 for doc, meta, score in extra:
                     key = (meta.get("filename", ""), meta.get("chunk", 0))
                     if key not in seen:
                         seen[key] = _score_with_bonus(doc, meta, score + 0.12)
             # Secours : inclure tout passage qui mentionne "Horizon" ou "logiciel" (toutes années).
             for kw in ("Horizon", "logiciel", "logiciels"):
-                extra = search(kw, embeddings, documents, metadata, n=18, year_filter=None, exact=True)
+                extra = search(kw, embeddings, documents, metadata, n=18, year_filter=None, exact=True, bm25=bm25)
                 for doc, meta, score in extra:
                     key = (meta.get("filename", ""), meta.get("chunk", 0))
                     if key not in seen:
@@ -555,7 +596,7 @@ def search_agent(question: str, embeddings, documents, metadata,
     # Pour voirie/travaux/montant : forcer l'inclusion de chunks qui contiennent "voirie", "travaux", "crédit", "Armistice"
     if query_wants_voirie or query_wants_figures:
         for exact_query in ("voirie travaux", "voirie", "travaux", "crédit", "Armistice", "rue de l'Armistice"):
-            exact_chunks = search(exact_query, embeddings, documents, metadata, n=10, year_filter=year_filter, exact=True)
+            exact_chunks = search(exact_query, embeddings, documents, metadata, n=10, year_filter=year_filter, exact=True, bm25=bm25)
             for doc, meta, score in exact_chunks:
                 key = (meta.get("filename", ""), meta.get("chunk", 0))
                 if key not in seen:
@@ -630,7 +671,39 @@ def search_agent(question: str, embeddings, documents, metadata,
             seen[key] = (doc, meta, 0.38)
             added += 1
 
+    # Pour les questions sur le château / Viollet-le-Duc : forcer l'inclusion des chunks des
+    # fichiers septentrion (livres openedition) qui traitent de l'histoire et de la restauration.
+    if _QUERY_CHATEAU.search(question):
+        added_ch = 0
+        for doc, meta in zip(documents, metadata):
+            if added_ch >= 30:
+                break
+            fname = str(meta.get("filename", ""))
+            # Cibler en priorité les fichiers septentrion puis tout chunk qui parle du château
+            is_septentrion = "septentrion" in fname.lower() or "chateau" in fname.lower()
+            if not (is_septentrion or _CHUNK_CHATEAU.search(doc)):
+                continue
+            key = (fname, meta.get("chunk", 0))
+            if key in seen:
+                continue
+            score_ch = 0.60 if is_septentrion else 0.45
+            seen[key] = (doc, meta, score_ch)
+            added_ch += 1
+        # Recherches exactes ciblées sur mots-clés château
+        for kw in ("Viollet-le-Duc", "restauration château", "château Pierrefonds", "fortification"):
+            extra = search(kw, embeddings, documents, metadata, n=12, year_filter=None, exact=True, bm25=bm25)
+            for doc, meta, score in extra:
+                key = (meta.get("filename", ""), meta.get("chunk", 0))
+                if key not in seen:
+                    seen[key] = (doc, meta, score + 0.10)
+
     merged = sorted(seen.values(), key=lambda x: x[2], reverse=True)
+    # Pour les questions sur le château : placer les chunks septentrion en tête
+    if _QUERY_CHATEAU.search(question):
+        chateau_first = [x for x in merged if _CHUNK_CHATEAU.search(x[0]) or
+                         "septentrion" in str(x[1].get("filename", "")).lower()]
+        others = [x for x in merged if x not in chateau_first]
+        merged = chateau_first + others
     # Pour les questions sur Horizon/logiciels : placer les passages qui en parlent en tête (2025 avant 2024 avant le reste).
     if re.search(r"\b(logiciel|logiciels|horizon|renouvellement)\b", question, re.IGNORECASE):
         horizon_first = [x for x in merged if _CHUNK_HORIZON.search(x[0])]
@@ -705,11 +778,16 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
 - Trail du Château de Pierrefonds : 27 km / 600 m D+ et 13 km / 350 m D+ (arrivée Institut Charles Quentin)
 
 ## Règles strictes
-1. Tu réponds UNIQUEMENT à partir des passages fournis entre balises <source>.
+1. Tu réponds en priorité à partir des passages fournis entre balises <source>. \
+   Exception : si la question porte sur l'histoire de Pierrefonds, le château, Viollet-le-Duc ou un sujet \
+   patrimonial/touristique lié à Pierrefonds, et que les passages ne contiennent pas d'information pertinente, \
+   tu peux répondre en t'appuyant sur tes connaissances générales. Dans ce cas, commence par préciser : \
+   « Les procès-verbaux du conseil municipal ne traitent pas directement de ce sujet. Voici ce que je sais : »
 2. Si un passage ne traite pas directement du sujet de la question, ignore-le.
 3. Ne cite un montant ou un chiffre QUE s'il est explicitement associé au sujet \
    exact de la question dans le passage.
-4. Si l'information est absente ou insuffisante, dis-le clairement et brièvement. Ne liste jamais \
+4. Si l'information est absente ou insuffisante dans les sources ET que le sujet n'est pas lié à l'histoire \
+   ou au patrimoine de Pierrefonds, dis-le clairement et brièvement. Ne liste jamais \
    tous les numéros de source (ex. [1, 2, 3, ... 28]) pour dire que l'info manque ; formule en une phrase.
 4b. Pour les questions sur les montants (travaux de voirie, budget, délibérations) : fournis une réponse \
    complète avec les éléments financiers disponibles. Parcours TOUS les passages fournis pour repérer \
@@ -742,7 +820,14 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
 7. N'écris JAMAIS les balises <source> ou </source> dans ta réponse.
 8. Le contexte municipal ci-dessus est fourni à titre informatif pour comprendre \
-   les acronymes et les acteurs — n'en tire aucune conclusion non présente dans les sources."""
+   les acronymes et les acteurs — n'en tire aucune conclusion non présente dans les sources. \
+   Exception : pour les sujets historiques et patrimoniaux (château, Viollet-le-Duc, histoire de Pierrefonds), \
+   tu peux utiliser tes connaissances générales si les passages ne fournissent pas l'information, \
+   en le signalant explicitement.
+9. Les sources dont le fichier contient « septentrion » ou « Web » correspondent à des livres ou sites \
+   web sur Pierrefonds (ex. "Viollet-le-Duc et Pierrefonds", éditions Septentrion/OpenEdition). \
+   Ces sources sont valides et fiables pour l'histoire du château. Appuie-toi dessus en priorité \
+   pour toute question sur la restauration, l'architecture ou l'histoire du château."""
 
 
 def ask_claude_stream(question: str, passages: list):
@@ -1106,7 +1191,7 @@ def main():
         st.stop()
 
     admin = is_admin()
-    embeddings, documents, metadata = load_db()
+    embeddings, documents, metadata, bm25 = load_db()
     # Détecter si la base contient des chunks issus de procès-verbaux (CM-*, compte-rendu-*, PV*)
     _PV_PATTERNS = ("cm-", "compte-rendu-", "pv-", "pv ", "-pv.", "lecho-", "l'echo")
     def _is_pv_meta(m: dict) -> bool:
@@ -1268,7 +1353,7 @@ def main():
                     with st.spinner("Recherche des passages pertinents…"):
                         passages = search_agent(
                             search_question, embeddings, documents, metadata,
-                            n=n_passages, year_filter=agent_years,
+                            n=n_passages, year_filter=agent_years, bm25=bm25,
                         )
                     if not passages:
                         st.warning("Aucun passage pertinent trouvé. Essayez d'autres mots-clés.")
@@ -1360,7 +1445,8 @@ def main():
                     log_search(get_client_ip_for_log(), query)
                     with st.spinner("Recherche…"):
                         results = search(query, embeddings, documents, metadata,
-                                        n=n_results, year_filter=year_filter, exact=exact_mode)
+                                        n=n_results, year_filter=year_filter, exact=exact_mode,
+                                        bm25=bm25)
 
                     terms = [t for t in re.split(r"\s+", query) if len(t) > 2]
                     mode_label = "recherche exacte" if exact_mode else "recherche sémantique"
@@ -1597,11 +1683,6 @@ def main():
         # ════════════════════════════════════════════════════════════════════════
         elif st.session_state["current_section"] == "docs":
             st.title("📄 Sources et Documents")
-            st.markdown(
-                "**Source officielle :** "
-                "[mairie-pierrefonds.fr — Procès-verbaux du Conseil Municipal]"
-                "(https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal)"
-            )
             st.divider()
             st.markdown("**Documents indexés** (triés par date décroissante)")
             input_dir = APP_DIR / "input"
@@ -1610,7 +1691,21 @@ def main():
                 for p in all_docs:
                     dt = _pdf_date_key(p)
                     label_date = dt.strftime("%d/%m/%Y") if dt != datetime.min else "—"
-                    st.markdown(f"`{label_date}` — 📝 {p.stem}")
+                    # Cherche une URL source dans les premières lignes du fichier
+                    source_url = None
+                    try:
+                        with open(p, encoding="utf-8") as f:
+                            for line in f:
+                                m = re.search(r'Source\s*:\s*(https?://\S+)', line)
+                                if m:
+                                    source_url = m.group(1)
+                                    break
+                    except OSError:
+                        pass
+                    if source_url:
+                        st.markdown(f"`{label_date}` — 🔗 [{source_url}]({source_url})")
+                    else:
+                        st.markdown(f"`{label_date}` — 📝 {p.stem}")
             else:
                 st.caption("Aucun document trouvé.")
 

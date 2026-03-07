@@ -13,6 +13,15 @@ from datetime import datetime
 PDF_DIR = Path(__file__).parent / "static"
 DB_DIR  = Path(__file__).parent / "vector_db"
 
+# Seuls les PV du Conseil Municipal (pas journaux, annexes, CC communautaire…)
+_PV_CM_RE = re.compile(
+    r'^(CM[-_ ]|CM-du-|PV-CM-|\d{8}-PV\.pdf|Compte-rendu-du-Conseil-municipal)',
+    re.IGNORECASE
+)
+
+def is_pv_cm(path):
+    return bool(_PV_CM_RE.match(path.name)) and 'AFFICHAGE' not in path.name.upper()
+
 MOIS_FR = {
     'janvier': 1, 'fevrier': 2, 'février': 2, 'mars': 3, 'avril': 4,
     'mai': 5, 'juin': 6, 'juillet': 7, 'aout': 8, 'août': 8,
@@ -248,8 +257,8 @@ def extract_pdf(pdf_path):
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
     DB_DIR.mkdir(exist_ok=True)
-    pdfs = sorted(PDF_DIR.glob("*.pdf"))
-    print(f"Extraction de {len(pdfs)} PDFs…\n")
+    pdfs = sorted(p for p in PDF_DIR.glob("*.pdf") if is_pv_cm(p))
+    print(f"Extraction de {len(pdfs)} PV du Conseil Municipal…\n")
 
     seances, errors = [], []
 

@@ -1,4 +1,5 @@
 pdfplumber
+rank_bm25
 pandas
 requests
 beautifulsoup4
