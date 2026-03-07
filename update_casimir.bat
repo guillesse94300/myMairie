@@ -3,46 +3,15 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 echo ============================================
-echo   Update_Casimir - Pipeline complet
-echo   acquire ^> transform ^> ingest
+echo   Update_Casimir - Indexation des .md
+echo   input/ -^> vector_db/
 echo ============================================
 echo.
 
 cd /d "%~dp0"
 
-:: Dependances (une seule fois)
-if not exist "%~dp0.deps_installed" (
-    echo Installation des dependances...
-    python -m pip install --quiet -r requirements.txt groq
-    echo. > "%~dp0.deps_installed"
-    echo   OK.
-    echo.
-)
-
-:: Phase 1 : Acquisition
-echo [1/3] Acquisition  site_url.txt -^> source/
-echo.
-python acquire.py
-if errorlevel 1 (
-    echo ERREUR acquisition.
-    if not "%~1"=="-q" pause
-    exit /b 1
-)
-echo.
-
-:: Phase 2 : Transformation
-echo [2/3] Transformation  source/ + static/ -^> input/
-echo.
-python transform.py
-if errorlevel 1 (
-    echo ERREUR transformation.
-    if not "%~1"=="-q" pause
-    exit /b 1
-)
-echo.
-
-:: Phase 3 : Indexation
-echo [3/3] Indexation  input/ -^> vector_db/
+:: Indexation depuis input/*.md (les .md sont deja la)
+echo Indexation  input/ -^> vector_db/
 echo.
 python ingest.py --md-dir input/ --md-only
 if errorlevel 1 (
@@ -53,27 +22,29 @@ if errorlevel 1 (
 echo   OK.
 echo.
 
-:: Stats vote (toujours a jour)
+:: Stats vote
 echo Extraction stats vote (stats.json)...
 python stats_extract.py 2>nul
 if errorlevel 1 echo   ATTENTION : echec stats_extract.py
 echo.
 
-:: Commit vector_db dans git
+:: Commit + push vector_db
 if exist "%~dp0vector_db" (
     git status >nul 2>&1
     if not errorlevel 1 (
         echo Commit vector_db...
-        git add -f "%~dp0vector_db\*"
-        git add -f "%~dp0vector_db"
+        git add -f "%~dp0vector_db\documents.pkl"
+        git add -f "%~dp0vector_db\embeddings.npy"
+        git add -f "%~dp0vector_db\metadata.pkl"
+        git add -f "%~dp0vector_db\stats.json"
         git diff --cached --quiet -- vector_db
         if errorlevel 1 (
-            git commit -m "vector_db: reindex documents.pkl embeddings.npy metadata.pkl stats.json"
+            git commit -m "vector_db: reindex depuis input/*.md"
             if not errorlevel 1 (
-                echo   Commit vector_db effectue.
+                echo   Commit effectue.
                 if not "%~1"=="-q" (
                     set PUSH_NOW=
-                    set /p PUSH_NOW="Pousser vector_db sur GitHub maintenant ? (o/n) [o] : "
+                    set /p PUSH_NOW="Pousser sur GitHub maintenant ? (o/n) [o] : "
                     if "!PUSH_NOW!"=="" set PUSH_NOW=o
                     if /i "!PUSH_NOW:~0,1!"=="o" (
                         echo   Pull + Push en cours...
@@ -91,10 +62,9 @@ if exist "%~dp0vector_db" (
 )
 
 echo ============================================
-echo   Pipeline termine.
-echo   source/    = artefacts bruts
-echo   input/     = .md prets pour Casimir
-echo   vector_db  = index vectoriel
+echo   Termine. Pour ajouter de nouvelles
+echo   sources : relancer acquire.bat puis
+echo   transform.bat avant update_casimir.bat
 echo ============================================
 echo.
 if not "%~1"=="-q" pause
