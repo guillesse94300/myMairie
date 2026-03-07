@@ -25,11 +25,6 @@ python -c "from datetime import datetime; open('deploy_date.txt','w').write(date
 echo Date de deploiement : !MSG!
 echo.
 
-:: Copie des .md vers static
-echo Copie des .md vers static...
-python copy_md_to_static.py 2>nul
-echo.
-
 :: Verifier depot git
 git status >nul 2>&1
 if errorlevel 1 (
@@ -38,21 +33,30 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Preparation vector_db (OneDrive)
+:: Preparation vector_db (flush OneDrive)
 if exist "%~dp0vector_db" (
     git update-index --refresh
     python -c "import os; d=os.path.join(os.getcwd(),'vector_db'); [open(os.path.join(d,f),'rb').read(1) for f in ['documents.pkl','embeddings.npy','metadata.pkl','stats.json'] if os.path.exists(os.path.join(d,f))]" 2>nul
     timeout /t 2 /nobreak >nul
 )
 
-:: Stager toute la base (dont vector_db)
+:: Désindexer les répertoires lourds s'ils etaient suivis auparavant
+:: (le .gitignore empeche qu'ils soient re-ajoutes par git add -A)
+git rm -r --cached source\images 2>nul
+git rm -r --cached source\pdf    2>nul
+git rm -r --cached static        2>nul
+git rm -r --cached fetcher_raw   2>nul
+
+:: Staging : code + source\md + input\*.md + vector_db
+echo Staging des fichiers...
 git add -A
+
+:: Force-add vector_db (non ignore par defaut, mais on s'assure qu'il est inclus)
 if exist "%~dp0vector_db" (
     git add -f "%~dp0vector_db\documents.pkl"
     git add -f "%~dp0vector_db\embeddings.npy"
     git add -f "%~dp0vector_db\metadata.pkl"
     git add -f "%~dp0vector_db\stats.json"
-    git add -f "%~dp0vector_db"
 )
 echo Fichiers stages :
 git status --short
@@ -73,7 +77,7 @@ if errorlevel 1 (
 
 :: Pull puis push
 echo Synchronisation avec GitHub...
-git pull origin main --rebase
+git pull origin main --rebase --autostash
 if errorlevel 1 (
     echo ERREUR lors du pull.
     pause

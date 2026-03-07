@@ -66,7 +66,8 @@ _OCR_AVAILABLE = _OCR_TESSERACT or _OCR_EASYOCR
 APP_DIR        = Path(__file__).parent
 STATIC_DIR     = APP_DIR / "static"
 JOURNAL_DIR    = APP_DIR / "journal"
-KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py
+KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py (défaut)
+INPUT_DIR      = APP_DIR / "input"            # .md produits par transform.py
 DB_DIR         = APP_DIR / "vector_db"
 MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 1000   # caractères max par chunk
@@ -250,8 +251,14 @@ def _check_ocr() -> bool:
 
 def main(args=None):
     if args is None:
-        args = argparse.Namespace(md_only=False)
+        args = argparse.Namespace(md_only=False, md_dir=None)
     DB_DIR.mkdir(exist_ok=True)
+
+    # Répertoire source des .md : --md-dir ou KNOWLEDGE_DIR par défaut
+    global KNOWLEDGE_DIR
+    if getattr(args, "md_dir", None):
+        KNOWLEDGE_DIR = Path(args.md_dir)
+        print(f"  Source .md : {KNOWLEDGE_DIR}")
 
     _ocr_ok = _check_ocr()
     if not OCR_JOURNAL:
@@ -454,5 +461,8 @@ def main(args=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Indexation .md (sites web) et PDFs pour Casimir.")
-    parser.add_argument("--md-only", action="store_true", help="Indexer uniquement les .md (sites web), pas les PDFs")
+    parser.add_argument("--md-only", action="store_true",
+                        help="Indexer uniquement les .md (sites web), pas les PDFs")
+    parser.add_argument("--md-dir", metavar="DIR", default=None,
+                        help="Répertoire source des .md (défaut: knowledge_sites/, recommandé: input/)")
     main(parser.parse_args())

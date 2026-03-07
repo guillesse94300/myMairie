@@ -69,7 +69,29 @@
       "WebFetch(domain:fr.m.wikipedia.org)",
       "WebFetch(domain:www.info-flash.com)",
       "WebFetch(domain:commune-mairie.fr)",
-      "WebFetch(domain:fr.wikipedia.org)"
+      "WebFetch(domain:fr.wikipedia.org)",
+      "Bash(.venv/Scripts/python.exe -c \"from fetcher.dispatcher import detect_type; print\\(detect_type\\(''https://fr.wikipedia.org/wiki/Pierrefonds_\\(Oise\\)''\\)\\); print\\(detect_type\\(''https://www.calameo.com/read/0078431104528e1305956''\\)\\); print\\(detect_type\\(''https://www.tripadvisor.fr/Tourism-g1029112''\\)\\); print\\(detect_type\\(''https://www.courrier-picard.fr/article''\\)\\); print\\(detect_type\\(''https://www.mairie-pierrefonds.fr/''\\)\\)\")",
+      "Bash(.venv/Scripts/python.exe -m fetcher --dry-run \"https://fr.wikipedia.org/wiki/Pierrefonds_\\(Oise\\)\")",
+      "Bash(.venv/Scripts/pip.exe show requests)",
+      "Bash(.venv/Scripts/pip.exe show beautifulsoup4)",
+      "Bash(.venv/Scripts/pip.exe list)",
+      "Bash(python -m fetcher --dry-run \"https://fr.wikipedia.org/wiki/Pierrefonds_\\(Oise\\)\")",
+      "Bash(python -m fetcher --detect \"https://www.calameo.com/hautsdefrance/read/004933210bf8002f17e83?page=1\")",
+      "Bash(python -m fetcher --help)",
+      "Bash(python -m fetcher \"https://www.calameo.com/read/00484993435e27d44d6e2\")",
+      "Bash(python -c \"from fetcher import fetch, extract_raw, interpret_raw, RawBundle, list_stems; from fetcher.stage import load_bundle; from fetcher.dispatcher import get_fetcher_for_type; print\\(''OK imports''\\)\")",
+      "Bash(python -m fetcher --detect https://www.calameo.com/read/00484993435e27d44d6e2)",
+      "Bash(python -m fetcher list)",
+      "Bash(python -m fetcher extract \"https://fr.wikipedia.org/wiki/Pierrefonds_\\(Oise\\)\")",
+      "Bash(python -m fetcher interpret --dry-run)",
+      "Bash(Remove-Item -Recurse -Force \"C:\\\\Users\\\\gilles.kammerer\\\\OneDrive\\\\immobilier\\\\Pierrefonds\\\\Mairie\\\\fetcher_raw\")",
+      "Bash(python -c \"from fetcher.fetchers.calameo import _preprocess_for_ocr, _ocr_tesseract, _ocr_easyocr, _ocr_images; print\\(''OK''\\)\")",
+      "Bash(python -c \"import acquire, transform; print\\(''OK''\\)\")",
+      "Bash(python acquire.py --help)",
+      "Bash(python transform.py --help)",
+      "Bash(dir /b \"C:\\\\Users\\\\gilles.kammerer\\\\OneDrive\\\\immobilier\\\\Pierrefonds\\\\Mairie\\\\source\")",
+      "Bash(echo.)",
+      "Bash(python3 -c \"open\\(r''C:/Users/gilles.kammerer/OneDrive/immobilier/Pierrefonds/Mairie/.gitignore'', ''w''\\).write\\(''''\\)\")"
     ]
   }
 }

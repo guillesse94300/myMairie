@@ -42,6 +42,16 @@ def download_book(page, book_id, filename, num_pages):
     print(f"  Ouverture: {url}")
 
     try:
+        # Bloquer CookieBot et trackers pour éviter la popup de consentement
+        def _block_trackers(route):
+            u = route.request.url
+            if any(d in u for d in ("cookiebot.com", "consentcdn", "gimii.fr",
+                                    "doubleclick", "googlesyndication")):
+                route.abort()
+            else:
+                route.continue_()
+
+        page.route("**/*", _block_trackers)
         page.goto(url, wait_until="networkidle", timeout=60000)
         time.sleep(3)
 
@@ -81,41 +91,20 @@ def download_book(page, book_id, filename, num_pages):
         while current_page <= num_pages:
             print(f"  Capture page {current_page}/{num_pages}...")
 
-            # Attendre que la page soit chargée
             time.sleep(1.5)
 
-            # Prendre screenshot du viewer principal
-            # Chercher l'élément canvas ou le conteneur principal
-            viewer_el = None
-            for selector in ['.viewer-content', '#book-reader', '.book-container',
-                              'canvas', '#viewer', '.flipbook', 'article']:
-                try:
-                    el = page.query_selector(selector)
-                    if el:
-                        viewer_el = el
-                        break
-                except:
-                    pass
-
-            if viewer_el:
-                screenshot = viewer_el.screenshot()
-            else:
-                screenshot = page.screenshot(full_page=False)
-
-            img = Image.open(io.BytesIO(screenshot))
-            images.append(img.convert('RGB'))
+            # Screenshot de la fenêtre entière + rognage marges (~8% haut/bas)
+            screenshot = page.screenshot(full_page=False)
+            img = Image.open(io.BytesIO(screenshot)).convert("RGB")
+            w, h = img.size
+            margin = int(h * 0.08)
+            img = img.crop((0, margin, w, h - margin))
+            images.append(img)
 
             # Passer à la page suivante
             if current_page < num_pages:
-                page.keyboard.press('ArrowRight')
-                time.sleep(0.5)
-                # Aussi essayer le bouton next
-                try:
-                    page.click('button.next, .btn-next, [title*="next"], [title*="suivant"]',
-                               timeout=1000)
-                except:
-                    pass
-                time.sleep(1)
+                page.keyboard.press("ArrowRight")
+                time.sleep(1.5)
 
             current_page += 1
 
@@ -156,6 +145,7 @@ def main():
         )
         context = browser.new_context(
             viewport={"width": 1400, "height": 1000},
+            device_scale_factor=2,   # résolution 2× → PDF plus net
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         )
         page = context.new_page()

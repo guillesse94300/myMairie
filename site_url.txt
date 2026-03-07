@@ -1,7 +1,19 @@
-# Liste des sites web à indexer pour enrichir la connaissance de Casimir
-# Une URL par ligne. Les lignes commençant par # sont ignorées.
-# Ajoutez vos URLs ci-dessous :
-
+https://www.lessecretsdepierrefonds.fr/histoire-de-pierrefonds/
+https://www.chateau-pierrefonds.fr/
+https://leblogduherisson.com/chateau-de-pierrefonds/
+https://books.openedition.org/septentrion/33639
+https://books.openedition.org/septentrion/33642
+https://books.openedition.org/septentrion/33651
+https://books.openedition.org/septentrion/33657
+https://books.openedition.org/septentrion/33660
+https://books.openedition.org/septentrion/33663
+https://books.openedition.org/septentrion/33666
+https://books.openedition.org/septentrion/33669
+https://books.openedition.org/septentrion/33672
+https://books.openedition.org/septentrion/33675
+https://books.openedition.org/septentrion/33678
+https://books.openedition.org/septentrion/33681
+https://books.openedition.org/septentrion/33648
 https://www.mairie-pierrefonds.fr/
 https://fr.wikipedia.org/wiki/Pierrefonds_(Oise)
 https://www.ccloise.com/
@@ -16,3 +28,7 @@ https://www.mairie-pierrefonds.fr/event/reunion-publique-p-e-p-i-t-e-s/
 https://www.tripadvisor.fr/Tourism-g1029112-Pierrefonds_Oise_Hauts_de_France-Vacations.html
 https://www.lessecretsdepierrefonds.fr/
 https://www.compiegne-pierrefonds.fr/
+https://www.calameo.com/hautsdefrance/read/004933210bf8002f17e83?page=1
+https://www.calameo.com/hautsdefrance/read/004933210b2c6b530ff81?page=1
+https://www.calameo.com/read/0078431104528e1305956
+https://www.calameo.com/read/00484993435e27d44d6e2

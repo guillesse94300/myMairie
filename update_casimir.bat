@@ -3,32 +3,14 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 echo ============================================
-echo   Update_Casimir - Reindex base de connaissance
+echo   Update_Casimir - Pipeline complet
+echo   acquire ^> transform ^> ingest
 echo ============================================
 echo.
 
 cd /d "%~dp0"
-if not exist "%~dp0data" mkdir "%~dp0data"
 
-:: ========== Questions au debut (sauf mode -q) ==========
-set INDEX_PDFS=0
-if not "%~1"=="-q" (
-    set INGEST_OCR_JOURNAL=0
-    python -c "import sys; sys.path.insert(0,'.'); from ingest import _OCR_AVAILABLE; sys.exit(0 if _OCR_AVAILABLE else 1)" 2>nul
-    if errorlevel 1 (
-        echo OCR non disponible - PDFs image ignores.
-    ) else (
-        set /p OCR_CHOICE="Activer l'OCR pour L'ECHO ^(lent^) ? (o/n) [n] : "
-        if /i "!OCR_CHOICE:~0,1!"=="o" set INGEST_OCR_JOURNAL=1
-    )
-    set /p CHOICE="Indexer les PDFs ^(PV, L'ECHO^) ? (o/n) [n] : "
-    if /i "!CHOICE:~0,1!"=="o" set INDEX_PDFS=1
-    echo.
-) else (
-    set INGEST_OCR_JOURNAL=0
-)
-
-:: Dependances : une seule fois (marqueur .deps_installed)
+:: Dépendances (une seule fois)
 if not exist "%~dp0.deps_installed" (
     echo Installation des dependances...
     python -m pip install --quiet -r requirements.txt groq
@@ -37,23 +19,32 @@ if not exist "%~dp0.deps_installed" (
     echo.
 )
 
-:: Telechargement L'ECHO uniquement si on va indexer les PDFs
-if "!INDEX_PDFS!"=="1" (
-    echo Telechargement L'ECHO...
-    python journal/download_calameo.py 2>nul
-    if errorlevel 1 echo   Ignore ^(Playwright optionnel^).
-    echo.
+:: ── Phase 1 : Acquisition ─────────────────────────────────────────────────────
+echo [1/3] Acquisition  site_url.txt → source/
+echo.
+python acquire.py
+if errorlevel 1 (
+    echo ERREUR acquisition.
+    if not "%~1"=="-q" pause
+    exit /b 1
 )
+echo.
 
-:: Une seule passe d'indexation : .md seul OU .md + PDFs
-set INGEST_OCR_JOURNAL=%INGEST_OCR_JOURNAL%
-if "!INDEX_PDFS!"=="1" (
-    echo Indexation .md + PDFs...
-    python ingest.py
-) else (
-    echo Indexation .md ^(sites web^)...
-    python ingest.py --md-only
+:: ── Phase 2 : Transformation ──────────────────────────────────────────────────
+echo [2/3] Transformation  source/ + static/ → input/
+echo.
+python transform.py
+if errorlevel 1 (
+    echo ERREUR transformation.
+    if not "%~1"=="-q" pause
+    exit /b 1
 )
+echo.
+
+:: ── Phase 3 : Indexation ──────────────────────────────────────────────────────
+echo [3/3] Indexation  input/ → vector_db/
+echo.
+python ingest.py --md-dir input/ --md-only
 if errorlevel 1 (
     echo ERREUR indexation.
     if not "%~1"=="-q" pause
@@ -62,21 +53,17 @@ if errorlevel 1 (
 echo   OK.
 echo.
 
-echo Copie .md vers static...
-python copy_md_to_static.py 2>nul
-echo.
-
-:: Toujours regenerer stats.json pour qu'il soit a jour avec les PV (sinon il reste ancien sur GitHub)
-echo Extraction stats vote ^(stats.json^)...
+:: Stats vote (toujours à jour)
+echo Extraction stats vote (stats.json)...
 python stats_extract.py 2>nul
 if errorlevel 1 echo   ATTENTION : echec stats_extract.py
 echo.
 
-:: Commit systematique de tout vector_db dans git
+:: Commit vector_db dans git
 if exist "%~dp0vector_db" (
     git status >nul 2>&1
     if not errorlevel 1 (
-        echo Commit de tous les fichiers vector_db...
+        echo Commit vector_db...
         git add -f "%~dp0vector_db\*"
         git add -f "%~dp0vector_db"
         git diff --cached --quiet -- vector_db
@@ -92,24 +79,22 @@ if exist "%~dp0vector_db" (
                         echo   Pull + Push en cours...
                         git pull origin main --rebase 2>nul
                         git push origin main
-                        if not errorlevel 1 (
-                            echo   vector_db a jour sur https://github.com/guillesse94300/myMairie/tree/main/vector_db
-                        )
                         echo.
                     )
                 )
             )
         ) else (
-            echo   vector_db deja a jour dans le dernier commit.
+            echo   vector_db deja a jour.
         )
         echo.
     )
 )
 
 echo ============================================
-echo   Reindex termine.
+echo   Pipeline termine.
+echo   source/   = artefacts bruts
+echo   input/    = .md prets pour Casimir
+echo   vector_db = index vectoriel
 echo ============================================
-echo.
-echo   Pour deploiement complet ^(date, static^) : lancez  deploy.bat
 echo.
 if not "%~1"=="-q" pause

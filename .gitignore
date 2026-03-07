@@ -1,29 +1,24 @@
-# Base vectorielle locale alternative
-base_vectorielle/
+# ── Binaires lourds — non déployés sur Streamlit Cloud ─────────────────────
+source/images/
+source/pdf/
+static/
+fetcher_raw/
 
-# Données locales (SQLite recherches : IP, timestamp, requête)
-data/
-
-# Cache du modèle sentence-transformers
+# ── Environnement Python ──────────────────────────────────────────────────
+.venv/
 __pycache__/
 *.pyc
 *.pyo
-.cache/
-
-# Marqueur d'installation des dépendances
-.deps_installed
-
-# Python env
-venv/
-.env
+*.pyd
 *.egg-info/
 dist/
 build/
 
-# Secrets (ne jamais versionner)
+# ── Secrets ───────────────────────────────────────────────────────────────
 .streamlit/secrets.toml
 
-# OS
-.DS_Store
+# ── Divers ───────────────────────────────────────────────────────────────
+.env
+*.log
 Thumbs.db
-desktop.ini
+.DS_Store
