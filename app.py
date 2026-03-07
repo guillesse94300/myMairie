@@ -314,37 +314,46 @@ _NOM_LINK_STYLE = "color:#1565c0;text-decoration:underline dotted;cursor:pointer
 
 def _lier_noms_propres(text: str) -> str:
     """Remplace les noms propres connus par des liens HTML ?q=... vers Casimir.
-    Ne touche pas au contenu à l'intérieur des balises <a> existantes."""
-    parts = re.split(r'(<[^>]+>)', text)
-    result = []
-    inside_anchor = False
-    for part in parts:
-        if part.startswith('<'):
-            tag_lower = part.lower()
-            if tag_lower.startswith('<a ') or tag_lower == '<a>':
-                inside_anchor = True
-            elif tag_lower.startswith('</a'):
-                inside_anchor = False
-            result.append(part)
-        elif inside_anchor:
-            # Ne pas modifier le texte à l'intérieur d'un <a> existant
-            result.append(part)
-        else:
-            for nom, question in sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0])):
-                q_enc = urllib.parse.quote(question)
-                # target="_parent" : navigue le frame parent (page Streamlit réelle)
-                # sans JavaScript → Streamlit ne strip pas cet attribut
-                lien = (f'<a href="?q={q_enc}" target="_parent"'
-                        f' title="Poser cette question à Casimir"'
-                        f' style="{_NOM_LINK_STYLE}">{nom}</a>')
-                # Remplacer **nom** et __nom__ (bold Markdown) → lien propre sans marqueurs
-                part = part.replace(f"**{nom}**", lien)
-                part = part.replace(f"__{nom}__", lien)
-                # Remplacer le nom nu
-                if nom in part:
+    Traite chaque nom séparément en re-splittant le texte à chaque itération
+    pour éviter les doubles remplacements dans les <a> déjà créés."""
+    noms_tries = sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0]))
+    for nom, question in noms_tries:
+        q_enc = urllib.parse.quote(question)
+        # Pas de target="_parent" ni onclick → Streamlit les supprime et affiche le HTML brut
+        lien = (f'<a href="?q={q_enc}"'
+                f' title="Poser cette question à Casimir"'
+                f' style="{_NOM_LINK_STYLE}">{nom}</a>')
+        # Re-splitter à chaque nom pour protéger les <a> déjà créés lors des itérations précédentes
+        parts = re.split(r'(<[^>]+>)', text)
+        result = []
+        inside_anchor = False
+        for part in parts:
+            if part.startswith('<'):
+                tag_lower = part.lower()
+                if tag_lower.startswith('<a ') or tag_lower == '<a>':
+                    inside_anchor = True
+                elif tag_lower.startswith('</a'):
+                    inside_anchor = False
+                result.append(part)
+            elif inside_anchor:
+                # Ne pas toucher au texte à l'intérieur d'un <a> existant
+                result.append(part)
+            else:
+                # Remplacer **nom** et __nom__ en priorité (supprime les marqueurs Markdown)
+                replaced = False
+                if f"**{nom}**" in part:
+                    part = part.replace(f"**{nom}**", lien)
+                    replaced = True
+                if f"__{nom}__" in part:
+                    part = part.replace(f"__{nom}__", lien)
+                    replaced = True
+                # Remplacer le nom nu SEULEMENT si pas déjà traité via ** ou __
+                # (évite le double-remplacement : nom dans le lien <a> déjà créé)
+                if not replaced and nom in part:
                     part = part.replace(nom, lien)
-            result.append(part)
-    return ''.join(result)
+                result.append(part)
+        text = ''.join(result)
+    return text
 
 
 # ── Mode admin ─────────────────────────────────────────────────────────────────
