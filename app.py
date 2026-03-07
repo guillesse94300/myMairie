@@ -824,9 +824,8 @@ def _liens_sources(text: str, passages: list) -> str:
         if source_url and _safe_source_url(source_url):
             url, icon = _safe_source_url(source_url), "🌐"
         else:
-            rel_path = meta.get("rel_path", fname)
-            url = _safe_pdf_url(rel_path)
-            icon = "📄"
+            # Documents locaux (.md extraits de PDF) : pas d'URL servable → pas de lien
+            url, icon = "#", "📝"
         id_map[str(i)] = (fname, url, icon)
         if fname:
             fname_map[fname] = url
@@ -866,13 +865,13 @@ def _bloc_references(text: str, passages: list) -> str:
         _, meta, _ = passages[i - 1]
         fname = meta.get("filename", "")
         source_url = meta.get("source_url", "")
+        label = (fname or meta.get("rel_path", "") or "").replace(".pdf", "").replace(".md", "").replace("[Web] ", "")
         if source_url and _safe_source_url(source_url):
             url = _safe_source_url(source_url)
+            lines.append(f"Passage {i} : [{label}]({url})")
         else:
-            rel_path = meta.get("rel_path", fname)
-            url = _safe_pdf_url(rel_path)
-        label = (fname or rel_path or "").replace(".pdf", "").replace("[Web] ", "")
-        lines.append(f"Passage {i} : [{label}]({url})")
+            # Document local (PV, L'ECHO...) : pas de lien, juste le nom
+            lines.append(f"Passage {i} : 📝 {label}")
     return "\n".join(lines)
 
 
