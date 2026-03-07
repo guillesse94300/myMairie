@@ -289,6 +289,48 @@ def _pdf_date_key(p: Path) -> datetime:
     return datetime.min
 
 
+# ── Liens noms propres dans les réponses ────────────────────────────────────────
+import urllib.parse
+
+NOMS_PROPRES_LIENS: dict[str, str] = {
+    "Eugène Viollet-le-Duc":   "Qui était Eugène Viollet-le-Duc ?",
+    "Viollet-le-Duc":          "Qui était Viollet-le-Duc ?",
+    "Lucjan Wyganowski":       "Qui était Lucjan Wyganowski ?",
+    "Wyganowski":              "Qui était Wyganowski ?",
+    "Amédée Scelles":          "Qui était Amédée Scelles ?",
+    "Pierre Lecot":            "Qui était Pierre Lecot ?",
+    "Paul Devilliers":         "Qui était Paul Devilliers ?",
+    "Napoléon III":            "Qui était Napoléon III ?",
+    "Napoléon Ier":            "Qui était Napoléon Ier ?",
+    "Louis d'Orléans":         "Qui était Louis d'Orléans, duc d'Orléans ?",
+    "Richelieu":               "Qui était Richelieu ?",
+    "Florence Demouy":         "Qui est Florence Demouy, maire de Pierrefonds ?",
+    "Jean-Jacques Carretero":  "Qui est Jean-Jacques Carretero ?",
+    "Emmanuelle Lemaitre":     "Qui est Emmanuelle Lemaitre ?",
+    "Romain Ribeiro":          "Qui est Romain Ribeiro ?",
+}
+
+_NOM_LINK_STYLE = "color:#1565c0;text-decoration:underline dotted;cursor:pointer"
+
+def _lier_noms_propres(text: str) -> str:
+    """Remplace les noms propres connus par des liens HTML ?q=... vers Casimir."""
+    # Traiter uniquement les nœuds texte (pas les balises HTML ni les citations [N])
+    parts = re.split(r'(<[^>]+>)', text)
+    result = []
+    for part in parts:
+        if part.startswith('<'):
+            result.append(part)
+        else:
+            for nom, question in sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0])):
+                if nom in part:
+                    q_enc = urllib.parse.quote(question)
+                    part = part.replace(
+                        nom,
+                        f'<a href="?q={q_enc}" title="Poser cette question à Casimir"'
+                        f' style="{_NOM_LINK_STYLE}">{nom}</a>'
+                    )
+            result.append(part)
+    return ''.join(result)
 
 
 # ── Mode admin ─────────────────────────────────────────────────────────────────
@@ -1330,6 +1372,12 @@ def main():
                         st.session_state["agent_auto_search"] = ex
                         st.rerun()
 
+            # Intercepter les liens de noms propres (?q=...)
+            _q_link = st.query_params.get("q", "")
+            if _q_link and not st.session_state.get("agent_auto_search"):
+                st.session_state["agent_auto_search"] = _q_link
+                st.query_params.clear()
+
             agent_years = []
             n_passages  = 28
 
@@ -1378,7 +1426,8 @@ def main():
                                 full_text += chunk
                                 placeholder.markdown(full_text + " ▌")
                             processed = _liens_sources(full_text, passages)
-                            placeholder.markdown(processed)
+                            processed = _lier_noms_propres(processed)
+                            placeholder.markdown(processed, unsafe_allow_html=True)
                             refs = _bloc_references(processed, passages)
                             if refs:
                                 st.markdown(refs)
