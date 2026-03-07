@@ -1,8 +1,798 @@
 {
-  "generated_at": "2026-03-01T23:10:17.745115",
-  "nb_pdfs": 82,
-  "nb_seances": 82,
+  "generated_at": "2026-03-07T14:58:21.549596",
+  "nb_pdfs": 131,
+  "nb_seances": 131,
   "seances": [
+    {
+      "fichier": "001-guide-des-decouvertes-pierrefonds.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "2-Au-fil-des-Lisieres-Septembre-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "2025.09.25-Compte-rendu-du-CC-du-25-septembre-2025-approuve.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": "19:30",
+      "heure_fin": "20:50",
+      "duree_minutes": 80,
+      "presences": [
+        "BACHELART",
+        "BARGADA",
+        "BEGUIN",
+        "BETRIX",
+        "BOUCHEZ",
+        "CHAMPEAU",
+        "CHEVOT",
+        "CORMONT",
+        "DEBLOIS",
+        "DEFRANCE",
+        "DEMOUY",
+        "FAVROLE",
+        "FLEURY",
+        "FRERE",
+        "GOUPIL",
+        "GOURDON",
+        "LECAT",
+        "LEMMENS",
+        "LEWANDOWSKI",
+        "MAILLET",
+        "LOUBES",
+        "PARMENTIER",
+        "POTIER",
+        "RIGAULT",
+        "TUAL",
+        "SUPERBI"
+      ],
+      "nb_presences": 26,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 6,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "FINANCES",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 2,
+          "titre": "DEVELOPPEMENT ECONOMIQUE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 3,
+          "titre": "EAU ET ASSAINISSEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 4,
+          "titre": "URBANISME ET ENVIRONNEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 5,
+          "titre": "VOIRIE – OM – VIE ASSOCIATIVE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "SERVICES A LA POPULATION",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
+    },
+    {
+      "fichier": "2025.11.13-CR-CC-du-13-novembre-2025-approuve.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": "19:30",
+      "heure_fin": "20:35",
+      "duree_minutes": 65,
+      "presences": [
+        "BACHELART",
+        "BARGADA",
+        "BEGUIN",
+        "BETRIX",
+        "BOUCHEZ",
+        "BOURGEOIS",
+        "BROCVIELLE",
+        "CHEVOT",
+        "CORMONT",
+        "DEBLOIS",
+        "DEFRANCE",
+        "DELCELIER",
+        "DEMOUY",
+        "DUTEIL",
+        "FAVROLE",
+        "FLEURY",
+        "FRERE",
+        "GOURDON",
+        "LECAT",
+        "LEMMENS",
+        "LEWANDOWSKI",
+        "MAILLET",
+        "PARMENTIER",
+        "POTIER",
+        "RIGAULT",
+        "SUPERBI",
+        "TUAL"
+      ],
+      "nb_presences": 27,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 8,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "DEVELOPPEMENT ECONOMIQUE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 2,
+          "titre": "EAU ET ASSAINISSEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "URBANISME ET ENVIRONNEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 4,
+          "titre": "VOIRIE – OM – VIE ASSOCIATIVE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 5,
+          "titre": "ADMINISTRATION GENERALE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 1,
+          "titre": "LISTE DES PLIS",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "CANDIDATS SOUMISSIONNAIRES AYANT DÉPOSÉ UNE OFFRE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 6,
+          "titre": "CULTURE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
+    },
+    {
+      "fichier": "2025.12.22-CR-du-Conseil-Communautaire-du-18-decembre-2025-approuve.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": "19:30",
+      "heure_fin": "20:27",
+      "duree_minutes": 57,
+      "presences": [
+        "BACHELART",
+        "BEGUIN",
+        "BETRIX",
+        "BOURGEOIS",
+        "BRASSEUR",
+        "CHAMPEAU",
+        "CHEVOT",
+        "CORMONT",
+        "DEBLOIS",
+        "DECULTOT",
+        "DEFRANCE",
+        "DELCELIER",
+        "DEMOUY",
+        "DUTEIL",
+        "FAVROLE",
+        "FLEURY",
+        "GOURDON",
+        "LECAT",
+        "MICHEL",
+        "LEWANDOWSKI",
+        "LOUBES",
+        "MAILLET",
+        "PARMENTIER",
+        "RIGAULT",
+        "SUPERBI",
+        "TUAL"
+      ],
+      "nb_presences": 26,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 5,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "FINANCES",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 2,
+          "titre": "EAU ET ASSAINISSEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "DEVELOPPEMENT ECONOMIQUE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "MOBILITE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 5,
+          "titre": "ADMINISTRATION GENERALE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
+    },
+    {
+      "fichier": "4-Au-fil-des-Lisieres-Juin-2025-Magazine.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 4,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Diagnostic et définitions des enjeux : produire un socle commun de connaissances pour faire un état des lieux du",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Projet de territoire : fixer un cap stratégique pour les 20 prochaines années.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Traduction règlementaire : traduire ce cap, aussi bien en orientations dans le SCoT-AEC qu’en règles d’occupation",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 4,
+          "titre": "Phase administrative : valider le document en consultant l’ensemble des partenaires des Lisières de l’Oise.",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        }
+      ]
+    },
+    {
+      "fichier": "4.-Annexe-DEL2024-48-RPQS-OM-2023.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "5-Au-fil-des-Lisieres-Novembre-2025-Magazines-10.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "7.-Annexe-DEL2024-53-CCLO_Rapport-annuel-SPANC-2023.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 8,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "CARACTÉRISATION TECHNIQUE DU SERVICE Page 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "TARIFICATION DE L’ASSAINISSEMENT ET Page 7",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "INDICATEURS DE PERFORMANCE Page 10",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "FINANCEMENT DES INVESTISSEMENTS",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        }
+      ]
+    },
+    {
+      "fichier": "adlfi-4357.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "Au-fil-des-Lisieres-Avril-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "Au-fil-des-Lisieres-Edition-annuelle-2025.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "brochure-groupes-destination-compiegne-pierrefonds.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "calameo_com_read_00484993435e27d44d6e2.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "carte-de-loise-des-camping-cars-2024-oise-tourisme.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "carte-des-flaneries-pierrefonds-lisieres-de-loise-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "Carte-des-producteurs-locaux-Saveurs-de-nos-Vallees.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "carte-touristique-compiegne-et-sa-region-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "carte-touristique-de-la-destination-compiegne-pierrefonds-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "carte-touristique-de-loise-2022.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
     {
       "fichier": "compte-rendu-28-05-2020.pdf",
       "date": null,
@@ -59,7 +849,3415 @@
       ]
     },
     {
+      "fichier": "Compte-rendu-approuve-du-CC-du-10-avril-2025.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": "19:00",
+      "heure_fin": "20:59",
+      "duree_minutes": 119,
+      "presences": [
+        "BACHELART",
+        "BARGADA",
+        "BEGUIN",
+        "BETRIX",
+        "BOURGEOIS",
+        "BROCVIELLE",
+        "CHAMPEAU",
+        "CHEVOT",
+        "CORMONT",
+        "DEBLOIS",
+        "DEFRANCE",
+        "DELCELIER",
+        "DUTEIL",
+        "DUTILLOY",
+        "FAVROLE",
+        "FLEURY",
+        "FRERE",
+        "GOUPIL",
+        "GOURDON",
+        "LECAT",
+        "LEMMENS",
+        "LEWANDOWSKI",
+        "LOUBES",
+        "RIGAULT",
+        "SUPERBI",
+        "VALENTE-LE",
+        "HIR"
+      ],
+      "nb_presences": 27,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 17,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "FINANCES",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 2,
+          "titre": "TOURISME",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 3,
+          "titre": "URBANISME / ENVIRONNEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 1,
+          "titre": "L'équilibre entre :",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 2,
+          "titre": "La qualité urbaine, architecturale et paysagère, notamment des entrées de ville ;",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "La diversité des fonctions urbaines et rurales et la mixité sociale dans l'habitat, en prévoyant",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 4,
+          "titre": "La sécurité et la salubrité publiques ;",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 5,
+          "titre": "La prévention des risques naturels prévisibles, des risques miniers, des risques",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "La protection des milieux naturels et des paysages, la préservation de la qualité de l'air, de",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 7,
+          "titre": "La lutte contre le changement climatique et l'adaptation à ce changement, la réduction des",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Énergie / Éclairage"
+        },
+        {
+          "num": 8,
+          "titre": "La promotion du principe de conception universelle pour une société inclusive vis-à-vis des",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 4,
+          "titre": "DEVELOPPEMENT ECONOMIQUE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 5,
+          "titre": "EAU ET ASSAINISSEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 6,
+          "titre": "VIE ASSOCIATIVE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 7,
+          "titre": "MOBILITE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 8,
+          "titre": "PERSONNEL",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 9,
+          "titre": "ADMINISTRATION GENERALE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
+    },
+    {
+      "fichier": "Compte-rendu-approuve-du-CC-du-13-mars-2025.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": "19:30",
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [
+        "BACHELART",
+        "BEGUIN",
+        "BETRIX",
+        "BOUCHEZ",
+        "BOURGEOIS",
+        "BROCVIELLE",
+        "CHEVOT",
+        "CORMONT",
+        "DEBLOIS",
+        "DEFRANCE",
+        "DELCELIER",
+        "DEMOUY",
+        "DUTEIL",
+        "FLEURY",
+        "FRERE",
+        "GOUPIL",
+        "GOURDON",
+        "LECAT",
+        "MAILLET",
+        "POTIER",
+        "RIGAULT",
+        "SUPERBI",
+        "TUAL",
+        "VALENTE-LE",
+        "HIR"
+      ],
+      "nb_presences": 25,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 4,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "FINANCES",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 2,
+          "titre": "DEVELOPPEMENT ECONOMIQUE",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "EAU ET ASSAINISSEMENT",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "PERSONNEL",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        }
+      ]
+    },
+    {
+      "fichier": "Compte-rendu-approuve-du-CC-du-26-juin-2025.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "decouvrez-le-compiegnois-2026.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "DEL2025-64-Annexe-RPQS-CCLO-Eau-Potable-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 48,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service ......................................................................................... 11",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 16",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 24",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 26",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 27",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service ......................................................................................... 13",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 19",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 27",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 29",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 30",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service ......................................................................................... 11",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 16",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 24",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 26",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 27",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service ......................................................................................... 10",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 15",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 23",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 25",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 26",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’eau et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        }
+      ]
+    },
+    {
+      "fichier": "DEL2025-65-Annexe-RPQS-CCLO-Assainissement-collectif-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 48,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service ....................................................................... 11",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 16",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 24",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 25",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 26",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service ....................................................................... 11",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 16",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 24",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 26",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 27",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service ....................................................................... 11",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 16",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 24",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 26",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 27",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service .................................................................................................... 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service ....................................................................... 10",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance ................................................................................................................ 15",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements ....................................................................................................... 23",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée dans le domaine de l’eau ................................ 24",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs .................................................................................................. 25",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement et recettes du service",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 5,
+          "titre": "Actions de solidarité et de coopération décentralisée",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Tableau récapitulatif des indicateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        }
+      ]
+    },
+    {
+      "fichier": "DEL2025-66-Annexe-RPQS-CCLO-Assainissement-Non-Collectif-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 8,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "CARACTÉRISATION TECHNIQUE DU SERVICE Page 4",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "TARIFICATION DE L’ASSAINISSEMENT ET Page 7",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "INDICATEURS DE PERFORMANCE Page 10",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "FINANCEMENT DES INVESTISSEMENTS",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        },
+        {
+          "num": 1,
+          "titre": "Caractérisation technique",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Tarification de l’assainissement",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 3,
+          "titre": "Indicateurs de performance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Tarifs / Redevances"
+        },
+        {
+          "num": 4,
+          "titre": "Financement des investissements",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Budget / Finances"
+        }
+      ]
+    },
+    {
+      "fichier": "DEL2025-73-Annexe-RPQS-Dechets-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "e-brochure-hebergements-pierrefonds-lisieres-de-l-oise-1.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "JOURNAL-AU-FIL-DES-LISIERES-1-1.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "JOURNAL-AU-FIL-DES-LISIERES-2-1.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 5,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Concernant le ruissellement, des travaux d’hydraulique douce ont été",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 2,
+          "titre": "Au sein de la commune de Pierrefonds, l’Entente a engagé des",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 3,
+          "titre": "La commune d’Attichy, impactée régulièrement par des coulées de boue,",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 4,
+          "titre": "À Saint-Étienne-Roilaye, a eu lieu la pose de gros ballots de paille (plus de",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 18,
+          "titre": "Des soldats s’y réfugièrent et en",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        }
+      ]
+    },
+    {
+      "fichier": "JOURNAL-AU-FIL-DES-LISIERES-3-1.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 8,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Mise en œuvre d’une stratégie ambitieuse vers le « Zéro Déchet » grâce au",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Réduire les ordures ménagères en encourageant le recyclage et la réduction",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Veiller à la bonne application des consignes de tri à travers des animations",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 4,
+          "titre": "Collaborer avec le service communication pour mettre en place",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 5,
+          "titre": "Régler les problèmes de collecte.",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 1,
+          "titre": "Participation, 4. Ouverture et 7. Compétences 10. Gestion",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Réactivité 5. État de droit 8. Innovation 11. Droits de",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Efficacité et 6. Comportement 9. Durabilité et 12. Obligation",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        }
+      ]
+    },
+    {
+      "fichier": "lha-1478.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 32,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "Actuellementprésentéeàmêmelesolaurez-de-chausséedel’ailedesPreuses,lamaquettenebéné-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 2,
+          "titre": "SabineFrommel(dir.),LesMaquettesd’architecture,fonctionetévolutiond’uninstrumentdeconcep-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "On se rapportera aux travaux de Béatrice Bouvier et notamment, à sa thèse, Béatrice Bouvier,",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 4,
+          "titre": "Pierrefondsestainsisouventconsidérécommeunesourced’inspirationduspectaculairechâteaude",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 5,
+          "titre": "Journal des travaux de Wyganowski et dossiers de l’agence des travaux de Pierrefonds. Archives",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 6,
+          "titre": "ArnaudTimbert,Viollet-le-DucetPierrefonds:histoired’unchantier,Villeneuve-d’Ascq,Pressesuni-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 7,
+          "titre": "Lechâteauouvreaupublicaumomentdel’Expositionuniversellede1867enprésentantlacollec-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 8,
+          "titre": "Bienquelejournaldestravauxsignaleuneéchellededeuxcentimètresparmètre,ilsemblequela",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 9,
+          "titre": "Piècesituéeaurez-de-chausséedel’ailedesPreusesdansleprolongementdelasalledesgardesoù",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 10,
+          "titre": "Le10novembre1867,WyganowskisignalequeletailleurdepierreLecotpèretravailleàl’exécu-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        },
+        {
+          "num": 11,
+          "titre": "LucianWyganowski,Journaldestravaux,29février1868.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 12,
+          "titre": "Viollet-le-Ducparvientàmobiliserdescréditssupplémentairespouracheverlarestaurationmonu-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 13,
+          "titre": "Lespremiersessaisontétéfaitsenplâtreavantd’êtreabandonnésauprofitdelapierredetaille",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 14,
+          "titre": "Pierre calcaire à grains fins extraites des carrières Chevru, en activité depuis 1850. A. Timbert,",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 15,
+          "titre": "MozetadéjàtravaillépourViollet-le-DucàNotre-DamedeParisetàl’hôteldevilledeCompiègne.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 16,
+          "titre": "L’entrepriseMonduitadéjàacquisuneimportanterenomméelorsqu’elleintervientauchâteaude",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 17,
+          "titre": "LettredeLucianWyganowskiàViollet-le-Duc,le13janvier1878.NoCIVArchivesdépartemen-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 18,
+          "titre": "Le 4 mars 1878 Wyganowski dans le Journal des travaux indique que les ouvriers ont amené la",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 19,
+          "titre": "OpérationréaliséeàPierrefondsentrele18marsetle22avril1878.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 20,
+          "titre": "JournaldestravauxdeWyganowkidu22avril1878.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 21,
+          "titre": "JulesBrunfaut,L’Expositionuniversellede1878illustrée,publicationinternationaleautoriséeparla",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 22,
+          "titre": "LafirmeMonduitremporteuntriompheàl’Expositionde1878grâceàlaprésentationdelatête",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 23,
+          "titre": "Expositionuniversellede1878àParis.Ministèredel’Instructionpublique,descultesetdesBeaux-Arts,",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 24,
+          "titre": "Lettred’AmédéeScellesàWyganowski,le15janvier1879:«Nousfinissonsaujourd’huidetranspor-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 25,
+          "titre": "Rapportadresséauministredel’InstructionpubliqueetdesBeaux-Artssurl’étatdescollectionsdu",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 26,
+          "titre": "EdmondduSommerard,Catalogueetdescriptiondesobjetsd’artdel’antiquité,duMoyenÂgeet",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 27,
+          "titre": "Albumphotographiqued’A.Dupré,SouvenirdePierrefonds,sansdate.Cetalbum,quimontredes",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 28,
+          "titre": "Jean-Pierre Reverseau, «Le cabinet d’armes de NapoléonIII à Pierrefonds», Actes du colloque",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 29,
+          "titre": "Mémoire des ouvrages exécutés de démontage, réparation, remontage de la maquette du château",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 30,
+          "titre": "Arrêtédeclassementparmilesmonumentshistoriquesdu3septembre1979.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 31,
+          "titre": "Surcesujetvoirlesitehttp://www.onmjfootsteps.com/archives/2015/05/14/32053992.html[consulté",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 32,
+          "titre": "Lesdifférentsdéplacementsontétéàl’originedenombreusesaltérationsnécessitantdesinterventions",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        }
+      ]
+    },
+    {
       "fichier": "LISTE-DELIBERATIONS-DU-27-janvier-2026.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "maquette-magazine-de-destination.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "oise-magazine-35-web.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "oise-magazine-36-web.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "oise-magazine-37-web.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "oise-magazine-38-web.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 3,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "L’hydro régénération Même si la chaussée est dégradée (nids ALATA. La voie de l’anneau et les",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 2,
+          "titre": "Augmentation du linéaire d’enduit du ciment, il est utilisé un liant issu La RD 201 supporte un trafic routier",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 3,
+          "titre": "Retraitement de chaussée les travaux permettent de reprendre",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        }
+      ]
+    },
+    {
+      "fichier": "oise-rando-a-pied-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "oise-rando-a-velo-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "Petit-journal-n51-juin-2018.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "Petit-journal-numero-51-juin-2018.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "pistes-cyclables-de-larc-2024.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "RAPPORT-D_ACTIVITE-2021.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 4,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "« Préserver la biodiversité et gérer durablement le massif » (dans laquelle une quinzaine d’entreprises locale",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 2,
+          "titre": "« Accueillir tous les publics en forêt » ferrée entre la plateforme chimique de Lamotte",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Forêt / Bois"
+        },
+        {
+          "num": 3,
+          "titre": "« Valoriser durablement les ressources forestières » bouclé en décembre entre l’État, la Région, SNCF",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "« Accroître les connaissances, se former, s’informer »",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        }
+      ]
+    },
+    {
+      "fichier": "RAPPORT-DACTIVITE-2022.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 49,
+      "deliberations": [
+        {
+          "num": 1,
+          "titre": "L’entretien et la réparation du vélo avec l’association l’Anthurium",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "« Le défi Home trainer » avec Decathlon",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Pratique du bicross sur une mini piste installée par « BMX Compiègne Clairoix »",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Circuit de sécurité routière avec la Brigade motorisée",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 5,
+          "titre": "Quizz sur le port des équipements de sécurité lors de la pratique du vélo",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 6,
+          "titre": "Atelier créatif de jeux de construction LEGO",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 7,
+          "titre": "Atelier créatif de la fresque du vélo",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 8,
+          "titre": "Essai de Vélos à Assistance électrique (VAE) et de trottinettes électriques",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 2,
+          "titre": "Développer les productions respectueuses de l’environnement en",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Développer des outils pour transformer et commercialiser des produits",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Favoriser l’accès à tous à des produits alimentaires de qualité, au quotidien.",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 1,
+          "titre": "Préserver la biodiversité et gérer dura-",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Forêt / Bois"
+        },
+        {
+          "num": 2,
+          "titre": "Valoriser durablement les ressources",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Forêt / Bois"
+        },
+        {
+          "num": 4,
+          "titre": "Se former, s’informer et enfin accueillir",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Travaux / Voirie"
+        },
+        {
+          "num": 1,
+          "titre": "Présentation générale France Services",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Labellisation France services Lisières de l’Oise",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Inauguration France services Lisières de l’Oise",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "France Services Lisières de l’Oise Partenaires et Permanences",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Séminaires de la Préfecture de l’Oise",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Journées Portes Ouvertes",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Intervention dans les communes",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "Interventions –Rencontres –Réunions",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "France services Lisières de l’Oise -chiffres clés",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "France services Lisières de l’Oise –démarches par opérateurs",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "France services Lisières de l’Oise –profil des usagers",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 4,
+          "titre": "France services Lisières de l’Oise -suivi des usagers par provenance",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 5,
+          "titre": "France services Lisières de l’Oise -durées, mode d’accueil",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 6,
+          "titre": "France services Lisières de l’Oise –Conseiller numérique : présentation, ateliers",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 7,
+          "titre": "France services Lisières de l’Oise –démarches DGFIP",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 8,
+          "titre": "France services Lisières de l’Oise –démarches retraites",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 9,
+          "titre": "France services Lisières de l’Oise –démarches ANTS",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 10,
+          "titre": "France services Lisières de l’Oise –permanences",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 11,
+          "titre": "France Services Lisières de l’Oise –formations des agents, webinaires",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 1,
+          "titre": "TF1 Journal de 13h00",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Publications de presse",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Communication CCLO",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 1,
+          "titre": "Présentation générale France Services",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 2,
+          "titre": "Labellisation France services des Lisières de l’Oise",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Emploi / RH"
+        },
+        {
+          "num": 3,
+          "titre": "Inauguration France Services Lisières de l’Oise",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Enfance / Jeunesse"
+        },
+        {
+          "num": 4,
+          "titre": "France services des Lisières de l’Oise –",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Énergie / Éclairage"
+        },
+        {
+          "num": 2,
+          "titre": "Journées Portes Ouvertes du 3 au 14 octobre 2022",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Interventions dans les communes de la CCLO",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "École / Scolaire"
+        },
+        {
+          "num": 4,
+          "titre": "Interventions – Rencontres - Réunions",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "TF1 - Journal de 13h00",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 3,
+          "titre": "Publications de presse et réseaux sociaux",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Publications communication CCLO",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 3,
+          "titre": "Les petits mots les plus entendus de la part des usagers",
+          "vote": {
+            "type": "unanimité",
+            "pour": null,
+            "contre": 0,
+            "abstentions": 0,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Urbanisme / Permis"
+        },
+        {
+          "num": 1,
+          "titre": "Une présentation générale, puis détaillée, du Territoire de",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Autre"
+        },
+        {
+          "num": 2,
+          "titre": "Une présentation des acteurs, des activités et des prestataires",
+          "vote": {
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
+            "noms_abstentions": [],
+            "noms_contre": []
+          },
+          "theme": "Convention / Contrat"
+        }
+      ]
+    },
+    {
+      "fichier": "Rapport-dactivites-2023-CCLO-6.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "Rapport-dactivites-2024-CC-Lisieres-de-lOise.pdf",
       "date": null,
       "annee": null,
       "heure_debut": null,
@@ -90,6 +4288,36 @@
     },
     {
       "fichier": "REPERTOIRE-CHRONOLOGIQUE-2025-POUR-AFFICHAGE.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "RPQS-ASSAINISSEMENT-COLLECTIF-2023.pdf",
+      "date": null,
+      "annee": null,
+      "heure_debut": null,
+      "heure_fin": null,
+      "duree_minutes": null,
+      "presences": [],
+      "nb_presences": 0,
+      "absences": [],
+      "nb_absences": 0,
+      "pouvoirs": [],
+      "nb_deliberations": 0,
+      "deliberations": []
+    },
+    {
+      "fichier": "RPQS-EAU-POTABLE-2023.pdf",
       "date": null,
       "annee": null,
       "heure_debut": null,
