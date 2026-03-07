@@ -815,7 +815,10 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    (2) Cite tout montant, crédit, subvention ou budget trouvé dans les passages (€, HT, TTC) avec sa source [N]. \
    (3) Si le montant exact n'est pas dans les extraits, indique-le clairement et renvoie vers les procès-verbaux complets (mairie, Vie municipale > Conseil municipal). \
    Structure la réponse (titres courts ou paragraphes) pour que les éléments financiers soient visibles ; ne te contente pas d'un seul paragraphe vague.
-5. Tu réponds toujours en français, de façon concise et structurée.
+5. Tu réponds toujours en français, de façon détaillée et structurée. \
+   Pour les questions historiques, patrimoniales ou techniques (château, Viollet-le-Duc, métiers, architecture, restauration…), \
+   développe ta réponse en plusieurs paragraphes thématiques : contexte, méthodes, acteurs, anecdotes, chronologie, \
+   résultats. N'hésite pas à écrire 400 à 800 mots si le sujet le permet.
 6. Pour chaque affirmation, indique le numéro de la source entre crochets \
    (ex : [1], [3]) — utilise uniquement le chiffre, rien d'autre.
 7. N'écris JAMAIS les balises <source> ou </source> dans ta réponse.
@@ -1314,8 +1317,8 @@ def main():
             AGENT_EXAMPLES = [
                 "Comment ont évolué les tarifs de la cantine scolaire ?",
                 "Quels travaux de voirie ont été votés et pour quel montant ?",
-                "Quelles délibérations concernent l'éclairage public ?",
-                "Qu'a décidé le conseil sur l'intercommunalité ?",
+                "Peux-tu résumer la restauration du château ?",
+                "Comment ont travaillé les tailleurs de pierre ?",
                 "Que sais-tu sur les logiciels Horizon ?",
                 "Que sais-tu de Vertefeuille ?",
             ]
@@ -1702,8 +1705,12 @@ def main():
                                     break
                     except OSError:
                         pass
+                    pdf_path = PDF_DIR / (p.stem + ".pdf")
                     if source_url:
                         st.markdown(f"`{label_date}` — 🔗 [{source_url}]({source_url})")
+                    elif pdf_path.exists():
+                        pdf_url = _safe_pdf_url(f"{PDF_BASE_URL}/{p.stem}.pdf")
+                        st.markdown(f"`{label_date}` — 📄 [{p.stem}]({pdf_url})")
                     else:
                         st.markdown(f"`{label_date}` — 📝 {p.stem}")
             else:

@@ -97,7 +97,8 @@
       "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK syntaxe''\\)\")",
       "Bash(python -m pip install rank_bm25 -q)",
       "Bash(python -m pip install rank_bm25)",
-      "Bash(python ingest.py --md-dir input/)"
+      "Bash(python ingest.py --md-dir input/)",
+      "Bash(tasklist /FI \"IMAGENAME eq python.exe\")"
     ]
   }
 }
