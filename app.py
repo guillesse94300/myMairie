@@ -322,13 +322,15 @@ def _lier_noms_propres(text: str) -> str:
             result.append(part)
         else:
             for nom, question in sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0])):
+                q_enc = urllib.parse.quote(question)
+                lien = (f'<a href="?q={q_enc}" title="Poser cette question à Casimir"'
+                        f' style="{_NOM_LINK_STYLE}">{nom}</a>')
+                # Remplacer **nom** et __nom__ (bold Markdown) → lien propre sans marqueurs
+                part = part.replace(f"**{nom}**", lien)
+                part = part.replace(f"__{nom}__", lien)
+                # Remplacer le nom nu s'il n'est pas déjà dans un lien
                 if nom in part:
-                    q_enc = urllib.parse.quote(question)
-                    part = part.replace(
-                        nom,
-                        f'<a href="?q={q_enc}" title="Poser cette question à Casimir"'
-                        f' style="{_NOM_LINK_STYLE}">{nom}</a>'
-                    )
+                    part = part.replace(nom, lien)
             result.append(part)
     return ''.join(result)
 
@@ -967,9 +969,12 @@ def _liens_sources(text: str, passages: list) -> str:
             return f"[{sid}]({url})"
         return f"[{sid}]"
 
-    # 0. Remplacer les références [N] produites par le LLM (format principal)
-    #    (?!\() évite de remplacer les liens Markdown déjà formés [texte](url)
+    # 0a. Remplacer les références [N] produites par le LLM (format principal)
+    #     (?!\() évite de remplacer les liens Markdown déjà formés [texte](url)
     text = re.sub(r'\[(\d+)\](?!\()', lambda m: _make_link(m.group(1)), text)
+
+    # 0b. Remplacer __N__ (le LLM utilise parfois le bold Markdown pour les citations)
+    text = re.sub(r'__(\d+)__', lambda m: _make_link(m.group(1)), text)
 
     # 1. Remplacer <source id="N" ...> résiduels (au cas où le LLM en échappe)
     text = re.sub(r'<source\s+id=["\'](\d+)["\'][^>]*>',
