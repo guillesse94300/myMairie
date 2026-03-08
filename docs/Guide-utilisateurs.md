@@ -154,6 +154,8 @@ La section **« Sources et Documents »** liste les documents disponibles (PDF, 
 
 La **source officielle** des procès-verbaux du Conseil municipal est indiquée : [mairie-pierrefonds.fr — Procès-verbaux du Conseil Municipal](https://www.mairie-pierrefonds.fr/vie-municipale/conseil-municipal/#proces-verbal).
 
+**Référence :** [Licence OpenEdition Books](https://www.openedition.org/12554).
+
 ---
 
 ## 10. Limites d’utilisation

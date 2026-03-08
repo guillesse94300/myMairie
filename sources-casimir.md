@@ -6,6 +6,8 @@
 
 Cette liste est extraite de la base d’indexation (`vector_db/metadata.pkl`).
 
+**Références :** [Licence OpenEdition Books](https://www.openedition.org/12554)
+
 **Enrichir Casimir :** ajoutez des URLs dans `siteweb.txt`, puis exécutez `python fetch_sites.py` et `python ingest.py` (ou `update_casimir.bat`).
 
 **Synthèse des connaissances :** le fichier `knowledge_sites/casimir_synthese_connaissances.md` résume les informations clés issues des .md (mairie, élus, scolarité, culture, tourisme, CCLO) pour améliorer les réponses de Casimir sur les sujets courants.

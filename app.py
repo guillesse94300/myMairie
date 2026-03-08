@@ -1864,6 +1864,7 @@ def main():
         elif st.session_state["current_section"] == "docs":
             st.title("📄 Sources et Documents")
             st.divider()
+            st.markdown("**Références :** [Licence OpenEdition Books](https://www.openedition.org/12554)")
             st.markdown("**Documents indexés** (triés par date décroissante)")
             input_dir = APP_DIR / "input"
             all_docs = sorted(input_dir.glob("*.md"), key=_pdf_date_key, reverse=True) if input_dir.exists() else []
