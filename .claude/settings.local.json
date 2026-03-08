@@ -106,7 +106,10 @@
       "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK: syntaxe valide''\\)\")",
       "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'',encoding=''utf-8''\\).read\\(\\)\\); print\\(''Syntaxe OK''\\)\")",
       "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'',encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK''\\)\")",
-      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK''\\)\")"
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK''\\)\")",
+      "Bash(wc -l \"C:\\\\Users\\\\gilles.kammerer\\\\OneDrive\\\\immobilier\\\\Pierrefonds\\\\Mairie\"/*.py)",
+      "Bash(ls -lh \"C:\\\\Users\\\\gilles.kammerer\\\\OneDrive\\\\immobilier\\\\Pierrefonds\\\\Mairie\"/*.py)",
+      "Bash(grep -l \"secret\\\\|password\\\\|api\\\\|token\\\\|key\" \"C:\\\\Users\\\\gilles.kammerer\\\\OneDrive\\\\immobilier\\\\Pierrefonds\\\\Mairie\"/*.py)"
     ]
   }
 }

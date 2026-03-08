@@ -3,6 +3,7 @@ app.py — Interface Streamlit de recherche dans les comptes rendus
 Usage  : streamlit run app.py
 """
 
+import html as _html
 import re
 import sqlite3
 import warnings
@@ -63,17 +64,18 @@ def _safe_pdf_url(rel_path: str) -> str:
     """
     if not rel_path or not isinstance(rel_path, str):
         return "#"
-    # Supprimer tout scheme (javascript:, data:, etc.)
-    if ":" in rel_path and rel_path.split(":")[0].strip().lower() in ("javascript", "data", "vbscript"):
+    stripped = rel_path.strip()
+    # Bloquer tout scheme (seul le chemin relatif est autorisé)
+    if ":" in stripped:
         return "#"
     # Pas de path traversal
-    if ".." in rel_path or rel_path.startswith("/"):
+    if ".." in stripped or stripped.startswith("/"):
         return "#"
     # Nettoyer les backslashes
-    clean = rel_path.replace("\\", "/").strip()
+    clean = stripped.replace("\\", "/")
     if not clean:
         return "#"
-    return f"{PDF_BASE_URL}/{clean}"
+    return f"{PDF_BASE_URL}/{_html.escape(clean)}"
 
 
 def _safe_source_url(url: str) -> str | None:
@@ -84,6 +86,25 @@ def _safe_source_url(url: str) -> str | None:
     if u.startswith("https://") or u.startswith("http://"):
         return url.strip()
     return None
+
+
+def _esc(value: str) -> str:
+    """Échappe une chaîne pour injection sûre dans du HTML (anti-XSS)."""
+    if not value or not isinstance(value, str):
+        return ""
+    return _html.escape(str(value), quote=True)
+
+
+def _sanitize_llm_html(text: str) -> str:
+    """Supprime les balises HTML dangereuses de la sortie LLM (script, iframe, object, etc.).
+    Conserve les balises de mise en forme simples autorisées par Streamlit Markdown."""
+    # Supprimer <script>...</script>, <iframe>...</iframe>, <object>, <embed>, <form>, <input>, <link>, <meta>
+    text = re.sub(r'<\s*(script|iframe|object|embed|form|input|link|meta|base|svg)\b[^>]*>.*?</\s*\1\s*>', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'<\s*(script|iframe|object|embed|form|input|link|meta|base|svg)\b[^>]*/?\s*>', '', text, flags=re.IGNORECASE)
+    # Supprimer les attributs événementiels (on*) dans les balises restantes
+    text = re.sub(r'\s+on\w+\s*=\s*["\'][^"\']*["\']', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\s+on\w+\s*=\s*\S+', '', text, flags=re.IGNORECASE)
+    return text
 
 
 # ── Rate limiting par IP (recherche + agent) : 5 recherches / jour ──────────────
@@ -954,7 +975,7 @@ def ask_claude_stream(question: str, passages: list):
     client = _Groq(api_key=api_key)
     stream = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
-        max_tokens=1500,
+        max_tokens=3500,
         messages=[
             {"role": "system", "content": SYSTEM_AGENT},
             {"role": "user",   "content": user_msg},
@@ -1516,6 +1537,7 @@ def main():
                                 full_text += chunk
                                 placeholder.markdown(full_text + " ▌")
                             processed = _liens_sources(full_text, passages)
+                            processed = _sanitize_llm_html(processed)
                             processed, noms_trouves = _lier_noms_propres(processed)
                             placeholder.markdown(processed, unsafe_allow_html=True)
                             refs = _bloc_references(processed, passages)
