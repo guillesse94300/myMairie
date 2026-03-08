@@ -310,49 +310,35 @@ NOMS_PROPRES_LIENS: dict[str, str] = {
     "Romain Ribeiro":          "Qui est Romain Ribeiro ?",
 }
 
-_NOM_LINK_STYLE = "color:#1565c0;text-decoration:underline dotted;cursor:pointer"
-
 def _lier_noms_propres(text: str) -> tuple[str, list[tuple[str, str]]]:
-    """Met en valeur les noms propres connus (style lien) et retourne la liste trouvée.
+    """Met en gras les noms propres connus et retourne la liste trouvée.
 
     Retourne (texte_modifié, [(nom_affiché, question), ...]).
-    Les noms sont stylés en bleu souligné dans le texte (visuel).
-    Les boutons Streamlit natifs (affichés après la réponse) permettent de
-    relancer la recherche dans la même page.
+    Les noms sont mis en **gras** dans le texte (pas de lien <a> car Streamlit
+    force target="_blank" et ouvre un nouvel onglet).
+    Les boutons Streamlit natifs « En savoir plus » permettent de relancer
+    la recherche dans la même page.
     """
     found: dict[str, str] = {}          # nom → question (dédupliqué)
     noms_tries = sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0]))
     for nom, question in noms_tries:
-        q_enc = urllib.parse.quote(question)
-        lien = (f'<a href="?q={q_enc}"'
-                f' title="Voir le bouton ci-dessous pour lancer la recherche"'
-                f' style="{_NOM_LINK_STYLE}">{nom}</a>')
-        # Re-splitter à chaque nom pour protéger les <a> déjà créés
+        bold = f"**{nom}**"
+        # Vérifier si le nom est dans le texte (hors balises HTML et hors gras existant)
+        if nom not in text:
+            continue
+        # Déjà en gras → juste noter le nom
+        if bold in text:
+            found[nom] = question
+            continue
+        # Mettre en gras (simple remplacement, en évitant l'intérieur des balises HTML)
         parts = re.split(r'(<[^>]+>)', text)
         result = []
-        inside_anchor = False
         for part in parts:
             if part.startswith('<'):
-                tag_lower = part.lower()
-                if tag_lower.startswith('<a ') or tag_lower == '<a>':
-                    inside_anchor = True
-                elif tag_lower.startswith('</a'):
-                    inside_anchor = False
-                result.append(part)
-            elif inside_anchor:
                 result.append(part)
             else:
-                replaced = False
-                if f"**{nom}**" in part:
-                    part = part.replace(f"**{nom}**", lien)
-                    replaced = True
-                    found[nom] = question
-                if f"__{nom}__" in part:
-                    part = part.replace(f"__{nom}__", lien)
-                    replaced = True
-                    found[nom] = question
-                if not replaced and nom in part:
-                    part = part.replace(nom, lien)
+                if nom in part:
+                    part = part.replace(nom, bold)
                     found[nom] = question
                 result.append(part)
         text = ''.join(result)
@@ -891,7 +877,11 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    Si les passages ne contiennent que des listes de présence sans autre information sur cette personne, \
    dis-le en UNE phrase et indique les années de présence constatées (ex. « présent(e) aux séances de 2016 à 2023 »). \
    Ne liste JAMAIS tous les numéros de source pour une simple présence ; regroupe (ex. [1-28] ou « dans l'ensemble des PV fournis »). \
-   Cherche aussi si la personne a été élue secrétaire de séance ou désignée dans un vote nominatif.
+   Cherche aussi si la personne a été élue secrétaire de séance ou désignée dans un vote nominatif. \
+   IMPORTANT : tu disposes déjà de l'intégralité des procès-verbaux indexés. Ne renvoie JAMAIS l'utilisateur \
+   vers le site de la mairie ou vers d'autres documents pour « plus de détails » sur une personne. \
+   Si l'information n'est pas dans les passages fournis, dis simplement que les procès-verbaux indexés \
+   ne contiennent pas de détail supplémentaire sur cette personne au-delà de sa présence aux séances.
 4f. Travaux de voirie et montants : donne une réponse complète avec des éléments financiers quand c'est possible. \
    (1) Résume ce que disent les passages : quels travaux (ex. rue de l'Armistice), où, contexte (circulation alternée, etc.) avec la source [N]. \
    (2) Cite tout montant, crédit, subvention ou budget trouvé dans les passages (€, HT, TTC) avec sa source [N]. \
@@ -1413,7 +1403,7 @@ def main():
             ("📄", "Sources et Documents", "Liste des sources utilisées par Casimir et la recherche sémantique.", "docs"),
         ]
         if listes_electorales:
-            CARDS.append(("🗳️", "Élections municipales", "Découvrez les candidats des 2 listes et interrogez Casimir sur leur rôle passé au conseil municipal.", "elections"))
+            CARDS.insert(1, ("🗳️", "Élections municipales", "Découvrez les candidats des 2 listes et interrogez Casimir sur leur rôle passé au conseil municipal.", "elections"))
         col1, col2 = st.columns(2)
         for i, (icon, title, desc, section) in enumerate(CARDS):
             col = col1 if i % 2 == 0 else col2
@@ -1891,7 +1881,7 @@ def main():
                             st.session_state["agent_auto_search"] = (
                                 f"Quels ont été les rôles respectifs de {_tous} "
                                 f"au conseil municipal de Pierrefonds ? "
-                                f"Pour chacun, précise : fonction, délégations, commissions, interventions notables, votes."
+                                f"Adjoint, délégué, commission, désignation, nomination, vote, intervention, rapporteur."
                             )
                             st.session_state["current_section"] = "agent"
                             st.rerun()
@@ -1905,7 +1895,7 @@ def main():
                                 st.session_state["agent_question"] = ""
                                 st.session_state["agent_auto_search"] = (
                                     f"Quel a été le rôle de {nom} au conseil municipal de Pierrefonds ? "
-                                    f"Fonction, délégations, commissions, interventions, votes, dossiers portés."
+                                    f"Adjoint, délégué, commission, désignation, nomination, vote, intervention, rapporteur."
                                 )
                                 st.session_state["current_section"] = "agent"
                                 st.rerun()

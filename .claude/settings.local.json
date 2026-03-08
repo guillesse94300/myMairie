@@ -104,7 +104,9 @@
       "Bash(ls input/*.md)",
       "Bash(python -c \"import pickle; m=pickle.load\\(open\\(''vector_db/metadata.pkl'',''rb''\\)\\); print\\(m[0]\\)\")",
       "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK: syntaxe valide''\\)\")",
-      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'',encoding=''utf-8''\\).read\\(\\)\\); print\\(''Syntaxe OK''\\)\")"
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'',encoding=''utf-8''\\).read\\(\\)\\); print\\(''Syntaxe OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'',encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK''\\)\")"
     ]
   }
 }
