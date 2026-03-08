@@ -310,44 +310,49 @@ NOMS_PROPRES_LIENS: dict[str, str] = {
     "Romain Ribeiro":          "Qui est Romain Ribeiro ?",
 }
 
-_NOM_SPAN_STYLE = "color:#1565c0;font-weight:600"
+_NOM_LINK_STYLE = "color:#1565c0;text-decoration:underline dotted;cursor:pointer"
 
 def _lier_noms_propres(text: str) -> tuple[str, list[tuple[str, str]]]:
-    """Remplace les noms propres connus par des <span> colorés dans le texte.
+    """Met en valeur les noms propres connus (style lien) et retourne la liste trouvée.
 
-    Retourne (texte_modifié, [(nom_affiché, question), ...]) pour permettre
-    l'affichage de boutons Streamlit cliquables après la réponse.
+    Retourne (texte_modifié, [(nom_affiché, question), ...]).
+    Les noms sont stylés en bleu souligné dans le texte (visuel).
+    Les boutons Streamlit natifs (affichés après la réponse) permettent de
+    relancer la recherche dans la même page.
     """
     found: dict[str, str] = {}          # nom → question (dédupliqué)
     noms_tries = sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0]))
     for nom, question in noms_tries:
-        span = f'<span style="{_NOM_SPAN_STYLE}">{nom}</span>'
-        # Re-splitter à chaque nom pour protéger les <span> déjà créés
+        q_enc = urllib.parse.quote(question)
+        lien = (f'<a href="?q={q_enc}"'
+                f' title="Voir le bouton ci-dessous pour lancer la recherche"'
+                f' style="{_NOM_LINK_STYLE}">{nom}</a>')
+        # Re-splitter à chaque nom pour protéger les <a> déjà créés
         parts = re.split(r'(<[^>]+>)', text)
         result = []
-        inside_tag = False
+        inside_anchor = False
         for part in parts:
             if part.startswith('<'):
                 tag_lower = part.lower()
-                if tag_lower.startswith('<span') or tag_lower.startswith('<a '):
-                    inside_tag = True
-                elif tag_lower.startswith('</span') or tag_lower.startswith('</a'):
-                    inside_tag = False
+                if tag_lower.startswith('<a ') or tag_lower == '<a>':
+                    inside_anchor = True
+                elif tag_lower.startswith('</a'):
+                    inside_anchor = False
                 result.append(part)
-            elif inside_tag:
+            elif inside_anchor:
                 result.append(part)
             else:
                 replaced = False
                 if f"**{nom}**" in part:
-                    part = part.replace(f"**{nom}**", span)
+                    part = part.replace(f"**{nom}**", lien)
                     replaced = True
                     found[nom] = question
                 if f"__{nom}__" in part:
-                    part = part.replace(f"__{nom}__", span)
+                    part = part.replace(f"__{nom}__", lien)
                     replaced = True
                     found[nom] = question
                 if not replaced and nom in part:
-                    part = part.replace(nom, span)
+                    part = part.replace(nom, lien)
                     found[nom] = question
                 result.append(part)
         text = ''.join(result)
