@@ -1416,6 +1416,26 @@ def main():
                 key="agent_question",
             )
 
+            # Intercepteur de clics sur les liens ?q=... (noms propres dans les réponses)
+            # → empêche l'ouverture d'un nouvel onglet, navigue dans l'onglet courant
+            components.html("""<script>
+(function(){
+  var d = window.parent.document;
+  if (d._casimir_click_setup) return;
+  d._casimir_click_setup = true;
+  d.addEventListener('click', function(e){
+    var t = e.target;
+    while(t && t.tagName !== 'A') t = t.parentElement;
+    if(!t) return;
+    var h = t.getAttribute('href');
+    if(!h || h.indexOf('?q=') !== 0) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.parent.location.href = h;
+  }, true);
+})();
+</script>""", height=0)
+
             auto_question = st.session_state.pop("agent_auto_search", None)
             do_search = (
                 st.button("Obtenir une réponse", type="primary", disabled=not question.strip(), key="agent_btn")

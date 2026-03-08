@@ -98,7 +98,10 @@
       "Bash(python -m pip install rank_bm25 -q)",
       "Bash(python -m pip install rank_bm25)",
       "Bash(python ingest.py --md-dir input/)",
-      "Bash(tasklist /FI \"IMAGENAME eq python.exe\")"
+      "Bash(tasklist /FI \"IMAGENAME eq python.exe\")",
+      "Bash(grep -ri \"contre\\\\|abstention\\\\|POUR\\\\|voix\" input/*.md)",
+      "Bash(grep -ril \"voix contre\\\\|voix pour\\\\|abstention\\\\|s''abstient\\\\|s''abstiennent\\\\|vote contre\" input/pv*.md)",
+      "Bash(ls input/*.md)"
     ]
   }
 }
