@@ -1555,7 +1555,6 @@ def main():
                     with _btn_cols[_i % _cols_per_row]:
                         if st.button(_nom, key=f"nom_{_nom}", use_container_width=True):
                             st.session_state["agent_auto_search"] = _question
-                            st.session_state["agent_question"] = ""
                             st.session_state.pop("_last_noms", None)
                             st.rerun()
 
