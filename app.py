@@ -878,7 +878,21 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    avec les montants et décisions. \
    INTERDICTION : Tu ne dois JAMAIS écrire « il n'y a aucune information sur les logiciels Horizon dans les passages fournis » \
    dès qu'au moins un passage contient le mot « Horizon » ou « logiciel » ; dans ce cas, tu DOIS répondre en t'appuyant sur ces passages.
-4e. Travaux de voirie et montants : donne une réponse complète avec des éléments financiers quand c'est possible. \
+4e. Questions sur une personne (élu, candidat, conseiller) : quand la question porte sur le rôle \
+   ou l'action d'une personne au conseil municipal, NE TE CONTENTE PAS de dire qu'elle était « présente » \
+   aux séances. Cherche dans les passages : \
+   (1) Son titre ou sa fonction : maire, adjoint(e), conseiller(e) délégué(e), président(e) de commission, etc. \
+   (2) Ses délégations : voirie, finances, scolaire, urbanisme, culture, etc. \
+   (3) Ses interventions ou prises de position concrètes : a-t-elle voté contre ? s'est-elle abstenue ? \
+       a-t-elle présenté une délibération ? été rapporteur ? proposé un amendement ? \
+   (4) Les commissions ou syndicats où elle siège (CCLoise, SE60, SMOA, SIVOC, etc.). \
+   (5) Les sujets/dossiers auxquels elle est associée dans les passages. \
+   Structure la réponse : d'abord le rôle/fonction, puis les actions/dossiers marquants par ordre chronologique. \
+   Si les passages ne contiennent que des listes de présence sans autre information sur cette personne, \
+   dis-le en UNE phrase et indique les années de présence constatées (ex. « présent(e) aux séances de 2016 à 2023 »). \
+   Ne liste JAMAIS tous les numéros de source pour une simple présence ; regroupe (ex. [1-28] ou « dans l'ensemble des PV fournis »). \
+   Cherche aussi si la personne a été élue secrétaire de séance ou désignée dans un vote nominatif.
+4f. Travaux de voirie et montants : donne une réponse complète avec des éléments financiers quand c'est possible. \
    (1) Résume ce que disent les passages : quels travaux (ex. rue de l'Armistice), où, contexte (circulation alternée, etc.) avec la source [N]. \
    (2) Cite tout montant, crédit, subvention ou budget trouvé dans les passages (€, HT, TTC) avec sa source [N]. \
    (3) Si le montant exact n'est pas dans les extraits, indique-le clairement et renvoie vers les procès-verbaux complets (mairie, Vie municipale > Conseil municipal). \
@@ -1876,7 +1890,8 @@ def main():
                             st.session_state["agent_question"] = ""
                             st.session_state["agent_auto_search"] = (
                                 f"Quels ont été les rôles respectifs de {_tous} "
-                                f"au conseil municipal de Pierrefonds ?"
+                                f"au conseil municipal de Pierrefonds ? "
+                                f"Pour chacun, précise : fonction, délégations, commissions, interventions notables, votes."
                             )
                             st.session_state["current_section"] = "agent"
                             st.rerun()
@@ -1889,7 +1904,8 @@ def main():
                             ):
                                 st.session_state["agent_question"] = ""
                                 st.session_state["agent_auto_search"] = (
-                                    f"Quel a été le rôle de {nom} au conseil municipal de Pierrefonds ?"
+                                    f"Quel a été le rôle de {nom} au conseil municipal de Pierrefonds ? "
+                                    f"Fonction, délégations, commissions, interventions, votes, dossiers portés."
                                 )
                                 st.session_state["current_section"] = "agent"
                                 st.rerun()
