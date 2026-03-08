@@ -53,7 +53,7 @@ SEARCHES_DB = DATA_DIR / "searches.db"  # SQLite : IP, timestamp, requête
 MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # URL de base pour les PDFs (fonctionne local ET sur Streamlit Cloud)
-PDF_BASE_URL = "app/static"
+PDF_BASE_URL = "/app/static"
 
 
 def _safe_pdf_url(rel_path: str) -> str:
@@ -1805,7 +1805,7 @@ def main():
                     if source_url:
                         st.markdown(f"`{label_date}` — 🔗 [{source_url}]({source_url})")
                     elif pdf_path.exists():
-                        pdf_url = _safe_pdf_url(f"{PDF_BASE_URL}/{p.stem}.pdf")
+                        pdf_url = _safe_pdf_url(f"{p.stem}.pdf")
                         st.markdown(f"`{label_date}` — 📄 [{p.stem}]({pdf_url})")
                     else:
                         st.markdown(f"`{label_date}` — 📝 {p.stem}")
