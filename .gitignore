@@ -1,7 +1,6 @@
 # ── Binaires lourds — non déployés sur Streamlit Cloud ─────────────────────
 source/images/
 source/pdf/
-static/
 fetcher_raw/
 
 # ── Environnement Python ──────────────────────────────────────────────────
