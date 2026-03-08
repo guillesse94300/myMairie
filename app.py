@@ -1165,6 +1165,7 @@ def main():
         st.session_state["agent_question"] = _q_link
         st.session_state["current_section"] = "agent"
         st.query_params.clear()
+        st.rerun()
 
     # IP publique côté client (même source que le bandeau : api.ipify.org via st_javascript)
     if "client_public_ip" not in st.session_state and _ST_JS_OK:
@@ -1416,6 +1417,36 @@ def main():
                 label_visibility="collapsed",
                 key="agent_question",
             )
+
+            # Intercepteur JS : empêche les liens ?q= d'ouvrir un nouvel onglet
+            # st_javascript a allow-same-origin (contrairement à components.html)
+            if _ST_JS_OK:
+                st_javascript("""(function(){
+  try {
+    var d = window.parent.document;
+    if (d._casimir_q_links) return '';
+    d._casimir_q_links = true;
+    function patch() {
+      d.querySelectorAll('a[href^="?q="]').forEach(function(a){
+        if (a._cq) return;
+        a._cq = true;
+        a.removeAttribute('target');
+        a.removeAttribute('rel');
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          window.parent.location.href =
+            window.parent.location.origin +
+            window.parent.location.pathname + a.getAttribute('href');
+        });
+      });
+    }
+    patch();
+    new MutationObserver(function(){ patch(); })
+      .observe(d.body, {childList:true, subtree:true});
+    return '';
+  } catch(e) { return ''; }
+})()""")
 
             auto_question = st.session_state.pop("agent_auto_search", None)
             do_search = (
