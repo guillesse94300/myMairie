@@ -1287,6 +1287,38 @@ def main():
         base_desc = f"**{len(documents)} passages**" + (f" (dont {len(_pv_filenames)} PV/délibération(s))" if base_has_pdfs else " (sites web uniquement, PVs non indexés)")
         st.caption(f"Base indexée : {base_desc} · 🔑 Mode admin")
 
+    # ── Listes électorales ────────────────────────────────────────────────────
+    listes_electorales = []  # [(nom_liste, [noms]), ...]
+    _liste_file = APP_DIR / "liste electorale.txt"
+    if _liste_file.exists():
+        try:
+            _raw = _liste_file.read_text(encoding="utf-8").splitlines()
+            _cur_name, _cur_noms = None, []
+            _need_name = False  # le nom de liste est sur la ligne suivante
+            for _line in _raw:
+                _line = _line.strip()
+                if _line.lower().startswith("liste "):
+                    if _cur_name and _cur_noms:
+                        listes_electorales.append((_cur_name, _cur_noms))
+                    # ex: "Liste 1 : AUTREMENT et ENSEMBLE" ou "Liste 2 : Poursuivons ..."
+                    _after = _line.split(":", 1)[1].strip() if ":" in _line else ""
+                    if _after:
+                        _cur_name = _after
+                        _need_name = False
+                    else:
+                        _cur_name = _line
+                        _need_name = True
+                    _cur_noms = []
+                elif _line and _need_name:
+                    _cur_name = _line
+                    _need_name = False
+                elif _line:
+                    _cur_noms.append(_line)
+            if _cur_name and _cur_noms:
+                listes_electorales.append((_cur_name, _cur_noms))
+        except Exception:
+            pass
+
     # ── Bandeau supérieur (une ligne, compact) ─────────────────────────────────
     commit_date, _ = get_git_info()
     total_today = get_searches_today_count()
@@ -1366,6 +1398,8 @@ def main():
             ("🔍", "Recherche dans la base de connaissance", "Recherche sémantique dans les comptes rendus et toute la base de connaissance. Filtres par année, mode exact, suggestions.", "search"),
             ("📄", "Sources et Documents", "Liste des sources utilisées par Casimir et la recherche sémantique.", "docs"),
         ]
+        if listes_electorales:
+            CARDS.append(("🗳️", "Élections municipales", "Découvrez les candidats des 2 listes et interrogez Casimir sur leur rôle passé au conseil municipal.", "elections"))
         col1, col2 = st.columns(2)
         for i, (icon, title, desc, section) in enumerate(CARDS):
             col = col1 if i % 2 == 0 else col2
@@ -1463,17 +1497,8 @@ def main():
                             refs = _bloc_references(processed, passages)
                             if refs:
                                 st.markdown(refs)
-                            # Boutons cliquables pour relancer une recherche sur un nom propre
-                            if noms_trouves:
-                                st.markdown("**🔗 En savoir plus :**")
-                                _cols_per_row = min(len(noms_trouves), 4)
-                                _btn_cols = st.columns(_cols_per_row)
-                                for _i, (_nom, _question) in enumerate(noms_trouves):
-                                    with _btn_cols[_i % _cols_per_row]:
-                                        if st.button(_nom, key=f"nom_{_nom}", use_container_width=True):
-                                            st.session_state["agent_question"] = ""
-                                            st.session_state["agent_auto_search"] = _question
-                                            st.rerun()
+                            # Stocker les noms pour les boutons (rendus APRÈS le bloc if/elif)
+                            st.session_state["_last_noms"] = noms_trouves
                         except ValueError as e:
                             placeholder.empty()
                             st.error(str(e))
@@ -1494,6 +1519,21 @@ def main():
                                 st.markdown(f"> {doc[:300]}{'…' if len(doc) > 300 else ''}")
             elif not question.strip():
                 st.info("Saisissez une question ou cliquez sur un exemple pour lancer la recherche.")
+
+            # Boutons « En savoir plus » — rendus HORS du bloc if do_search
+            # pour que Streamlit les voit lors du rerun déclenché par le clic
+            _last_noms = st.session_state.get("_last_noms")
+            if _last_noms:
+                st.markdown("**🔗 En savoir plus :**")
+                _cols_per_row = min(len(_last_noms), 4)
+                _btn_cols = st.columns(_cols_per_row)
+                for _i, (_nom, _question) in enumerate(_last_noms):
+                    with _btn_cols[_i % _cols_per_row]:
+                        if st.button(_nom, key=f"nom_{_nom}", use_container_width=True):
+                            st.session_state["agent_auto_search"] = _question
+                            st.session_state["agent_question"] = ""
+                            st.session_state.pop("_last_noms", None)
+                            st.rerun()
 
         # ════════════════════════════════════════════════════════════════════════
         # SECTION RECHERCHE
@@ -1807,6 +1847,52 @@ def main():
                         st.markdown(f"`{label_date}` — 📝 {p.stem}")
             else:
                 st.caption("Aucun document trouvé.")
+
+        # ════════════════════════════════════════════════════════════════════════
+        # SECTION ÉLECTIONS MUNICIPALES
+        # ════════════════════════════════════════════════════════════════════════
+        elif st.session_state["current_section"] == "elections":
+            st.title("🗳️ Élections municipales")
+            st.caption(
+                "Cliquez sur un nom pour interroger **Casimir** sur le rôle passé de cette personne "
+                "au conseil municipal de Pierrefonds (à partir des procès-verbaux indexés)."
+            )
+            if not listes_electorales:
+                st.warning("Fichier `liste electorale.txt` introuvable ou vide.")
+            else:
+                cols_listes = st.columns(len(listes_electorales))
+                for col_idx, (nom_liste, noms) in enumerate(listes_electorales):
+                    with cols_listes[col_idx]:
+                        st.markdown(f"### Liste {col_idx + 1}")
+                        st.markdown(f"**{nom_liste}**")
+                        # Bouton global pour toute la liste
+                        if st.button(
+                            f"Interroger Casimir sur les {len(noms)} candidats",
+                            key=f"elec_all_{col_idx}",
+                            use_container_width=True,
+                            type="primary",
+                        ):
+                            _tous = ", ".join(noms)
+                            st.session_state["agent_question"] = ""
+                            st.session_state["agent_auto_search"] = (
+                                f"Quels ont été les rôles respectifs de {_tous} "
+                                f"au conseil municipal de Pierrefonds ?"
+                            )
+                            st.session_state["current_section"] = "agent"
+                            st.rerun()
+                        st.divider()
+                        for n_idx, nom in enumerate(noms):
+                            if st.button(
+                                f"🔗 {nom}",
+                                key=f"elec_{col_idx}_{n_idx}",
+                                use_container_width=True,
+                            ):
+                                st.session_state["agent_question"] = ""
+                                st.session_state["agent_auto_search"] = (
+                                    f"Quel a été le rôle de {nom} au conseil municipal de Pierrefonds ?"
+                                )
+                                st.session_state["current_section"] = "agent"
+                                st.rerun()
 
 
 if __name__ == "__main__":
