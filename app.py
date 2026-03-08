@@ -53,7 +53,7 @@ SEARCHES_DB = DATA_DIR / "searches.db"  # SQLite : IP, timestamp, requête
 MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # URL de base pour les PDFs (fonctionne local ET sur Streamlit Cloud)
-PDF_BASE_URL = "/app/static"
+PDF_BASE_URL = "https://raw.githubusercontent.com/guillesse94300/myMairie/main/static"
 
 
 def _safe_pdf_url(rel_path: str) -> str:
