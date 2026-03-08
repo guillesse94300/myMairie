@@ -310,50 +310,48 @@ NOMS_PROPRES_LIENS: dict[str, str] = {
     "Romain Ribeiro":          "Qui est Romain Ribeiro ?",
 }
 
-_NOM_LINK_STYLE = "color:#1565c0;text-decoration:underline dotted;cursor:pointer"
+_NOM_SPAN_STYLE = "color:#1565c0;font-weight:600"
 
-def _lier_noms_propres(text: str) -> str:
-    """Remplace les noms propres connus par des liens HTML ?q=... vers Casimir.
-    Traite chaque nom séparément en re-splittant le texte à chaque itération
-    pour éviter les doubles remplacements dans les <a> déjà créés."""
+def _lier_noms_propres(text: str) -> tuple[str, list[tuple[str, str]]]:
+    """Remplace les noms propres connus par des <span> colorés dans le texte.
+
+    Retourne (texte_modifié, [(nom_affiché, question), ...]) pour permettre
+    l'affichage de boutons Streamlit cliquables après la réponse.
+    """
+    found: dict[str, str] = {}          # nom → question (dédupliqué)
     noms_tries = sorted(NOMS_PROPRES_LIENS.items(), key=lambda x: -len(x[0]))
     for nom, question in noms_tries:
-        q_enc = urllib.parse.quote(question)
-        # Pas de target="_parent" ni onclick → Streamlit les supprime et affiche le HTML brut
-        lien = (f'<a href="?q={q_enc}"'
-                f' title="Poser cette question à Casimir"'
-                f' style="{_NOM_LINK_STYLE}">{nom}</a>')
-        # Re-splitter à chaque nom pour protéger les <a> déjà créés lors des itérations précédentes
+        span = f'<span style="{_NOM_SPAN_STYLE}">{nom}</span>'
+        # Re-splitter à chaque nom pour protéger les <span> déjà créés
         parts = re.split(r'(<[^>]+>)', text)
         result = []
-        inside_anchor = False
+        inside_tag = False
         for part in parts:
             if part.startswith('<'):
                 tag_lower = part.lower()
-                if tag_lower.startswith('<a ') or tag_lower == '<a>':
-                    inside_anchor = True
-                elif tag_lower.startswith('</a'):
-                    inside_anchor = False
+                if tag_lower.startswith('<span') or tag_lower.startswith('<a '):
+                    inside_tag = True
+                elif tag_lower.startswith('</span') or tag_lower.startswith('</a'):
+                    inside_tag = False
                 result.append(part)
-            elif inside_anchor:
-                # Ne pas toucher au texte à l'intérieur d'un <a> existant
+            elif inside_tag:
                 result.append(part)
             else:
-                # Remplacer **nom** et __nom__ en priorité (supprime les marqueurs Markdown)
                 replaced = False
                 if f"**{nom}**" in part:
-                    part = part.replace(f"**{nom}**", lien)
+                    part = part.replace(f"**{nom}**", span)
                     replaced = True
+                    found[nom] = question
                 if f"__{nom}__" in part:
-                    part = part.replace(f"__{nom}__", lien)
+                    part = part.replace(f"__{nom}__", span)
                     replaced = True
-                # Remplacer le nom nu SEULEMENT si pas déjà traité via ** ou __
-                # (évite le double-remplacement : nom dans le lien <a> déjà créé)
+                    found[nom] = question
                 if not replaced and nom in part:
-                    part = part.replace(nom, lien)
+                    part = part.replace(nom, span)
+                    found[nom] = question
                 result.append(part)
         text = ''.join(result)
-    return text
+    return text, list(found.items())
 
 
 # ── Mode admin ─────────────────────────────────────────────────────────────────
@@ -1418,36 +1416,6 @@ def main():
                 key="agent_question",
             )
 
-            # Intercepteur JS : empêche les liens ?q= d'ouvrir un nouvel onglet
-            # st_javascript a allow-same-origin (contrairement à components.html)
-            if _ST_JS_OK:
-                st_javascript("""(function(){
-  try {
-    var d = window.parent.document;
-    if (d._casimir_q_links) return '';
-    d._casimir_q_links = true;
-    function patch() {
-      d.querySelectorAll('a[href^="?q="]').forEach(function(a){
-        if (a._cq) return;
-        a._cq = true;
-        a.removeAttribute('target');
-        a.removeAttribute('rel');
-        a.addEventListener('click', function(e){
-          e.preventDefault();
-          e.stopPropagation();
-          window.parent.location.href =
-            window.parent.location.origin +
-            window.parent.location.pathname + a.getAttribute('href');
-        });
-      });
-    }
-    patch();
-    new MutationObserver(function(){ patch(); })
-      .observe(d.body, {childList:true, subtree:true});
-    return '';
-  } catch(e) { return ''; }
-})()""")
-
             auto_question = st.session_state.pop("agent_auto_search", None)
             do_search = (
                 st.button("Obtenir une réponse", type="primary", disabled=not question.strip(), key="agent_btn")
@@ -1485,11 +1453,22 @@ def main():
                                 full_text += chunk
                                 placeholder.markdown(full_text + " ▌")
                             processed = _liens_sources(full_text, passages)
-                            processed = _lier_noms_propres(processed)
+                            processed, noms_trouves = _lier_noms_propres(processed)
                             placeholder.markdown(processed, unsafe_allow_html=True)
                             refs = _bloc_references(processed, passages)
                             if refs:
                                 st.markdown(refs)
+                            # Boutons cliquables pour relancer une recherche sur un nom propre
+                            if noms_trouves:
+                                st.markdown("**🔗 En savoir plus :**")
+                                _cols_per_row = min(len(noms_trouves), 4)
+                                _btn_cols = st.columns(_cols_per_row)
+                                for _i, (_nom, _question) in enumerate(noms_trouves):
+                                    with _btn_cols[_i % _cols_per_row]:
+                                        if st.button(_nom, key=f"nom_{_nom}", use_container_width=True):
+                                            st.session_state["agent_question"] = ""
+                                            st.session_state["agent_auto_search"] = _question
+                                            st.rerun()
                         except ValueError as e:
                             placeholder.empty()
                             st.error(str(e))

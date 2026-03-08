@@ -102,7 +102,8 @@
       "Bash(grep -ri \"contre\\\\|abstention\\\\|POUR\\\\|voix\" input/*.md)",
       "Bash(grep -ril \"voix contre\\\\|voix pour\\\\|abstention\\\\|s''abstient\\\\|s''abstiennent\\\\|vote contre\" input/pv*.md)",
       "Bash(ls input/*.md)",
-      "Bash(python -c \"import pickle; m=pickle.load\\(open\\(''vector_db/metadata.pkl'',''rb''\\)\\); print\\(m[0]\\)\")"
+      "Bash(python -c \"import pickle; m=pickle.load\\(open\\(''vector_db/metadata.pkl'',''rb''\\)\\); print\\(m[0]\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''app.py'', encoding=''utf-8''\\).read\\(\\)\\); print\\(''OK: syntaxe valide''\\)\")"
     ]
   }
 }
