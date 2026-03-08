@@ -1438,14 +1438,34 @@ def main():
                 "Peux-tu résumer la restauration du château ?",
                 "Comment ont travaillé les tailleurs de pierre ?",
                 "Que sais-tu sur les logiciels Horizon ?",
-                "Que sais-tu de Vertefeuille ?",
             ]
+            # Ajouter le bilan comparatif si les listes électorales sont disponibles
+            _bilan_query = None
+            if listes_electorales and len(listes_electorales) >= 2:
+                _parts_ex = []
+                for _nom_l, _noms_l in listes_electorales:
+                    _parts_ex.append(f"Liste « {_nom_l} » : {', '.join(_noms_l)}")
+                _all_lists_ex = " ; ".join(_parts_ex)
+                _bilan_query = (
+                    f"Fais un bilan comparatif des 2 listes électorales de Pierrefonds. "
+                    f"{_all_lists_ex}. "
+                    f"Pour chaque liste, résume quels candidats ont déjà siégé au conseil municipal, "
+                    f"avec leur fonction passée (maire, adjoint, délégué, conseiller, commission). "
+                    f"Identifie les candidats qui n'apparaissent dans aucun procès-verbal. "
+                    f"Conclus par une synthèse comparative : expérience municipale de chaque liste."
+                )
             ex_c1, ex_c2 = st.columns(2)
             for i, ex in enumerate(AGENT_EXAMPLES):
                 with (ex_c1 if i % 2 == 0 else ex_c2):
                     if st.button(f"🔗 {ex}", key=f"agent_ex_{i}", use_container_width=True):
                         st.session_state["agent_question"] = ""
                         st.session_state["agent_auto_search"] = ex
+                        st.rerun()
+            if _bilan_query:
+                with (ex_c1 if len(AGENT_EXAMPLES) % 2 == 0 else ex_c2):
+                    if st.button("🔗 Bilan comparatif des 2 listes électorales", key="agent_ex_bilan", use_container_width=True):
+                        st.session_state["agent_question"] = ""
+                        st.session_state["agent_auto_search"] = _bilan_query
                         st.rerun()
 
             agent_years = []
@@ -1864,6 +1884,31 @@ def main():
             if not listes_electorales:
                 st.warning("Fichier `liste electorale.txt` introuvable ou vide.")
             else:
+                # Bouton bilan global des 2 listes
+                if len(listes_electorales) >= 2:
+                    if st.button(
+                        "📋 Bilan comparatif des 2 listes — Interroger Casimir",
+                        key="elec_bilan_global",
+                        use_container_width=True,
+                        type="primary",
+                    ):
+                        _parts = []
+                        for _nom_l, _noms_l in listes_electorales:
+                            _parts.append(f"Liste « {_nom_l} » : {', '.join(_noms_l)}")
+                        _all_lists = " ; ".join(_parts)
+                        st.session_state["agent_question"] = ""
+                        st.session_state["agent_auto_search"] = (
+                            f"Fais un bilan comparatif des 2 listes électorales de Pierrefonds. "
+                            f"{_all_lists}. "
+                            f"Pour chaque liste, résume quels candidats ont déjà siégé au conseil municipal, "
+                            f"avec leur fonction passée (maire, adjoint, délégué, conseiller, commission). "
+                            f"Identifie les candidats qui n'apparaissent dans aucun procès-verbal. "
+                            f"Conclus par une synthèse comparative : expérience municipale de chaque liste."
+                        )
+                        st.session_state["current_section"] = "agent"
+                        st.rerun()
+                    st.divider()
+
                 cols_listes = st.columns(len(listes_electorales))
                 for col_idx, (nom_liste, noms) in enumerate(listes_electorales):
                     with cols_listes[col_idx]:
