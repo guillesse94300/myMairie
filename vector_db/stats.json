@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-07T16:54:43.954892",
+  "generated_at": "2026-03-08T09:51:46.514768",
   "nb_pdfs": 37,
   "nb_seances": 37,
   "seances": [
@@ -140,12 +140,17 @@
           "num": 1,
           "titre": "Projet de vidéoprotection :",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
-            "contre": 0,
+            "contre": 4,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLIER",
+              "DEBUISSER",
+              "TANGUY"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -328,12 +333,18 @@
           "num": 1,
           "titre": "Budget – Commune :",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "type": "vote",
+            "pour": 15,
+            "contre": 1,
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLIER",
+              "LEBLANC",
+              "DEBUISSIER"
+            ],
+            "noms_contre": [
+              "TANGUY"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -598,10 +609,15 @@
           "vote": {
             "type": "vote",
             "pour": 16,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 1,
+            "abstentions": 2,
+            "noms_abstentions": [
+              "RIBEIRO",
+              "TOLEDANO"
+            ],
+            "noms_contre": [
+              "TANGUY"
+            ]
           },
           "theme": "Convention / Contrat"
         },
@@ -958,11 +974,16 @@
           "num": 2,
           "titre": "Marché de concession de service d’un petit train touristique : autorisation à donner à Madame le",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
+            "contre": 0,
+            "abstentions": 4,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLIER",
+              "DEBUISSSER",
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -1010,11 +1031,13 @@
           "num": 6,
           "titre": "Fixation de la participation financière de la commune de Retheuil pour les enfants accueillis au",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
+            "contre": 0,
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "École / Scolaire"
@@ -1023,12 +1046,17 @@
           "num": 7,
           "titre": "Subvention à l’association L’Enceinte",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
+            "contre": 4,
+            "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLIER",
+              "DEBUISSSER",
+              "TANGUY"
+            ]
           },
           "theme": "Budget / Finances"
         }
@@ -1164,8 +1192,12 @@
             "type": "vote",
             "pour": 14,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -1176,10 +1208,15 @@
           "vote": {
             "type": "vote",
             "pour": 14,
-            "contre": 0,
+            "contre": 4,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER",
+              "TANGUY"
+            ]
           },
           "theme": "Autre"
         },
@@ -1187,11 +1224,16 @@
           "num": 4,
           "titre": "Commissions communales : désignation des conseillers municipaux appelés à remplacer le",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
+            "type": "vote",
+            "pour": 14,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER",
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -1335,8 +1377,12 @@
             "type": "vote",
             "pour": 14,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -1348,8 +1394,12 @@
             "type": "vote",
             "pour": 14,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Tarifs / Redevances"
@@ -1387,8 +1437,12 @@
             "type": "vote",
             "pour": 14,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -1601,10 +1655,15 @@
           "vote": {
             "type": "vote",
             "pour": 15,
-            "contre": 0,
+            "contre": 4,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER",
+              "TANGUY"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -1680,8 +1739,11 @@
             "type": "vote",
             "pour": 17,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "LEBLANC",
+              "DEBUISSIER"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -1745,8 +1807,10 @@
             "type": "vote",
             "pour": 18,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "École / Scolaire"
@@ -1973,10 +2037,10 @@
           "num": 7,
           "titre": "Budget 2021 : Décision modificative n°2",
           "vote": {
-            "type": "vote",
-            "pour": 15,
-            "contre": 0,
-            "abstentions": 0,
+            "type": "inconnu",
+            "pour": null,
+            "contre": null,
+            "abstentions": null,
             "noms_abstentions": [],
             "noms_contre": []
           },
@@ -2166,12 +2230,20 @@
           "num": 1,
           "titre": "Budget – Commune",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "type": "vote",
+            "pour": 15,
+            "contre": 3,
+            "abstentions": 3,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "THUILLIER",
+              "LEBLANC"
+            ],
+            "noms_contre": [
+              "DEBUISSER",
+              "THUILLIER",
+              "LEBLANC"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -2290,8 +2362,10 @@
             "type": "vote",
             "pour": 17,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -2316,8 +2390,11 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLIER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -2934,8 +3011,12 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLIER",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -3071,10 +3152,17 @@
           "vote": {
             "type": "vote",
             "pour": 12,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 2,
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "DEBUISSER",
+              "THUILLIER"
+            ],
+            "noms_contre": [
+              "DECKER",
+              "DUTILLOY"
+            ]
           },
           "theme": "Emploi / RH"
         },
@@ -3084,10 +3172,14 @@
           "vote": {
             "type": "vote",
             "pour": 15,
-            "contre": 0,
+            "contre": 3,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "DEBUISSER",
+              "THUILLIER"
+            ]
           },
           "theme": "Emploi / RH"
         },
@@ -3111,8 +3203,10 @@
             "type": "vote",
             "pour": 17,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -3248,8 +3342,12 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLER",
+              "LEBLANC",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -3261,8 +3359,12 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLER",
+              "LEBLANC",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -3300,8 +3402,12 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLER",
+              "LEBLANC",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -3395,12 +3501,18 @@
           "num": 1,
           "titre": "Budget – Commune :",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "type": "vote",
+            "pour": 14,
+            "contre": 2,
+            "abstentions": 1,
+            "noms_abstentions": [
+              "LEBLANC",
+              "EN"
+            ],
+            "noms_contre": [
+              "DEBUISSER",
+              "LEBLANC"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -3411,8 +3523,11 @@
             "type": "vote",
             "pour": 15,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "LEBLANC"
+            ],
             "noms_contre": []
           },
           "theme": "Autre"
@@ -3638,8 +3753,12 @@
             "type": "vote",
             "pour": 15,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLIER",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -3908,10 +4027,17 @@
           "vote": {
             "type": "vote",
             "pour": 14,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 2,
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLIER",
+              "DEBUISSER",
+              "TANGUY"
+            ],
+            "noms_contre": [
+              "PAPIN",
+              "LEBLANC"
+            ]
           },
           "theme": "Tarifs / Redevances"
         },
@@ -3922,7 +4048,7 @@
             "type": "vote",
             "pour": 18,
             "contre": 0,
-            "abstentions": 0,
+            "abstentions": 1,
             "noms_abstentions": [],
             "noms_contre": []
           },
@@ -4109,10 +4235,17 @@
           "vote": {
             "type": "vote",
             "pour": 14,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 1,
+            "abstentions": 4,
+            "noms_abstentions": [
+              "DEBUISSIER",
+              "THUILLIER",
+              "PAPIN",
+              "LEBLANC"
+            ],
+            "noms_contre": [
+              "TANGUY"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -4123,8 +4256,13 @@
             "type": "vote",
             "pour": 15,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "DEBUISSIER",
+              "PAPIN",
+              "THUILLIER",
+              "LEBLANC"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -4136,7 +4274,7 @@
             "type": "vote",
             "pour": 18,
             "contre": 0,
-            "abstentions": 0,
+            "abstentions": 1,
             "noms_abstentions": [],
             "noms_contre": []
           },
@@ -4440,8 +4578,11 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "THUILLIER",
+              "LEBLANC"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -4453,8 +4594,11 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "THUILLIER",
+              "LEBLANC"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -4466,8 +4610,10 @@
             "type": "vote",
             "pour": 17,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -4518,8 +4664,12 @@
             "type": "vote",
             "pour": 15,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLIER",
+              "LEBLANC",
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Tarifs / Redevances"
@@ -4640,10 +4790,16 @@
           "vote": {
             "type": "vote",
             "pour": 14,
-            "contre": 0,
+            "contre": 5,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "PAPIN",
+              "DEBUISSER",
+              "LEBLANC",
+              "THUILLIER",
+              "TANGUY"
+            ]
           },
           "theme": "Travaux / Voirie"
         },
@@ -4805,8 +4961,11 @@
             "type": "vote",
             "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "LEBLANC",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -4815,11 +4974,14 @@
           "num": 4,
           "titre": "Commissions communales : désignation des conseillers municipaux appelés à remplacer le",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
+            "type": "vote",
+            "pour": 16,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "PAPIN",
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -4828,11 +4990,13 @@
           "num": 5,
           "titre": "Election des délégués de la commune au sein du conseil d’école",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
+            "type": "vote",
+            "pour": 17,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "PAPIN"
+            ],
             "noms_contre": []
           },
           "theme": "École / Scolaire"
@@ -4841,11 +5005,13 @@
           "num": 6,
           "titre": "Remplacement du délégué titulaire de la commune au sein du Syndicat Mixte Intercommunal",
           "vote": {
-            "type": "unanimité",
-            "pour": null,
+            "type": "vote",
+            "pour": 17,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "PAPIN"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -5005,12 +5171,15 @@
           "num": 1,
           "titre": "D2024-15 - Compte Financier Unique 2023",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
-            "contre": 0,
+            "contre": 2,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLIER"
+            ]
           },
           "theme": "Urbanisme / Permis"
         },
@@ -5031,11 +5200,14 @@
           "num": 3,
           "titre": "D2024-17 - Subventions 2024 aux associations",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 2,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLIER"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -5044,12 +5216,15 @@
           "num": 4,
           "titre": "Vote des taux d’imposition 2024",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
+            "contre": 2,
+            "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLIER"
+            ]
           },
           "theme": "Tarifs / Redevances"
         },
@@ -5057,12 +5232,15 @@
           "num": 5,
           "titre": "D2024_19 - Budget Primitif 2024",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
-            "contre": 0,
+            "contre": 2,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLIER"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -5142,12 +5320,24 @@
           "num_str": "D2024-22",
           "titre": "Bilan de la concertation du public et définition des ZAEnr sur le territoire",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 5,
+            "abstentions": 5,
+            "noms_abstentions": [
+              "PAPIN",
+              "LEBLANC",
+              "DEBUISSER",
+              "THUILLER",
+              "TANGUY"
+            ],
+            "noms_contre": [
+              "PAPIN",
+              "LEBLANC",
+              "DEBUISSER",
+              "THUILLER",
+              "TANGUY"
+            ]
           },
           "theme": "Énergie / Éclairage"
         }
@@ -5203,11 +5393,16 @@
           "num_str": "D2024-45",
           "titre": "admission en non-valeur",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "PAPIN",
+              "DEBUISSER",
+              "LEBLANC",
+              "THUILLIER"
+            ],
             "noms_contre": []
           },
           "theme": "Autre"
@@ -5251,12 +5446,14 @@
           "num_str": "D2024-48",
           "titre": "Gratuité inscription bibliothèque municipale pour les moins de 18 ans",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
-            "contre": 0,
+            "contre": 1,
             "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "DEFOSSEZ"
+            ]
           },
           "theme": "Enfance / Jeunesse"
         },
@@ -5265,11 +5462,15 @@
           "num_str": "D2024-49",
           "titre": "Instauration d’une amende administrative pour les dépôts sauvages de déchets",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 3,
+            "noms_abstentions": [
+              "THUILLIER",
+              "LEBLANC",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -5477,11 +5678,13 @@
           "num_str": "D2025-002",
           "titre": "Création et recrutement de contrats d’engagement éducatif (CEE) pour les accueils de",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Enfance / Jeunesse"
@@ -5536,11 +5739,16 @@
           "num_str": "D2025-004",
           "titre": "Marché entretien espaces verts 2025",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLIER",
+              "DEBUISSER",
+              "PAPIN"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -5550,11 +5758,16 @@
           "num_str": "D2025-005",
           "titre": "Subvention LEADER aménagement Place de l’Hôtel de Ville",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "LEBLANC",
+              "THUILLER",
+              "DEBUISSER",
+              "PAPIN"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -5564,11 +5777,13 @@
           "num_str": "D2025-006",
           "titre": "Recrutement vacataire agent administratif",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
+            "contre": 0,
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Emploi / RH"
@@ -5578,11 +5793,13 @@
           "num_str": "D2025-007",
           "titre": "SMOA extension du périmètre GEMA",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Autre"
@@ -5638,11 +5855,13 @@
           "num_str": "D2025-009",
           "titre": "Adhésion à la Fondation du Patrimoine",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
+            "contre": 0,
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Tarifs / Redevances"
@@ -5652,11 +5871,16 @@
           "num_str": "D2025-010",
           "titre": "Compte Financier Unique 2024",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "LEBLANC",
+              "PAPIN",
+              "THUILLIER"
+            ],
             "noms_contre": []
           },
           "theme": "Urbanisme / Permis"
@@ -5680,11 +5904,16 @@
           "num_str": "D2025-012",
           "titre": "Subventions 2025 aux associations",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "DUTILLOY",
+              "LANNIER",
+              "LEBLANC"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -5694,12 +5923,18 @@
           "num_str": "D2025-013",
           "titre": "Vote des taux d’imposition de fiscalité directe locale pour 2025",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 1,
+            "abstentions": 3,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "PAPIN",
+              "THUILLIER"
+            ],
+            "noms_contre": [
+              "LEBLANC"
+            ]
           },
           "theme": "Tarifs / Redevances"
         },
@@ -5708,12 +5943,17 @@
           "num_str": "D2025-014",
           "titre": "Vote du Budget Primitif 2025",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
-            "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
-            "noms_contre": []
+            "contre": 2,
+            "abstentions": 1,
+            "noms_abstentions": [
+              "DEBUISSER"
+            ],
+            "noms_contre": [
+              "LEBLANC",
+              "THUILLIER"
+            ]
           },
           "theme": "Budget / Finances"
         },
@@ -5781,11 +6021,14 @@
           "num_str": "D2025-017",
           "titre": "Adhésion à l’association Cats in The Air 2016",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
-            "noms_abstentions": [],
+            "contre": 0,
+            "abstentions": 2,
+            "noms_abstentions": [
+              "PAPIN",
+              "DEBUISSER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -6000,12 +6243,18 @@
           "num_str": "D2025-030",
           "titre": "Admission en non-valeur",
           "vote": {
-            "type": "inconnu",
+            "type": "vote",
             "pour": null,
-            "contre": null,
-            "abstentions": null,
+            "contre": 5,
+            "abstentions": 0,
             "noms_abstentions": [],
-            "noms_contre": []
+            "noms_contre": [
+              "DEBUISSER",
+              "LEBLANC",
+              "PAPIN",
+              "TANGUY",
+              "THUILLIER"
+            ]
           },
           "theme": "Autre"
         },
@@ -6104,11 +6353,13 @@
           "num_str": "D2025-035",
           "titre": "Adhésion au Conseil d’Architecture d’Urbanisme et de l’Environnement de",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "PAPIN"
+            ],
             "noms_contre": []
           },
           "theme": "Urbanisme / Permis"
@@ -6132,11 +6383,13 @@
           "num_str": "D2025-037",
           "titre": "Décision Budgétaire Modificative 2025-01",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 1,
+            "noms_abstentions": [
+              "TANGUY"
+            ],
             "noms_contre": []
           },
           "theme": "Budget / Finances"
@@ -6146,11 +6399,16 @@
           "num_str": "D2025-038",
           "titre": "Subvention Association Saint Louis Poissy",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 4,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "LEBLANC",
+              "PAPIN",
+              "THUILLIER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"
@@ -6230,11 +6488,17 @@
           "num_str": "D2025-044",
           "titre": "Rapport annuel de la SPL ADTO SAO 2024",
           "vote": {
-            "type": "unanimité",
+            "type": "vote",
             "pour": null,
             "contre": 0,
-            "abstentions": 0,
-            "noms_abstentions": [],
+            "abstentions": 5,
+            "noms_abstentions": [
+              "DEBUISSER",
+              "LEBLANC",
+              "PAPIN",
+              "TANGUY",
+              "THUILLIER"
+            ],
             "noms_contre": []
           },
           "theme": "Convention / Contrat"

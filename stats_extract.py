@@ -145,36 +145,100 @@ def parse_membres(text):
     return presences, absences, pouvoirs
 
 
+# ── Extraction des noms propres depuis un texte de vote ───────────────────────
+def _extract_noms(text):
+    """Extrait les noms en MAJUSCULES (ancien format) ou après M./Mme (nouveau)."""
+    exclus = {'PIERREFONDS', 'CONSEIL', 'MUNICIPAL', 'VOTE', 'POUR', 'CONTRE',
+              'ABSTENTION', 'ABSTENTIONS', 'MME', 'MADAME', 'MONSIEUR'}
+    noms = []
+    for n in re.findall(r'\b([A-ZÉÈÊÀÂÙÛÎÔÄ][A-ZÉÈÊÀÂÙÛÎÔÄ\-]{2,})\b', text):
+        if n not in exclus:
+            noms.append(n)
+    for n in re.findall(
+        r'(?:Mme\.?\s+|M\.\s+|Madame\s+|Monsieur\s+)([A-ZÉÈÊÀÂÙÛÎÔÄ][a-zéèêàâùûîôä\-]+)',
+        text
+    ):
+        upper = n.upper()
+        if upper not in exclus and upper not in noms:
+            noms.append(upper)
+    return list(dict.fromkeys(noms))
+
+
 # ── Extraction du vote ─────────────────────────────────────────────────────────
 def parse_vote(block):
     low = block.lower()
 
-    # Unanimité (ancien et nouveau format)
+    # ── 1. Abstentions ────────────────────────────────────────────────────────
+    nb_abst, noms_abst = 0, []
+
+    # "N abstentions? (noms)"  ex: "4 Abstentions (M. LEBLANC...)"
+    m = re.search(r'(\d+)\s+abstentions?\s*\(([^)]+)\)', block, re.IGNORECASE)
+    if m:
+        nb_abst = int(m.group(1)); noms_abst = _extract_noms(m.group(2))
+
+    # "abstentions? : N (noms)"  ex: "Abstentions : 3 (Mme DEBUISSER...)"
+    if not nb_abst:
+        m = re.search(r'abstentions?\s*:\s*(\d+)\s*\(([^)]+)\)', block, re.IGNORECASE)
+        if m:
+            nb_abst = int(m.group(1)); noms_abst = _extract_noms(m.group(2))
+
+    # "abstentions? N : noms"  ex: "Abstentions 4: M. Papin..."
+    if not nb_abst:
+        m = re.search(r'abstentions?\s+(\d+)\s*:\s*([^\n(]+)', block, re.IGNORECASE)
+        if m:
+            nb_abst = int(m.group(1)); noms_abst = _extract_noms(m.group(2))
+
+    # "N abstentions? : noms"  ex: "4 abstentions : Mme Debuisser..."
+    if not nb_abst:
+        m = re.search(r'(\d+)\s+abstentions?\s*:\s*([^\n(]+)', block, re.IGNORECASE)
+        if m:
+            nb_abst = int(m.group(1)); noms_abst = _extract_noms(m.group(2))
+
+    # "abstentions? : noms"  ex: "Abstentions: M. Leblanc, M. Thuillier..."
+    if not nb_abst:
+        m = re.search(r'abstentions?\s*:\s*([^\n(]+)', block, re.IGNORECASE)
+        if m:
+            noms_abst = _extract_noms(m.group(1))
+            nb_abst = len(noms_abst) if noms_abst else 1
+
+    # ── 2. Contre ─────────────────────────────────────────────────────────────
+    nb_contre, noms_contre = 0, []
+
+    # "N contre (noms)"  ex: "2 CONTRE (M. Leblanc...)"
+    m = re.search(r'(\d+)\s+contre\s*\(([^)]+)\)', block, re.IGNORECASE)
+    if m:
+        nb_contre = int(m.group(1)); noms_contre = _extract_noms(m.group(2))
+
+    # "contre : N (noms)"  ex: "CONTRE : 5 (M. Papin...)"
+    if not nb_contre:
+        m = re.search(r'contre\s*:\s*(\d+)\s*\(([^)]+)\)', block, re.IGNORECASE)
+        if m:
+            nb_contre = int(m.group(1)); noms_contre = _extract_noms(m.group(2))
+
+    # "N contre : noms"  ex: "5 contre : Mme Debuisser..."
+    if not nb_contre:
+        m = re.search(r'(\d+)\s+contre\s*:\s*([^\n(]+)', block, re.IGNORECASE)
+        if m:
+            nb_contre = int(m.group(1)); noms_contre = _extract_noms(m.group(2))
+
+    # ── 3. Pour ───────────────────────────────────────────────────────────────
+    pour = None
+    m = re.search(r'Pour\s*:\s*(\d+)', block)
+    if not m:
+        m = re.search(r'(\d+)\s+voix\s+pour', block, re.IGNORECASE)
+    if m:
+        pour = int(m.group(1))
+
+    # ── 4. Type ───────────────────────────────────────────────────────────────
+    if nb_abst or nb_contre or noms_abst or noms_contre:
+        return {"type": "vote", "pour": pour,
+                "contre": nb_contre, "abstentions": nb_abst,
+                "noms_abstentions": noms_abst, "noms_contre": noms_contre}
+
     if re.search(r'unanimit|unanimement|d[eé]lib[eé]r[eé].*unanim|unanim.*d[eé]lib[eé]r[eé]', low):
         return {"type": "unanimité", "pour": None, "contre": 0, "abstentions": 0,
                 "noms_abstentions": [], "noms_contre": []}
 
-    # Décompte explicite
-    m = re.search(
-        r'[Pp]our\s*:\s*(\d+)'
-        r'(?:.*?[Cc]ontre\s*:\s*(\d+)(?:\s*\(([^)]*)\))?)?'
-        r'(?:.*?[Aa]bstentions?\s*:\s*(\d+)(?:\s*\(([^)]*)\))?)?',
-        block, re.DOTALL
-    )
-    if m:
-        pour  = int(m.group(1))
-        contre = int(m.group(2)) if m.group(2) else 0
-        abst   = int(m.group(4)) if m.group(4) else 0
-        noms_contre = re.findall(
-            r'\b([A-ZÉÈÊÀÂÙÛÎÔÄ][A-ZÉÈÊÀÂÙÛÎÔÄ\-]{2,})\b', m.group(3) or ''
-        )
-        noms_abst = re.findall(
-            r'\b([A-ZÉÈÊÀÂÙÛÎÔÄ][A-ZÉÈÊÀÂÙÛÎÔÄ\-]{2,})\b', m.group(5) or ''
-        )
-        return {"type": "vote", "pour": pour, "contre": contre, "abstentions": abst,
-                "noms_abstentions": noms_abst, "noms_contre": noms_contre}
-
-    # Adopté sans décompte -> présumé unanimité
     if re.search(r'adopt[eé]|approuv', low):
         return {"type": "unanimité", "pour": None, "contre": 0, "abstentions": 0,
                 "noms_abstentions": [], "noms_contre": []}
