@@ -12,14 +12,13 @@ Ce site vous permet de :
 - **Rechercher** dans la base de connaissance (procès-verbaux, documents, pages web) avec une recherche par sens, pas seulement par mots exacts.
 - **Consulter des statistiques** sur les séances du Conseil municipal (délibérations, votes, durée, présence des conseillers).
 - **Accéder à la liste des sources** (PDF, documents) utilisées par Casimir et la recherche.
+- **Élections municipales** (si disponible) : découvrir les candidats des listes et interroger Casimir sur leur rôle passé au conseil municipal.
 
 **Casimir** est un agent basé sur l’intelligence artificielle. Il a été alimenté avec les documents publics de la Mairie de Pierrefonds et des sites associés. Comme toute IA, il peut se tromper : les réponses s’appuient sur des **sources** que vous pouvez ouvrir pour vérifier.
 
 ---
 
 ## 2. Comprendre les outils (en quelques mots)
-
-Pour mieux utiliser le site, voici des explications simples sur les notions clés.
 
 ### Qu’est-ce que la recherche sémantique ?
 
@@ -62,24 +61,27 @@ En résumé : un modèle sert à **trouver** les bons textes (recherche sémanti
 - **Site principal (Casimir)** : [https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/](https://mymairie-ksbry6thyvm8uddujy289c.streamlit.app/)
 - **Contact** : [casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com)
 
-Le bandeau en haut de page affiche la date de déploiement, votre adresse IP (pour information) et le nombre de recherches effectuées aujourd’hui ainsi que le nombre de recherches restantes pour vous (voir section 9).
+Le **bandeau** en haut de page affiche :
+- **Accueil** : retour à la page d’accueil.
+- **À propos** : présentation de Casimir.
+- **Guide utilisateur** : ouverture de ce guide dans une fenêtre.
+- La date de déploiement, l’adresse e-mail, votre adresse IP (pour information), le nombre de recherches effectuées **aujourd’hui** et le nombre de **recherches restantes** pour vous (voir section 10).
 
 ---
 
 ## 4. Page d’accueil
 
-Sur la page d’accueil, quatre cartes vous permettent d’accéder aux différentes fonctionnalités :
+Sur la page d’accueil, des **cartes** vous permettent d’accéder aux différentes fonctionnalités :
 
 | Carte | Description |
 |-------|-------------|
 | **Interroger l’Agent Casimir** | Posez une question en langage naturel ; Casimir synthétise une réponse à partir des documents. |
+| **Élections municipales** *(si disponible)* | Découvrez les candidats des 2 listes et interrogez Casimir sur leur rôle passé au conseil municipal. |
 | **Recherche dans la base de connaissance** | Recherche sémantique dans les comptes rendus et toute la base, avec filtres et suggestions. |
 | **Statistiques des séances du Conseil Municipal** | Graphiques : délibérations par année, types de vote, durée des séances, présence des conseillers. |
 | **Sources et Documents** | Liste des sources (PDF, etc.) utilisées par Casimir et la recherche. |
 
 Cliquez sur **« Accéder → »** sur la carte souhaitée.
-
-En haut de page : **Accueil** (retour à cette page), **À propos** (présentation de Casimir), et l’adresse e-mail de contact.
 
 ---
 
@@ -87,7 +89,7 @@ En haut de page : **Accueil** (retour à cette page), **À propos** (présentati
 
 1. Depuis l’accueil, cliquez sur **« Interroger l’Agent Casimir »**.
 2. Saisissez votre question dans la zone de texte (ex. : *« Comment ont évolué les tarifs de la cantine scolaire ? »*, *« Quels travaux de voirie ont été votés ? »*).
-3. Vous pouvez aussi cliquer sur un **exemple** proposé pour lancer directement une recherche.
+3. Vous pouvez aussi cliquer sur un **exemple** proposé pour lancer directement une recherche (ou sur **Bilan comparatif des 2 listes électorales** si les listes sont disponibles).
 4. Cliquez sur **« Obtenir une réponse »**.
 
 Casimir :
@@ -106,12 +108,12 @@ Sous la réponse, un encadré **« X passages consultés »** permet de voir les
 ## 6. Recherche dans la base de connaissance
 
 1. Depuis l’accueil, cliquez sur **« Recherche dans la base de connaissance »**.
-2. La **barre latérale** (à gauche) propose des **thèmes** : Convention/Contrat, Budget/Finances, École/Scolaire, Travaux/Voirie, Forêt/Bois, Urbanisme/Permis, etc. Un clic sur un thème remplit la requête avec des mots-clés associés.
+2. La **barre latérale** (à gauche) propose des **thèmes** : Convention/Contrat, Budget/Finances, École/Scolaire, Travaux/Voirie, Forêt/Bois, Urbanisme/Permis, Énergie/Éclairage, Enfance/Jeunesse, Intercommunalité, Château/Tourisme, Culture/Associations, Tarifs/Redevances, Emploi/RH, etc. Un clic sur un thème remplit la requête avec des mots-clés associés.
 3. Vous pouvez :
    - **Filtrer par année(s)** : sélectionnez une ou plusieurs années (sinon toutes sont prises en compte).
    - **Choisir le nombre de résultats** (par défaut 15).
    - **Activer « Mot(s) exact(s) »** : seuls les passages contenant vraiment le ou les mots saisis sont retournés (recherche plus stricte).
-4. Saisissez votre requête dans le champ **« Recherche sémantique »** ou utilisez les **suggestions** (Bois D’Haucourt, Vertefeuille, permis de construire, etc.).
+4. Saisissez votre requête dans le champ **« Recherche sémantique »** ou utilisez les **suggestions** (Bois D'Haucourt, Vertefeuille, permis de construire, etc.).
 5. Validez : les résultats s’affichent avec un extrait, la date, le fichier source et un **bouton « Ouvrir »** pour consulter le PDF.
 
 La recherche est **sémantique** : elle comprend le sens de votre requête, pas seulement les mots exacts. Si vous n’obtenez rien avec « Mot(s) exact(s) » activé, essayez en le désactivant.
@@ -133,7 +135,20 @@ Vous pouvez **filtrer par année(s)** pour restreindre la période affichée.
 
 ---
 
-## 8. Sources et Documents
+## 8. Élections municipales *(si disponible)*
+
+Lorsque les listes électorales sont configurées, une carte **« Élections municipales »** apparaît sur l’accueil. Cette section permet de :
+
+- **Voir les candidats** des deux listes.
+- **Interroger Casimir sur un candidat** : en cliquant sur un nom, une question est envoyée à Casimir pour résumer le rôle passé de cette personne au conseil municipal (adjoint, délégué, commission, etc.).
+- **Interroger Casimir sur toute une liste** : bouton pour demander les rôles respectifs de tous les candidats de la liste.
+- **Bilan comparatif des 2 listes** : lancer une synthèse comparative (qui a siégé, avec quelle fonction, quels candidats n’apparaissent dans aucun procès-verbal).
+
+Les réponses s’appuient sur les procès-verbaux indexés ; pour une information officielle et à jour, consultez le site de la Mairie.
+
+---
+
+## 9. Sources et Documents
 
 La section **« Sources et Documents »** liste les documents disponibles (PDF, fichiers .md) utilisés par Casimir et la recherche, triés par date. Chaque entrée est cliquable pour ouvrir le document.
 
@@ -141,42 +156,21 @@ La **source officielle** des procès-verbaux du Conseil municipal est indiquée 
 
 ---
 
-## 9. Limites d’utilisation
+## 10. Limites d’utilisation
 
-- **Recherches par heure** : pour préserver le service, le nombre de recherches (Agent Casimir + Recherche dans la base) est limité à **5 par heure** par adresse IP. Au-delà, un message vous invite à réessayer plus tard.
-- Le bandeau en haut affiche le nombre de recherches **restantes** pour vous (ou « ∞ » si la limite ne s’applique pas).
+- **Recherches par jour** : pour préserver le service, le nombre de recherches (Agent Casimir + Recherche dans la base) est limité à **5 par jour** par adresse IP. Le compteur est réinitialisé à **minuit**. Au-delà, un message vous invite à réessayer le lendemain.
+- Le bandeau en haut affiche le nombre de recherches **aujourd’hui** et les **restantes** pour vous (ou « ∞ » si la limite ne s’applique pas).
 - Casimir peut être temporairement indisponible (quota des fournisseurs d’IA) ; dans ce cas, privilégiez la **Recherche dans la base** pour consulter les passages pertinents.
 
 ---
 
-## 10. À propos de Casimir
+## 11. À propos de Casimir
 
 Casimir est un agent créé à titre expérimental pour :
 - connaître la vie de la commune de Pierrefonds à partir des documents publics (Mairie, sites web, journaux) ;
 - répondre aux questions des utilisateurs en s’appuyant sur ces sources.
 
 Il est hébergé sur Streamlit et utilise des modèles d’IA (ex. via Groq). Les réponses sont à considérer avec l’aide des **sources** fournies ; pour les informations officielles et à jour (horaires, tarifs, procédures), consultez toujours le site de la Mairie : [mairie-pierrefonds.fr](https://www.mairie-pierrefonds.fr).
-
----
-
-## 11. Résumé rapide
-
-| Besoin | Où aller |
-|--------|----------|
-| Poser une question en langage naturel | **Interroger l’Agent Casimir** |
-| Chercher un mot, un thème, une délibération | **Recherche dans la base de connaissance** |
-| Voir des graphiques sur le Conseil municipal | **Statistiques des séances** |
-| Consulter la liste des documents indexés | **Sources et Documents** |
-| Contacter l’équipe Casimir | [casimir.pierrefonds@outlook.com](mailto:casimir.pierrefonds@outlook.com) |
-
----
-
-## 12. Documentation technique (développeurs / mainteneurs)
-
-Pour une description technique détaillée du projet (architecture, pipeline d’indexation, recherche sémantique, agent RAG) :
-
-- **[Architecture technique](Architecture-technique.md)** — Structure du projet, pipeline (ALL.bat, fetch_sites, ingest, stats_extract), déploiement, dépendances et variables d’environnement.
-- **[Recherche et agent RAG](Recherche-et-agent-RAG.md)** — Modèle d’embeddings, chunking, base vectorielle, recherche hybride pour l’agent, prompt système, API Groq, rate limiting, sécurité.
 
 ---
 
