@@ -44,8 +44,8 @@ if exist "%~dp0vector_db" (
 :: (le .gitignore empeche qu'ils soient re-ajoutes par git add -A)
 git rm -r --cached source\images 2>nul
 git rm -r --cached source\pdf    2>nul
-git rm -r --cached static        2>nul
 git rm -r --cached fetcher_raw   2>nul
+:: static/ : trackee intentionnellement (PDFs < 10Mo) — ne pas desindexer
 
 :: Staging : code + source\md + input\*.md + vector_db
 echo Staging des fichiers...
