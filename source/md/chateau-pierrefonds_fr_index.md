@@ -16,21 +16,18 @@ Lire l'histoire du château
 Voir tous les événements
 " Biens venus " Un dialogue en art contemporain et monuments nationaux
 Grand événement multi-sites
-samedi 7 mars 2026
+mardi 10 mars 2026
 de 10:00 à 17:30
 Voir toutes les dates disponibles
-Journée internationale de la femme
-Événement festif
-dimanche 8 mars 2026
-de 10:00 à 17:30
 Lire les murs : cinq siècles de graffitis au château de Pierrefonds
 Visite commentée
 samedi 14 mars 2026
 de 14:30 à 16:15
 Festival Paroles
-Rencontre (conférence, lecture, dédicace)
+Spectacle, festival (concert, danse, théâtre)
 dimanche 29 mars 2026
 de 16:30 à 17:30
+Voir toutes les dates disponibles
 Botanistes en herbe
 Atelier
 mercredi 15 avril 2026
@@ -41,6 +38,10 @@ Atelier
 mercredi 22 avril 2026
 de 14:30 à 16:30
 Voir toutes les dates disponibles
+Spectacle, festival (concert, danse, théâtre) | 2 rendez-vous
+Week-end impérial !
+27 juin 2026
+28 juin 2026
 Les incontournables
 En savoir plus
 La cour d'honneur

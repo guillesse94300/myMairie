@@ -47,6 +47,10 @@ def download_oise_magazines(output_dir: Path | str = "static") -> None:
 
 
 if __name__ == "__main__":
-    # Télécharge dans ./static par défaut
-    download_oise_magazines()
+    import argparse
+    p = argparse.ArgumentParser(description="Télécharge les magazines Oise en PDF")
+    p.add_argument("-o", "--output", default="source/pdf",
+                   help="Dossier de sortie (défaut : source/pdf)")
+    args = p.parse_args()
+    download_oise_magazines(args.output)
 

@@ -4,8 +4,6 @@ Source : https://www.lessecretsdepierrefonds.fr/histoire-de-pierrefonds/
 
 ---
 
-Aller au contenu
-Découvrir Pierrefonds
 L'Histoire de Pierrefonds à travers les époques
 A travers son musée, ses visites et ses différentes animations, Les Secrets de Pierrefonds retrace l’Histoire du Château mais aussi celle du village et de la région. Avec Guillaume, remontez le temps pour découvrir plus de 1000 ans d’Histoire, du Moyen-Age ou XXe siècle.
 Pierrefonds au Moyen Âge

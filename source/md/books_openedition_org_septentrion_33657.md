@@ -39,6 +39,8 @@ Le château du Moyen Âge
 Le château de Pierrefonds est situé dans une vallée entre les actuelles forêts de Compiègne et de Retz. Viollet-le-Duc a décrit avec précision la position du monument : il est situé à l’extrémité d’un promontoire, saillant du sud au nord, de vingt-cinq à trente mètres plus haut que les vallons périphériques et relié, vers le sud, à un plateau qui le domine de vingt mètres (fig.1)
 Fig. 1 : Pierrefonds, vue du château depuis le village.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 La famille éponyme s’implante dès le XI
 siècle sur le site
 . Philippe Auguste, après en avoir acquis les droits seigneuriaux, séjourne dans le château des seigneurs de Pierrefonds en 1213. Au siècle suivant, Philippe le Bel y réside à son tour entre 1300 et 1310 ainsi que son successeur Charles IV, en 1325-1326. La châtellenie de Pierrefonds, demeurée royale durant l’ensemble du XIII
@@ -56,6 +58,8 @@ Fig. 2 : Claude Carlier,
 Histoire du duché de Valois
 , Paris, Guillyn, t. 2, 1764, p. 338.
 © Bnf.
+Agrandir
+Télécharger l’image (.jpg
 C’est dans cet ensemble d’une rare puissance mais encore incomplet, que le chevalier des Bosquiaux, en septembre 1411, se retranche pour résister aux troupes de la coalition bourguignonne. À la suite de la paix d’Auxerre (1412), Charles d’Orléans (1394-1465)
 – héritier de Louis – a des difficultés à revenir en possession de ses châteaux de Pierrefonds et de Coucy. Au moment de leur restitution, en 1413, les couvertures de la forteresse sont incendiées. Toutes les toitures des tours auraient été consumées, ainsi que les charpentes du logis dont le premier étage, voûté, fut épargné.
 C’est néanmoins pendant le XVI
@@ -65,6 +69,8 @@ Fig. 3 : Compiègne, musée Vivenel, Brissot de Warville,
 Ruines de Pierrefonds
 , vue de la face nord-est, s. d.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Le retour en grâce
 À la faveur du pré-romantisme la ruine devient dès la fin du XVIII
 siècle un lieu d’enchantement pittoresque. L’ambiance politique et artistique se prêtait à une nouvelle appropriation du site
@@ -145,6 +151,8 @@ Fig. 4 : Compiègne, musée Vivenel, Eugène Lavieille (1820-1889),
 Ruines du château de Pierrefonds
 , vue de la face nord, huile sur panneau, Inv. 2008.12.1, détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Lors de son passage éphémère au poste d’Inspecteur général des Monuments historiques, L. Vitet fit pour son administration un rapport qui s’achève par une proposition au ministre : « En terminant ici ce qui concerne les monuments et leur conservation, laissez-moi, monsieur le ministre, dire encore quelques mots à propos d’un monument plus étonnant et plus précieux peut-être que tous ceux dont je viens de parler, et dont je me propose de tenter la restauration. À la vérité, c’est une restauration pour laquelle il ne faudra ni pierres, ni ciment, mais seulement quelques feuilles de papier. Reconstruire ou plutôt restituer dans son ensemble et dans ses moindres détails une forteresse du Moyen Âge, reproduire sa décoration intérieure et jusqu’à son ameublement ; en un mot, lui rendre sa forme, sa couleur, et, si j’ose le dire, sa vie primitive, tel est le projet qui m’est venu tout d’abord à la pensée en entrant dans l’enceinte du château de Coucy. Ces tours immenses, ce donjon colossal semblent, sur certains points, bâtis d’hier. Et dans leurs parties dégradées, que de vestiges de peinture, de sculpture, de distributions intérieures ! que de documents pour l’imagination ! que de jalons pour la guider avec certitude à la découverte du passé […]. Jusqu’ici ce genre de travail n’a été appliqué qu’aux monuments de l’Antiquité. Je crois que, dans le domaine du Moyen Âge, il pourrait conduire à des résultats plus utiles encore ; car les indications ayant pour base des faits plus récents et des monuments plus entiers, ce qui n’est souvent que conjectures à l’égard de l’Antiquité, deviendrait presque certitude quand il s’agirait du Moyen Âge […]
 . » En 1855, Viollet-le-Duc vante à son tour l’intérêt de la forteresse dans un rapport à la Commission des Monuments historiques
 ; à partir de 1856 des travaux de consolidation, de déblayement et de fouilles y sont entrepris, « le gouvernement de l’Empereur n’a pas voulu qu’une aussi belle ruine, qui rappelle de si grands souvenirs et dont l’aspect est encore si imposant, ne fût pas conservée. Des crédits assez importants ont été accordés pour reprendre les lézardes principales du donjon, pour le chaîner provisoirement au moyen de deux cercles en fer et pour le couvrir
@@ -155,10 +163,14 @@ En 1857, lorsque Napoléon III suscite la restauration du château de Pierrefond
 siècle, se composent tout au plus de la moitié de l’élévation de la tour Alexandre (pour l’appellation des tours : fig.5), et de la tour Hector tandis que la tour Artus est détruite en totalité (fig.4). Au sud-ouest et à l’angle sud, les tours César et Charlemagne sont rasées jusqu’à leurs souches (fig.6). Du logis et de la tour carrée il ne subsiste qu’une masse informe de maçonneries. Plus au sud, la tour Judas, renfermant la chapelle, ne possède plus qu’une portion de son enveloppe inférieure (fig.6).
 Fig. 5 : Beauvais, Arch. dép. Oise : 4 Tp 11-1-35 – Château de Pierrefonds. Plan du rez-de-chaussée, s. d., s. s., attribution à M. Ouradou, [entre 1880 et 1884].
 © Arch. dép. Oise.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 6 : Compiègne, musée Vivenel, Jean-Baptiste Langlace (1786-1864),
 Ruines de Pierrefonds
 , vue de l’angle sud-ouest, huile sur toile, Inv. 1982.68, détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Pour cette entreprise inédite de reconstitution, le souverain sollicite Viollet-le-Duc. À quarante-trois ans ce dernier est dans la pleine possession de son art et doté d’un solide réseau de sociabilité. Il n’est pas étranger à la famille impériale. Proche de la princesse Mathilde
 – la cousine de l’empereur – il avait été par ailleurs sollicité pour les décors de Notre-Dame à l’occasion du mariage des souverains en 1853
 , puis du baptême du prince impérial en 1856
@@ -204,6 +216,8 @@ et à l’hôtel de Ville de Compiègne
 : il ne tirera aucun prix de la présentation de « 16 dessins de la restauration du château de Vez (Oise) » au Salon de 1866
 Fig. 7 : Beauvais, Arch. dép. Oise : 4 Tp 101 – Portrait présumé de Lucjan Wyganowski, s. d., détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 La guerre de 1870 ne remet pas en cause ses fonctions. Ses appointements, un temps suspendus par une administration ébranlée, ont été assurés par Viollet-le-Duc
 . Il continue ainsi à surveiller les travaux en dépit de la chute de l’Empire et des troubles de la Commune. Après la mort de l’architecte, il collabore avec Maurice Ouradou, de 1879 à 1884, ainsi qu’avec Maximilien Mimey, architecte chargé de la restauration de l’église Saint-Jean-aux-Bois, en 1878-1879
 . Il est nommé inspecteur-conservateur du château de Pierrefonds en 1871
@@ -268,31 +282,51 @@ niveau) à l’angle sud-ouest. L’accès à cet ensemble s’effectue par le p
 Fig. 8 : Beauvais, Arch. dép. Oise : 4 Tp 11-1-48 – Château de Pierrefonds. Plan du 1
 niveau. Viollet-le-Duc et Maurice Ouradou architectes, s. d. [entre 1879 et 1884].
 © Arch. dép. Oise.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 9 : Pierrefonds, vue du grand logis, de la tour carrée et de la chapelle.
 Extrait de :
 Les châteaux historiques. Pierrefonds après la restauration de M. Viollet-le-Duc, photographié par Mieusement
 , Paris, Lib. Générale de l’architecture et des travaux publics, Ducher & Cie, s. d.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 10 : Beauvais, Arch. dép. Oise : 4 Tp 12-1-24 – Château de Pierrefonds. Élévation de l’aile sud-est, projet. Viollet-le-Duc, s. d.
 © Arch. dép. Oise.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 11 : Charenton-le-Pont, Méd. Arch. Pat. : CRMH n° 329 – Pierrefonds, château, aile nord-est, E. Viollet-le-Duc. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 12 : Compiègne, musée Vivenel, le beffroi de l’aile nord-est, E. Viollet-le-Duc, mars 1867, Inv. 1986-58, boîte 74. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 13 : Charenton-le-Pont, Méd. Arch. Pat. : CRMH n° 332, année 1866 – Pierrefonds, château, aile ouest, E. Viollet-le-Duc. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 14 : Pierrefonds, château, aile ouest, 1
 niveau, salle des Preuses.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 15 : Pierrefonds, château, aile ouest, 1
 niveau, cheminée de la salle des Preuses.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 16 : Pierrefonds, château, châtelet.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Il a fallu vingt-sept années, la volonté d’un empereur, deux architectes, un inspecteur des travaux, des artistes talentueux, des artisans et des entrepreneurs d’élite et des centaines d’ouvriers pour aboutir à ce résultat.
 Le chantier est en préparation dès 1857. Le 28 décembre de cette année l’architecte écrit à Achille Fould, ministre de la Maison de l’empereur, pour lui faire part de l’envoi des premiers projets et solliciter l’ouverture des crédits
 . Le 8 février 1858, dans une autre missive, l’architecte précise les limites de ses intentions : « Je pense avoir rempli les instructions de Sa Majesté en ne m’occupant que de la restauration de la portion habitable du château, c’est-à-dire du donjon, et en laissant toutes les autres parties dans l’état de ruine où elles se trouvent, sauf deux tours qu’il pourrait être utile de restaurer pour en faire des dépendances de l’habitation et surtout pour les conserver car ces deux tours sont fort belles. Une vue cavalière donne l’ensemble des travaux projetés (fig.17). » L’architecte, dans la perspective d’amener progressivement le souverain à une restitution complète, ajoute : « Cependant j’ai indiqué dans deux dessins représentant l’un la face extérieure d’entrée et l’intérieur de la cour, l’aspect complet du château restauré, afin que Sa Majesté puisse prendre une idée de cet ensemble, qui serait assez triste, tandis qu’au contraire la réédification du donjon au milieu des ruines très pittoresques et sur un point culminant d’où la vue est belle de tous côtés pourra faire une habitation fort agréable
 Fig. 17 : Charenton-le-Pont, Méd. Arch. Pat. 1996/083/337 – Pierrefonds, château, vue cavalière, E. Viollet-le-Duc, 1858.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Une lettre de Mérimée nous apprend que le projet graphique est validé le 17 février 1858
 , ce qui invite Viollet-le-Duc à envoyer dès le lendemain un devis détaillé à A. Fould
 . Toutefois, dès le 7 janvier l’architecte a semble-t-il déjà reçu l’aval de l’empereur puisqu’il donne des directives à Jean-Louis Victor Grisart, architecte au Palais de Compiègne
@@ -315,6 +349,8 @@ tandis qu’il est procédé au déblaiement de la tour nord (Godefroy)
 (fig.18).
 Fig. 18 : Charenton-le-Pont, Méd. Arch. Pat. Fonds Viollet-le-Duc, 7 septembre 1858, s. c. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 La première visite de l’empereur, le 5 novembre 1858, met le chantier en ébullition
 . Dès le mois précédent, le site et ses abords sont nettoyés. Viollet-le-Duc fait exécuter une bannière par Julien Belloir, tapissier-décorateur parisien qui travaillait alors sur le chantier de Notre-Dame
 , pour pavoiser la forteresse
@@ -356,6 +392,8 @@ Fig. 19 : Compiègne, Musée national du château, J. Gaildrau,
 Visite de Sa Majesté l’Empereur aux travaux de restauration du château de Pierrefonds
 , 1860, Inv. C.66.054. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Napoléon III, vainqueur à Magenta et à Solferino, était alors au sommet de son règne. Il avait remis la France dans le concert des nations et gagnait en autorité à l’intérieur. C’est dans cette ambiance, qu’à partir de février 1860
 , le projet initial d’une demeure pittoresque évolue. Les désirs de l’empereur se portent sur l’aspect extérieur de l’édifice que Viollet-le-Duc doit traiter simultanément à l’érection du logis et aux finitions des tours carrée et Godefroy. Il est ainsi envisagé de reboucher les brèches des courtines et de traiter la silhouette du monument. Dès 1861, Viollet-le-Duc écrit : « […] nous pourrons bientôt voir le plus beau spécimen de l’architecture féodale du XV
 siècle en France renaître par la volonté auguste du souverain
@@ -409,6 +447,8 @@ et 125 dix jours plus tard
 . La porte du pont-levis est achevée. La tour César est élevée à mi-hauteur, le déblaiement de la chapelle ainsi que celui de la tour sud (Charlemagne) est effectué tandis que débutent les premières fouilles sur l’aile ouest du château
 . À ce stade, l’édifice est proche de la représentation aquarellée réalisée en 1858 pour illustrer sa restitution partielle (fig.17 et 20).
 Fig. 20 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, MH 00002152 – Vue du château de Pierrefonds depuis l’angle nord, s. d.
+Agrandir
+Télécharger l’image (.jpg
 Cette année 1863 le château fit une grande impression sur le couple impérial : « Pendant six ans, enveloppé d’une véritable forêt de mâts et de madriers, le château ressembla de loin à un gigantesque vaisseau prêt à être lancé sur l’océan. Puis, vigoureusement conduits, alimentés généreusement par la cassette impériale […], les travaux extérieurs touchèrent à leur terme ; pendant un séjour à Compiègne, dans une excursion adroitement proposée pour examiner les travaux, Leurs Majestés aperçurent tout à coup, au détour de la route, à la place des ruines mornes et sombres, un palais de fée, blanche merveille, élevant dans les airs ses tours puissantes couronnées de toits élancés, de girouettes fantastiques, d’oriflammes blasonnées ! Viollet-le-Duc était brillamment sorti de cette immense entreprise et tout ce que la science architecturale, tout ce que l’art et le goût peuvent créer de plus complet, il l’avait réuni pour plaire aux souverains
 . » L’effet romantique du château sur A. Carette, l’impression d’une histoire à nouveau en marche à travers la métamorphose des ruines, la sensation que rien, pas même le passé, ne pouvait résister aux forces techniques du progrès, envahirent certainement les souverains et les membres les plus inattendus de la famille impériale. Le 16 novembre, le prince Napoléon, passionné par l’Antiquité et féru d’art néo-classique, visite le chantier sous la conduite de Viollet-le-Duc
 . Le 18, l’architecte écrit à son fils : « Le prince Napoléon que j’ai accompagné avant-hier à Pierrefonds, s’est pris d’un bel enthousiasme pour ce château, il a raconté à l’Empereur ses impressions tellement favorables que Sa Majesté s’en est émue et qu’elle veut finir le château dans un très court délai. On parle de 2 à 3 ans au plus. On me parle de le meubler. On veut, pour l’an prochain, la grande salle finie. On veut tant de choses qu’en en rabattant la moitié il y aura encore fort à faire
@@ -437,6 +477,8 @@ et la tour Charlemagne est repris et cette dernière tour est en cours d’érec
 . Le chantier est une véritable ruche hérissée de sapines. Tous les métiers sont présents. Le 28 septembre, le cahier du chantier enregistre : 38 couvreurs, 12 charpentiers, 2 serruriers, 1 parqueteur, 4 peintres décorateurs, 3 sculpteurs ornemanistes, 3 statuaires, 20 terrassiers, 150 maçons, tailleurs de pierre, bardeurs et scieurs
 . Le 10 octobre, en prévision de la venue des souverains, le nombre des peintres s’élève à 10, celui des statuaires à 5
 Fig. 21 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, MH 14160 – Vue du château de Pierrefonds depuis l’angle nord-est, s. d.
+Agrandir
+Télécharger l’image (.jpg
 Le 7 novembre 1865, Viollet-le-Duc écrit à son épouse : « J’ai vu Sa Majesté ces jours-ci. Elle me pousse pour que Pierrefonds soit avancé, aussi ai-je 300 ouvriers en ce moment, ce qui me donne une rude besogne. J’y vais tous les jours […]. On travaille jusqu’à 10 heures du soir dans les intérieurs. Je me porte bien, pas trop fatigué et fort impatient de savoir ce qui résultera de la visite de Sa Majesté. Probablement j’irai demain à Compiègne pour voir l’Empereur à son arrivée
 . » Le 13 novembre il lui annonce, dans un mélange de joie et d’enthousiasme associant vie de chantier et vie de Cour : « La visite a eu lieu aujourd’hui […]. Succès complet […]. Nous allons continuer avec plus de vigueur que jamais. L’Empereur désire que nous allions très vite
 , bien entendu les ressources viendront en raison de cela. […] Demain matin je vais à Compiègne m’établir pour le temps voulu. Nous souhaitons la fête de l’Impératrice demain soir. Peu d’amis dans la série qui vient, Mérimée en est cependant et je me réjouis. […] Leurs Majestés sont en fort bon état, le petit prince, gamin charmant et vivant. Il faudra profiter de la série du roi du Portugal
@@ -506,9 +548,13 @@ Fig. 22 : Compiègne, Musée national du château,
 Tour carrée et grand logis du château de Pierrefonds
 , 8 juin 1866, s. s., s. c. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 23 : Vue de la salle des Preuses, photographie de A. Chevalier, extrait de : A. Penguilly L’Haridon,
 Album du cabinet d’armes de Sa Majesté l’Empereur Napoléon III
 , Paris, Imp. Impériale, J. Claye, 1867.
+Agrandir
+Télécharger l’image (.jpg
 L’année de l’Exposition universelle de 1867 (1
 avril – 3 novembre)
 est particulièrement intense pour Viollet-le-Duc. Si, en fait d’architecture militaire, ce sont les travaux effectués à Carcassonne qui remportent un franc succès dans la section des Monuments historiques
@@ -525,11 +571,15 @@ Le 29 octobre 1867, la Maison de l’empereur avise Viollet-le-Duc que les souv
 . » Le succès de l’architecte est complet, mais la lassitude l’emporte et, le 27, il ajoute : « L’Empereur attache tant d’importance à Pierrefonds qu’il me faut sans cesse aller là et être en même temps ici dans ce château. Ce serait charmant si j’avais trente ans, mais cela devient un peu fatigant à mon âge. Il est vrai que l’extrême grâce de Leurs Majestés rend tout cela possible et qu’on ne saurait mieux faire que d’être satisfait et honoré. Mais je suis un peu trop philosophe pour éprouver les satisfactions de vanité qu’on trouve si piquantes plus jeune, et je regrette bien souvent ma solitude et mon cabinet et ses bouquins, mon chez moi tranquille et mes habitudes de travail suivi. Il ne me manque que ce qui ennuie bien des gens : le calme, la solitude et l’étude réfléchie
 Fig. 24 : Beauvais, Arch. dép. Oise : 4 Tp 11-2-10 – Château de Pierrefonds. Plan au sol. La teinte noire correspond aux maçonneries anciennes et restaurées, la teinte rose aux maçonneries construites.
 © Arch. dép. Oise.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 25 :
 Visite de l’empereur d’Autrice à Pierrefonds. La cour d’honneur restaurée par Viollet-Leduc. H. Lintok, d’après le croquis de M. Thorigny
 , extrait de :
 Le Monde Illustré
 , 9 novembre 1867, n° 552, p. 288.
+Agrandir
+Télécharger l’image (.jpg
 À la fin de cette année, le travail accompli est considérable
 . La tour Charlemagne est couverte et sa guette construite
 . La tour Josué est également achevée, seule la couverture de la galerie des mâchicoulis reste en attente
@@ -561,6 +611,8 @@ ainsi qu’à des travaux de terrassement autour du château
 . La fourniture des chaises et des banquettes destinées à la salle du premier étage du logis se poursuit
 . À la fin de l’année, le monument est presque achevé ; le peintre Charles Giraud expose au Salon une vue flamboyante de la salle des Preuses
 Fig. 26 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, A 11158, photographie de Ch. Hideux – Vue du château de Pierrefonds depuis l’angle nord-est, octobre 1868.
+Agrandir
+Télécharger l’image (.jpg
 Depuis plusieurs années la réalisation des décors peints a débuté et accompagne les travaux de maçonnerie. Les mémoires, très lacunaires pour les œuvres de peintures, indiquent cependant une réalisation de ces dernières de 1861 à 1870.
 Outre quelques travaux mentionnés dès 1861 dans la tour carrée
 , c’est à partir du 4 août 1865 que Wyganowski enregistre la présence sur le chantier de Nicolle, entrepreneur de peinture, visiblement pour repérage des lieux
@@ -596,6 +648,8 @@ ainsi que celle du grand perron devant le vestibule (fig.27)
 . Enfin, la collection d’armures de la salle des Preuses est complétée par plusieurs envois de l’empereur
 et, le 15 janvier 1869, un décret en nomme conservateur le polytechnicien et peintre Octave Penguilly l’Haridon
 Fig. 27 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, 234, s. s., s. d. – Vue du beffroi et des marches du grand perron du vestibule en construction.
+Agrandir
+Télécharger l’image (.jpg
 Les souverains, pour la première fois depuis le début des travaux, sont passés en petite compagnie, aux mois d’octobre et de novembre
 ; le règne s’achève avec le château.
 L’architecte Simon-Claude Constant-Dufeux, après une visite qu’il regrette de n’avoir pas faite avec Viollet-le-Duc, écrit à ce dernier le 30 mai 1870 : « Je suis venu ici avec une prévention de longue date. J’avais vu en 1829 et en 1853 ces ruines. J’aimais ces tours éventrées de haut en bas. J’aimais tout cela et j’en voulais à l’Empereur et à vous d’avoir tout changé. J’étais désireux et anxieux de voir tout cela. Vous voyez, j’étais prévenu par une idée critique et mon amitié pour vous me faisait reculer le moment de ma visite, le moment d’une conclusion que je prévoyais presque avec certitude blâmeuse [
@@ -613,8 +667,12 @@ tandis que celui de la chapelle est complété
 . La forteresse, dotée de toutes ses toitures, est alors hors-d’eau (fig.28). À cette date toutes les baies ne sont cependant pas vitrées, toutes les portes ne sont pas closes. Seules six salles ont été entièrement décorées : la salle des Preuses, la chambre de l’impératrice et celle de l’empereur ainsi que son cabinet, le salon de réception et la salle bleue du 3
 étage du logis. Le revêtement polychrome d’espaces intermédiaires a été également réalisé, tels celui des escaliers du logis impérial ou de l’aile des invités (fig.29).
 Fig. 28 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, A 11149, s. s. – Vue du château de Pierrefonds depuis l’angle nord-est, 1870.
+Agrandir
+Télécharger l’image (.jpg
 Fig. 29 : Pierrefonds, Escalier de l’aile des invités. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Le lendemain de la proclamation de la III
 République, le 5 septembre, ordre est donné par le ministère de fermer le chantier
 ; seul, Wyganowski garde le château. Les premières manifestations de la Commune enflamment la capitale. Le 11 février 1871, depuis Paris, Viollet-le-Duc écrit à son inspecteur : « Je vais bien, sans maladie ni blessure ; nous avons eu des mauvais moments hier soir et ce n’est pas fini. Sitôt que je pourrai aller vous voir j’irai, mais en ce moment cela m’est impossible. J’ai trop à faire ici puis je ne pourrais d’ailleurs pas partir. Madame Sureda va bien, c’est de chez elle que je vous écris. À bientôt, j’espère
@@ -673,6 +731,8 @@ et la statue du trumeau représentant Viollet-le-Duc en saint Jacques est posée
 , il décède la même année
 Fig. 30 : Pierrefonds, trumeau de la chapelle, E. Viollet-le-Duc par Hiolin, 1884. Détail.
 © A. Timbert.
+Agrandir
+Télécharger l’image (.jpg
 Le 20 juillet, Juste Lisch (1828-1910) est nommé architecte du château
 mais les crédits sont supprimés l’année suivante
 . Durant l’année 1885, l’inspecteur et l’architecte procèdent donc aux derniers travaux avec 3 maçons et ferment définitivement le chantier
@@ -3496,3 +3556,109 @@ Timbert, Arnaud.
 Viollet-le-Duc et Pierrefonds
 . Presses universitaires du Septentrion, 2017, https://doi.org/10.4000/books.septentrion.33624.
 Compatible avec Zotero
+Fig. 1 : Pierrefonds, vue du château depuis le village.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 2 : Claude Carlier,
+Histoire du duché de Valois
+, Paris, Guillyn, t. 2, 1764, p. 338.
+© Bnf.
+Télécharger l’image (.jpg
+Fig. 3 : Compiègne, musée Vivenel, Brissot de Warville,
+Ruines de Pierrefonds
+, vue de la face nord-est, s. d.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 4 : Compiègne, musée Vivenel, Eugène Lavieille (1820-1889),
+Ruines du château de Pierrefonds
+, vue de la face nord, huile sur panneau, Inv. 2008.12.1, détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 5 : Beauvais, Arch. dép. Oise : 4 Tp 11-1-35 – Château de Pierrefonds. Plan du rez-de-chaussée, s. d., s. s., attribution à M. Ouradou, [entre 1880 et 1884].
+© Arch. dép. Oise.
+Télécharger l’image (.jpg
+Fig. 6 : Compiègne, musée Vivenel, Jean-Baptiste Langlace (1786-1864),
+Ruines de Pierrefonds
+, vue de l’angle sud-ouest, huile sur toile, Inv. 1982.68, détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 7 : Beauvais, Arch. dép. Oise : 4 Tp 101 – Portrait présumé de Lucjan Wyganowski, s. d., détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 8 : Beauvais, Arch. dép. Oise : 4 Tp 11-1-48 – Château de Pierrefonds. Plan du 1
+niveau. Viollet-le-Duc et Maurice Ouradou architectes, s. d. [entre 1879 et 1884].
+© Arch. dép. Oise.
+Télécharger l’image (.jpg
+Fig. 9 : Pierrefonds, vue du grand logis, de la tour carrée et de la chapelle.
+Extrait de :
+Les châteaux historiques. Pierrefonds après la restauration de M. Viollet-le-Duc, photographié par Mieusement
+, Paris, Lib. Générale de l’architecture et des travaux publics, Ducher & Cie, s. d.
+Télécharger l’image (.jpg
+Fig. 10 : Beauvais, Arch. dép. Oise : 4 Tp 12-1-24 – Château de Pierrefonds. Élévation de l’aile sud-est, projet. Viollet-le-Duc, s. d.
+© Arch. dép. Oise.
+Télécharger l’image (.jpg
+Fig. 11 : Charenton-le-Pont, Méd. Arch. Pat. : CRMH n° 329 – Pierrefonds, château, aile nord-est, E. Viollet-le-Duc. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 12 : Compiègne, musée Vivenel, le beffroi de l’aile nord-est, E. Viollet-le-Duc, mars 1867, Inv. 1986-58, boîte 74. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 13 : Charenton-le-Pont, Méd. Arch. Pat. : CRMH n° 332, année 1866 – Pierrefonds, château, aile ouest, E. Viollet-le-Duc. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 14 : Pierrefonds, château, aile ouest, 1
+niveau, salle des Preuses.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 15 : Pierrefonds, château, aile ouest, 1
+niveau, cheminée de la salle des Preuses.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 16 : Pierrefonds, château, châtelet.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 17 : Charenton-le-Pont, Méd. Arch. Pat. 1996/083/337 – Pierrefonds, château, vue cavalière, E. Viollet-le-Duc, 1858.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 18 : Charenton-le-Pont, Méd. Arch. Pat. Fonds Viollet-le-Duc, 7 septembre 1858, s. c. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 19 : Compiègne, Musée national du château, J. Gaildrau,
+Visite de Sa Majesté l’Empereur aux travaux de restauration du château de Pierrefonds
+, 1860, Inv. C.66.054. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 20 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, MH 00002152 – Vue du château de Pierrefonds depuis l’angle nord, s. d.
+Télécharger l’image (.jpg
+Fig. 21 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, MH 14160 – Vue du château de Pierrefonds depuis l’angle nord-est, s. d.
+Télécharger l’image (.jpg
+Fig. 22 : Compiègne, Musée national du château,
+Tour carrée et grand logis du château de Pierrefonds
+, 8 juin 1866, s. s., s. c. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 23 : Vue de la salle des Preuses, photographie de A. Chevalier, extrait de : A. Penguilly L’Haridon,
+Album du cabinet d’armes de Sa Majesté l’Empereur Napoléon III
+, Paris, Imp. Impériale, J. Claye, 1867.
+Télécharger l’image (.jpg
+Fig. 24 : Beauvais, Arch. dép. Oise : 4 Tp 11-2-10 – Château de Pierrefonds. Plan au sol. La teinte noire correspond aux maçonneries anciennes et restaurées, la teinte rose aux maçonneries construites.
+© Arch. dép. Oise.
+Télécharger l’image (.jpg
+Fig. 25 :
+Visite de l’empereur d’Autrice à Pierrefonds. La cour d’honneur restaurée par Viollet-Leduc. H. Lintok, d’après le croquis de M. Thorigny
+, extrait de :
+Le Monde Illustré
+, 9 novembre 1867, n° 552, p. 288.
+Télécharger l’image (.jpg
+Fig. 26 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, A 11158, photographie de Ch. Hideux – Vue du château de Pierrefonds depuis l’angle nord-est, octobre 1868.
+Télécharger l’image (.jpg
+Fig. 27 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, 234, s. s., s. d. – Vue du beffroi et des marches du grand perron du vestibule en construction.
+Télécharger l’image (.jpg
+Fig. 28 : Charenton-le-Pont, Méd. Arch. Pat. Fonds ancien, A 11149, s. s. – Vue du château de Pierrefonds depuis l’angle nord-est, 1870.
+Télécharger l’image (.jpg
+Fig. 29 : Pierrefonds, Escalier de l’aile des invités. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg
+Fig. 30 : Pierrefonds, trumeau de la chapelle, E. Viollet-le-Duc par Hiolin, 1884. Détail.
+© A. Timbert.
+Télécharger l’image (.jpg

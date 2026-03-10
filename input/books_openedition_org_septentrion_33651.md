@@ -4,25 +4,8 @@ Source : https://books.openedition.org/septentrion/33651
 
 ---
 
-Informations sur la couverture
-Table des matières
-Citer
-Partager
 Liens vers le livre
-Informations sur la couverture
-Table des matières
-Citer
-Partager
-Formats de lecture
-Viollet-le-Duc et Pierrefonds
-Ce livre est recensé par
-Naviguer dans le livre
-Introduction
-p. 27-34
-Plan détaillé
-Texte intégral
 Notes de bas de page
-Texte intégral
 Quand on parle d’une époque obscure du passé, on ne saurait prétendre être cru sur parole, il ne suffit pas d’indiquer la source où l’on a puisé ses renseignements, il faut, pour les choses importantes, donner le texte même, car souvent le lecteur peut interpréter d’une manière différente le passage sur lequel vous fondez votre raisonnement. Napoléon III
 En 1858, alors qu’il achevait la restauration de Vézelay, Viollet-le-Duc fut sollicité par Napoléon III pour ouvrir le chantier de Pierrefonds ; un chantier exceptionnel par sa dimension, par son dessein et sa mobilisation humaine. Menée avec l’appui de son inspecteur des travaux, Lucjan Wyganowski, cette entreprise est achevée en 1885 par l’architecte Maurice Ouradou. La forteresse s’est depuis imprimée dans l’imaginaire collectif comme l’œuvre majeure de Viollet-le-Duc, peut-être parce qu’à Pierrefonds s’élabore la synthèse entre le chantier de restauration et le chantier de construction, entre l’architecture médiévale et l’architecture alors contemporaine et qu’à ce titre, ce chantier fut avant tout le laboratoire d’un alchimiste désireux de célébrer les temps, de transmuer les savoir-faire et les techniques médiévales dans la perspective d’orienter le chantier vers de nouvelles performances collectives. C’est par ce biais que cet ouvrage souhaite aborder Pierrefonds, par celui général du chantier et celui, plus particulier de « l’entreprise de construction »
 , c’est-à-dire des hommes, des outils, des techniques et des matériaux rassemblés, parfois suscités et toujours ordonnés par l’architecte.
@@ -32,11 +15,7 @@ Quand Charles Swann apprend que celle qu’il aime se rend à Pierrefonds, Marce
 et du début du XX
 siècles. Les chercheurs eux-mêmes eurent du mal à échapper à cette ambiance. Un des historiens du château, J. Harmand, dénonça « le manque de probité et d’intelligence » de Viollet-le-Duc et reprit à son compte la formule de Y. Christ selon laquelle il fallait interdire au public de se rendre à Pierrefonds
 . L. Grodecki, le premier à porter un regard scientifique sur l’édifice et son auteur, exprime une pensée plus objective, mais indécise : « Peut-être, la formidable silhouette du château paraît-elle trop blanche à nos yeux, habitués à la salissure que notre climat dépose sur les monuments. Sous le clair soleil d’été, au-dessus de la sombre masse de la forêt de Compiègne, elle nous agace, trop complète, trop neuve, trop arrogante. Mais en automne, quand un peu d’humidité répandue dans l’air enveloppe le château et sa colline, et que leur reflet dans l’étang du village se confond avec le reflet du ciel gris, Pierrefonds prend une indéniable valeur poétique, à peine artificielle, en nous transportant dans une ambiance romantique qui peut faire sourire, mais qui ne blesse pas. Aujourd’hui […] nous avons non seulement le droit mais le devoir de considérer ces travaux comme un témoignage précieux sur le goût d’une période de notre passé, qui n’est pas négligeable pour l’histoire de notre sensibilité et de notre art. »
-Droit
-devoir
 sont ainsi convoqués pour légitimer la démarche ;
-goût
-sensibilité
 sont invoqués pour justifier une enquête inédite. Avec toute l’autorité du médiéviste L. Grodecki a ainsi ouvert une ère nouvelle en revendiquant la valeur architecturale et historique de Pierrefonds. Toutefois, absorbé par son époque, il situe son architecte dans une problématique purement archéologique et estime comme « non seulement inexacte(s), mais encore absurde(s) » les dispositions défensives proposées par Viollet-le-Duc
 L’irrésolution sur la valeur de Pierrefonds, les jugements subjectifs et les phrases partisanes se sont estompés – il y a paradoxe – avec la dé-violletisation de Saint-Sernin
 . L’approche scientifique est aujourd’hui fondée et Viollet-le-Duc comme restaurateur, bâtisseur et théoricien – pour nous limiter à ces domaines – est bien connu à la faveur de multiples articles
@@ -44,7 +23,6 @@ L’irrésolution sur la valeur de Pierrefonds, les jugements subjectifs et les 
 , expositions
 , colloques
 , journées d’études
-et biographies
 venus renouveler ou compléter en 2014 les connaissances acquises depuis les commémorations de 1979-1980
 et les recherches de J.-M. Leniaud
 En dépit de cette abondante littérature d’envergure internationale et malgré de précoces recherches sur Pierrefonds
@@ -64,15 +42,11 @@ que par une prospection monographique sérielle
 colloque international de Pierrefonds ont tenté de rapprocher les historiens, les historiens de l’art, les architectes et les ingénieurs pour investir la matérialité du chantier viollet-le-ducien et en comprendre les mécanismes
 . Fort de ces premiers résultats et des enquêtes menées sur le château de Pierrefonds en collaboration avec I. Pallot-Frossard, A. Texier, L. Leroux et V. Detalle du Laboratoire de recherches des Monuments historiques
 , le présent ouvrage souhaiterait participer à ces nouvelles orientations en envisageant des objectifs simples : préciser l’histoire des travaux et circonscrire la part des acteurs principaux (architecte et commanditaire) ainsi que le rôle des acteurs secondaires (inspecteur et vérificateur) (
-Chapitre I
 ) ; nommer les ouvriers et les entrepreneurs ; restituer la hiérarchie fonctionnelle du chantier ; identifier et reconstituer ses lieux (latrines, écuries, loge, baraque, agence…) ; définir la place de la femme sur et à la périphérie du chantier et comprendre comment les travaux suscitent l’élaboration d’une mémoire collective (
-Chapitre II
 ). À la faveur de cette première approche, cette étude a pour fin de pénétrer dans l’intimité du processus technique et anthropologique de restitution d’une forteresse du Moyen Âge ; d’identifier les facteurs intervenant dans l’argumentation technique ; de décrire les hommes du bâtiment en action, qu’il s’agisse des hommes de la pierre (terrassiers, maçons, appareilleurs, tailleurs de pierre, statuaires), du métal (serruriers, plombiers), du bois (charpentiers, menuisiers), et de la couleur (peintres) ; d’apprécier leurs outils et la maîtrise de leur usage ; d’analyser leurs méthodes de mise en œuvre (
-Chapitre III
 ) ; et, enfin, au centre de cette mêlée, définir la place de l’architecte, son rôle, ses pratiques, ses rapports avec les ouvriers, avec les entrepreneurs et son inspecteur.
 L’édition des sources –
 L’abondance et la richesse des informations techniques conservées dans les archives produites pendant les travaux (1858-1885) – cahiers du chantier et correspondance passive et active entre l’architecte, l’inspecteur et les entrepreneurs (
-Chapitre I
 ) – nous permettent une enquête féconde.
 Nous avons choisi de publier cette documentation en trois annexes : la première réunit la correspondance de Viollet-le-Duc et Wyganowski entre 1858 et 1879, la deuxième rassemble celle de ce dernier avec Maurice Ouradou entre 1879 et 1884 ; enfin, la troisième collige les lettres échangées entre les entrepreneurs et Wyganowski au cours de l’entreprise. Les cahiers du chantier écrits durant la même période – 1858-1885 – sont au nombre de cinq. Il a été impossible d’associer leur édition à cette publication pour des raisons éditoriales et cela d’autant qu’ils ont été récemment numérisés en haute définition et mis à disposition des chercheurs sur le site des archives départementales de l’Oise
 . Quelques extraits ont cependant été convoqués dans l’étude ainsi qu’en note des trois annexes.
@@ -80,35 +54,25 @@ L’édition des sources inhérentes au chantier est aujourd’hui une démarche
 à laquelle nous sommes soucieux de participer
 . Elle favorise les études comparatives et l’élaboration progressive des répertoires prosopographiques des artisans et des entrepreneurs attachés à Viollet-le-Duc (
 les essais biographiques du
-Chapitre II
 ). Pour Pierrefonds cette édition est d’autant plus nécessaire que la
-Correspondance
-comme les
-Cahiers
 du chantier sont essentiels à la compréhension des travaux.
 Rédigés par Wyganowski, les cahiers
 éclairent au jour le jour sur la construction, sur les découvertes archéologiques, sur les visites de l’architecte, sur celles des entrepreneurs ; ils indiquent le nom des ouvriers et leur nombre, les accidents, les décès et les vols ; ils précisent la nature, la densité et le poids des matériaux employés, celle des techniques expérimentées et des machines sollicitées ; enfin, ils ouvrent au monde extérieur en égrenant le nom des visiteurs de marque (Louis II de Bavière, le prince japonais Taïkoun, l’empereur d’Autriche, la reine de Madagascar…), en évoquant les évènements politiques nationaux (la Commune, l’élection de Jules Grévy, la mort de Victor Hugo) et internationaux (la guerre de Sécession), en mentionnant les victoires militaires (Solferino) et les revers (les batailles de 1870). Les informations qu’offrent ces cahiers se dilatent donc bien au-delà du chantier en relevant les échos du monde ; de simple exercice de greffier ils se font mémoires. Ils constituent ainsi un genre littéraire particulier dont seule l’étude comparée – avec les
-Journaux du chantier
 de la Sainte-Chapelle, de Notre-Dame de Paris, de Saint-Denis ou d’Abbadia – pourra à terme valoriser l’originalité.
 Les 864 lettres de la correspondance ont été annotées et présentées (
 Annexe I à III
 ). Nous nous sommes interrogé sur l’intérêt scientifique de cette démarche. Ainsi que nous l’avons fait pour les
-Cahiers
 , des extraits choisis et des renvois en note auraient peut-être été d’un apport substantiel et en conséquence suffisant. Il s’est avéré que cela aurait atrophié la richesse de cette source. En dépit de son caractère technique il ne faut pas se méprendre sur ce qu’elle contient d’intime. Il est délicat de se priver de ces petites tournures de phrases, formules et constructions qui disent la vérité des acteurs avant d’éclairer sur la réalité des évènements. Éditer la correspondance du chantier, c’est solliciter le non-dit ou le suggéré comme l’on interprète le négatif d’un matériau ou un reliquat archéologique, c’est avant tout rechercher et comprendre la part humaine de toute construction monumentale. Dans son principe le chantier est en effet une construction sociale avec ses limites topographiques, ses luttes, ses réseaux, ses conflits. C’est ce que dévoile la correspondance, une structure humaine fractionnée mais performante car organisée dans sa conduite, hiérarchisée dans sa gouvernance et policée dans son ensemble. « L’archive est une brèche dans le tissu des jours, l’aperçu tendu d’un événement inattendu. En elle, tout se focalise sur quelques instants de vie de personnages ordinaires, rarement visités par l’histoire, sauf s’il leur prend un jour de se rassembler en foules et de construire ce qu’on appellera plus tard de l’histoire
 . » Les lettres réunies dans les annexes témoignent justement de cette foule, de ce groupe ordinaire, souvent oublié, que constituent les hommes du bâtiment. En nous communiquant leurs dialogues elles nous permettent d’en écrire l’histoire (
 Chapitres II et III
 ). Enfin, la correspondance du chantier se devait d’être éditée car elle est en soi un genre littéraire. La correspondance technique a son rythme, ses termes, ses formules, ses mécanismes, ses abréviations et ses champs lexicaux. Elle éclaire autant sur la course des travaux que sur l’instruction de ses acteurs (
 cf. Chapitre II
-et introductions des
-Annexes I
 Pour toutes ces raisons il fallait mettre cette littérature à la disposition des chercheurs et cela avec d’autant plus de conviction que toute prospection historique ne peut évoluer seule, détachée de ses preuves car « on le pressent – on peut tout faire dire à l’archive, tout et le contraire […]
 Une source majeure : le monument –
 Quand Viollet-le-Duc façonne la matière, il incarne une conception de l’histoire et défend une notion du progrès. Ainsi que plusieurs de ses contemporains (Caumont, Didron, Gerville…), il porte une attention particulière aux gestes produits et aux techniques engendrées pour donner forme et fonction aux matériaux. Le restaurateur ne part donc pas en quête d’une simple réalité archéologique, mais plus particulièrement, en recourant à l’édifice comme à un document, il est à la recherche d’une réalité technologique et humaine. Comme l’indique la multiplicité des observations semées dans le
 Dictionnaire de l’architecture française
 , dans sa suite d’
-Entretiens
 , dans sa correspondance technique ou dans ses rapports, c’est
-l’homo faber
 qu’il traque ; c’est le fabricant de traces, de marques et de signes, c’est l’artisan médiéval qui est au cœur de sa préoccupation de même que l’artisan contemporain en ce qu’il subsume, prolonge et rejoue le premier.
 Abordé dans ce sens, le monument – autant que le document écrit – est une source immédiate et diserte.
 C’est pourquoi le présent volume (
@@ -121,7 +85,6 @@ Du passé et de l’avenir de l’artillerie
 , Œuvres complète de Napoléon III, Paris, Plon et Amyot, t. 4, 1869, p. 12.
 D. Kimpel
 , « Structures et évolutions des chantiers médiévaux »,
-Chantiers médiévaux
 , Paris, La Pierre-qui-Vire, Zodiaque – Desclée de Brouwer, 1996, p. 11.
 M. Proust
 À la Recherche du Temps Perdu
@@ -132,10 +95,8 @@ J. Harmand
 Pierrefonds. La forteresse d’Orléans. Les réalités
 , Le Puy-en-Velay, éd. Jeanne-d’Arc, 1983, p. 7.
 L. Grodecki
-Pierrefonds
 , Paris, CNMH, s. d., [1957], s. p., [p. 6 et 25]. Sur cet ouvrage, lire le compte rendu de :
 Fr. Salet
-Bulletin monumental
 , 1957, p. 238-239.
 E. Romeo
 , « Trasformazioni e recenti restauri della chiesa di Saint-Sernin a Tolosa »,
@@ -143,26 +104,21 @@ Restauro dalla teoria alla prassi
 , S. Casiello dir., Naples, Electa Napoli, 2000, p. 103-125.
 B. Waty
 , « Saint-Sernin de Toulouse : la Basilique de la discorde »,
-Livraisons de l’Architecture
 , n° 17, 2009, p. 73-91.
 Parmi la production abondante de ces dernières années, lire notamment :
 L. Fraisse
 , « Viollet-le-Duc et le livre de pierre »,
 Architectes et architecture dans la littérature française
 , Actes du colloque international, 23-25 oct. 1997, dir. M. Bertrand,
-Travaux de littérature
 , XII, Klincksieck, 1999, p. 87-108.
 D. Ortiz Pradas
 , « Un proyecto de Viollet-le-Duc para Madrid. El mausoleo de la Duquesa de Alba »,
-Goya
 , 330, 2010, p. 48-61.
 S. D. Daussy
 , « De l’apport du
-Dictionnaire raisonné
 de Viollet-le-Duc à la connaissance de l’ancienne couverture en plomb »,
 Chartres : construire et restaurer la cathédrale (XI
 -XXI
-siècle
 ), dir. A. Timbert, Villeneuve-d’Ascq, Presses Universitaires du Septentrion, coll. « Architecture & Urbanisme », 2014, p. 335-359.
 E. Romeo
 , « Memoria e percezione dell’antico in Viollet-le-Duc. Dagli studi di Roberto Di Stefano alla lettura di documenti inediti », Actes du colloque
@@ -172,7 +128,6 @@ G. Poisson
 , « Un château rénové de Viollet-le-Duc : Jacquesson, Fagnières, Châlons-en-Champagne »,
 Magazine du Second Empire
 , n° 32, sept.-oct. 2015, p. 56-58.
-Campa
 , Maria-Rita,
 E.-E. Viollet-le-Duc : innovazione e tradizione in architettura. Linguaggio formale e coincidenze tra forma e struttura nella concezione di volte poliedriche
 , Gangemi, Roma, 2015.
@@ -195,12 +150,9 @@ Viollet-le-Duc (1814-2014), villégiature et architecture domestique
 , Actes du colloque international, Hendaye 9-10 oct. 2014, dir. V. Delpech, Villeneuve-d’Ascq, Presses Universitaires du Septentrion, coll. « Architecture & Urbanisme », 2016.
 Viollet-le-Duc. Regards croisés
 , Actes du colloque international, Carcassonne, 5-6 juin 2014, Garae Hésiode, 2015.
-Viollet-le-Duc enseignant
 , Journée d’études, 11 déc. 2014, Paris, Cité de l’architecture et du Patrimoine, dir. L. Diez.
-Viollet-le-Duc restaurateur
 , Journée d’études, 23 janvier 2015, Paris, INHA, dir. S. Quantin.
 Fr. Bercé
-Viollet-le-Duc
 , Paris, CMN, 2013.
 M. Bressani
 Architecture and the Historical Imagination. Eugène-Emmanuel Viollet-le-Duc (1814-1879)
@@ -220,11 +172,9 @@ E. E. Viollet-le-Duc Contributi per una rilettura degli scritti e delle opere (
 , dir. E. Romeo, Rome, éd. Ermès, à paraître.
 B. Foucart
 , dir.,
-Viollet-le-Duc
 , cat. expo. Paris, Galeries nationales du Grand Palais, 19 fév.-5 mai 1980, Paris, RMN, 1980.
 A. C. Papadakis
 , dir.,
-Viollet-le-Duc
 , Paris, Academy Éditions, 1980.
 B. Gaussuin
 Back to Viollet-le-Duc. La fortune critique de Violet-le-Duc 1964-1980
@@ -271,7 +221,6 @@ Lire néanmoins :
 Fr. Seitz
 dir.,
 Architecture et métal en France, XIX
-siècles
 , Paris, éd. de EHESS, 1994.
 G. Delhumeau
 L’invention du béton Hennebique 1890-1914
@@ -286,7 +235,6 @@ L. Baridon, J.-Ph. Garric, G. Richaud
 dir.,
 Les Leçons de la terre. François Cointeraux (1740-1830) professeur d’architecture rurale
 , Paris, INHA-éd. des Cendres, 2015. Ainsi que la littérature de V. Nègre sur les interactions entre architecture, technique et société du XVIII
-au XX
 siècle. Notons par ailleurs que des prospections matérielles ont été inaugurées, leurs résultats sont attendus :
 Les nouvelles maçonneries et leur revêtement au XIX
 siècle : techniques, usages et enjeux
@@ -307,15 +255,12 @@ Fr. Loyer
 , « Pierrefonds ou le dépassement du conflit »,
 Viollet-le-Duc, centenaire de la mort à Lausanne
 , cat. expo. du Musée historique de l’Ancien-Evêché, Lausanne, 22 juin-30 sept. 1979, Lausanne, éd. du Musée historique de l’Ancien-Evêché, 1979, p. 37-38. Du même : « Pierrefonds : le décor mural »,
-Viollet-le-Duc
 , cat. expo., Paris, Galeries nationales du Grand Palais, 19 fév.-5 mai 1980, Paris, RMN, 1980, p. 327-329.
 M.-Th. Thibierge
 , « Les sculpteurs de Viollet-le-Duc pour la restauration du château de Pierrefonds, 1858-1885 »,
 Bulletin de la Société d’Histoire de l’Art français
 , séance du 10 nov. 1984, 1987, p. 255-268. L.
-Kokanosky
 , « Petite histoire de la restauration du château de Pierrefonds, d’après le journal inédit de Lucjan Wyganowski »,
-Annales Historiques Compiégnoises
 bulletin de la Société d’Histoire Moderne et Contemporaine de Compiègne
 , n° 139-140, 2015, p. 29-40.
 F. Jiawei Jiang
@@ -375,131 +320,70 @@ Le goût de l’archive
 Ch. Nougaret, E. Parinet
 L’édition critique des textes contemporains XIX
 -XXI
-siècle
 , Paris, ENC, coll. « Les Manuels de l’École des chartes », 2015, p. 9.
 A. Farge
 op. cit.
 , 1989, p. 118.
 E.-E. Viollet-le-Duc
-Histoire d’une maison
 , [1873], Paris, Infolio, 2008, p. 149-155.
-Naviguer dans le livre
-Le texte seul est utilisable sous licence
-Licence OpenEdition Books
 . Les autres éléments (illustrations, fichiers annexes importés) sont « Tous droits réservés », sauf mention contraire.
-Dans la même collection
-Voir plus de livres
-Viollet-le-Duc et Pierrefonds
-Histoire d’un chantier
-Arnaud Timbert
-2017
 Le siège de Maubeuge (25 août – 8 septembre 1914)
-Hans von Zwehl
 Jean Heuclin                                                                                    (éd.)
-2018
 Souvenirs de guerre du recteur Georges Lyon (1914-1918)
-Georges Lyon
 Jean-François Condette                                                                                    (éd.)
-2016
 Journal de guerre d’une institutrice du Nord 1939-1945
 à Dunkerque, Arras, Bailleul, Hazebrouck
-Denise Delmas-Decreus
 Bernard Delmas                                                                                    (éd.)
-2015
 Journaux de combattants & civils de la France du Nord dans la Grande Guerre
 Annette Becker                                                                                    (dir.)
-2015
 Léon de Rosny 1837-1914
 De l'Orient à l'Amérique
 Bénédicte Fabre-Muller,                                             Pierre Leboulleux et                                             Philippe Rothstein                                                                                    (dir.)
-2014
 Journal de voyage d’un jeune noble savoyard à Paris en 1766-1767
 Joseph-Henry Costa de Beauregard
 Patrick Michel                                                                                    (éd.)
-2013
 Christianisme et ordre social
-William Temple
 Daniel Verheyde                                                                                    (trad.)
-2013
 Femmes sur le pied de guerre
 Chronique d’une famille bourgeoise 1914-1918
 Jacques Resal et                                             Pierre Allorant                                                                                    (éd.)
-2014
 Journal de guerre 1914-1918
 Abbé Achille Liénart aumônier du 201
-Achille Liénart
 Catherine Masson                                                                                    (éd.)
-2008
 La traduction en moyen français de la lettre anticuriale
 De curialium miseriis epistola
-d’Æneas Silvius Piccolomini
-Æneas Silvius Piccolomini
 Jacques Charles Lemaire                                                                                    (éd.)
-2007
 Journal d’un pasteur protestant au XIX
-siècle
-Jean-Baptiste Pruvot
 Madeleine Thomas                                                                                    (trad.)
-1997
-Voir plus de livres
-Viollet-le-Duc et Pierrefonds
-Histoire d’un chantier
-Arnaud Timbert
-2017
 Le siège de Maubeuge (25 août – 8 septembre 1914)
-Hans von Zwehl
 Jean Heuclin                                                                                    (éd.)
-2018
 Souvenirs de guerre du recteur Georges Lyon (1914-1918)
-Georges Lyon
 Jean-François Condette                                                                                    (éd.)
-2016
 Journal de guerre d’une institutrice du Nord 1939-1945
 à Dunkerque, Arras, Bailleul, Hazebrouck
-Denise Delmas-Decreus
 Bernard Delmas                                                                                    (éd.)
-2015
 Journaux de combattants & civils de la France du Nord dans la Grande Guerre
 Annette Becker                                                                                    (dir.)
-2015
 Léon de Rosny 1837-1914
 De l'Orient à l'Amérique
 Bénédicte Fabre-Muller,                                             Pierre Leboulleux et                                             Philippe Rothstein                                                                                    (dir.)
-2014
 Journal de voyage d’un jeune noble savoyard à Paris en 1766-1767
 Joseph-Henry Costa de Beauregard
 Patrick Michel                                                                                    (éd.)
-2013
 Christianisme et ordre social
-William Temple
 Daniel Verheyde                                                                                    (trad.)
-2013
 Femmes sur le pied de guerre
 Chronique d’une famille bourgeoise 1914-1918
 Jacques Resal et                                             Pierre Allorant                                                                                    (éd.)
-2014
 Journal de guerre 1914-1918
 Abbé Achille Liénart aumônier du 201
-Achille Liénart
 Catherine Masson                                                                                    (éd.)
-2008
 La traduction en moyen français de la lettre anticuriale
 De curialium miseriis epistola
-d’Æneas Silvius Piccolomini
-Æneas Silvius Piccolomini
 Jacques Charles Lemaire                                                                                    (éd.)
-2007
 Journal d’un pasteur protestant au XIX
-siècle
-Jean-Baptiste Pruvot
 Madeleine Thomas                                                                                    (trad.)
-1997
-Accès ouvert freemium
-ePub
-PDF du chapitre
 Suggérer l’acquisition à votre bibliothèque
-Acheter
-Édition imprimée
 Presses universitaires du Septentrion
 amazon.fr
 decitre.fr
@@ -507,13 +391,11 @@ mollat.com
 leslibraires.fr
 placedeslibraires.fr
 lcdpu.fr
-ePub / PDF
 L.-N. Bonaparte
 Du passé et de l’avenir de l’artillerie
 , Œuvres complète de Napoléon III, Paris, Plon et Amyot, t. 4, 1869, p. 12.
 D. Kimpel
 , « Structures et évolutions des chantiers médiévaux »,
-Chantiers médiévaux
 , Paris, La Pierre-qui-Vire, Zodiaque – Desclée de Brouwer, 1996, p. 11.
 M. Proust
 À la Recherche du Temps Perdu
@@ -524,10 +406,8 @@ J. Harmand
 Pierrefonds. La forteresse d’Orléans. Les réalités
 , Le Puy-en-Velay, éd. Jeanne-d’Arc, 1983, p. 7.
 L. Grodecki
-Pierrefonds
 , Paris, CNMH, s. d., [1957], s. p., [p. 6 et 25]. Sur cet ouvrage, lire le compte rendu de :
 Fr. Salet
-Bulletin monumental
 , 1957, p. 238-239.
 E. Romeo
 , « Trasformazioni e recenti restauri della chiesa di Saint-Sernin a Tolosa »,
@@ -535,26 +415,21 @@ Restauro dalla teoria alla prassi
 , S. Casiello dir., Naples, Electa Napoli, 2000, p. 103-125.
 B. Waty
 , « Saint-Sernin de Toulouse : la Basilique de la discorde »,
-Livraisons de l’Architecture
 , n° 17, 2009, p. 73-91.
 Parmi la production abondante de ces dernières années, lire notamment :
 L. Fraisse
 , « Viollet-le-Duc et le livre de pierre »,
 Architectes et architecture dans la littérature française
 , Actes du colloque international, 23-25 oct. 1997, dir. M. Bertrand,
-Travaux de littérature
 , XII, Klincksieck, 1999, p. 87-108.
 D. Ortiz Pradas
 , « Un proyecto de Viollet-le-Duc para Madrid. El mausoleo de la Duquesa de Alba »,
-Goya
 , 330, 2010, p. 48-61.
 S. D. Daussy
 , « De l’apport du
-Dictionnaire raisonné
 de Viollet-le-Duc à la connaissance de l’ancienne couverture en plomb »,
 Chartres : construire et restaurer la cathédrale (XI
 -XXI
-siècle
 ), dir. A. Timbert, Villeneuve-d’Ascq, Presses Universitaires du Septentrion, coll. « Architecture & Urbanisme », 2014, p. 335-359.
 E. Romeo
 , « Memoria e percezione dell’antico in Viollet-le-Duc. Dagli studi di Roberto Di Stefano alla lettura di documenti inediti », Actes du colloque
@@ -564,7 +439,6 @@ G. Poisson
 , « Un château rénové de Viollet-le-Duc : Jacquesson, Fagnières, Châlons-en-Champagne »,
 Magazine du Second Empire
 , n° 32, sept.-oct. 2015, p. 56-58.
-Campa
 , Maria-Rita,
 E.-E. Viollet-le-Duc : innovazione e tradizione in architettura. Linguaggio formale e coincidenze tra forma e struttura nella concezione di volte poliedriche
 , Gangemi, Roma, 2015.
@@ -587,12 +461,9 @@ Viollet-le-Duc (1814-2014), villégiature et architecture domestique
 , Actes du colloque international, Hendaye 9-10 oct. 2014, dir. V. Delpech, Villeneuve-d’Ascq, Presses Universitaires du Septentrion, coll. « Architecture & Urbanisme », 2016.
 Viollet-le-Duc. Regards croisés
 , Actes du colloque international, Carcassonne, 5-6 juin 2014, Garae Hésiode, 2015.
-Viollet-le-Duc enseignant
 , Journée d’études, 11 déc. 2014, Paris, Cité de l’architecture et du Patrimoine, dir. L. Diez.
-Viollet-le-Duc restaurateur
 , Journée d’études, 23 janvier 2015, Paris, INHA, dir. S. Quantin.
 Fr. Bercé
-Viollet-le-Duc
 , Paris, CMN, 2013.
 M. Bressani
 Architecture and the Historical Imagination. Eugène-Emmanuel Viollet-le-Duc (1814-1879)
@@ -612,11 +483,9 @@ E. E. Viollet-le-Duc Contributi per una rilettura degli scritti e delle opere (
 , dir. E. Romeo, Rome, éd. Ermès, à paraître.
 B. Foucart
 , dir.,
-Viollet-le-Duc
 , cat. expo. Paris, Galeries nationales du Grand Palais, 19 fév.-5 mai 1980, Paris, RMN, 1980.
 A. C. Papadakis
 , dir.,
-Viollet-le-Duc
 , Paris, Academy Éditions, 1980.
 B. Gaussuin
 Back to Viollet-le-Duc. La fortune critique de Violet-le-Duc 1964-1980
@@ -663,7 +532,6 @@ Lire néanmoins :
 Fr. Seitz
 dir.,
 Architecture et métal en France, XIX
-siècles
 , Paris, éd. de EHESS, 1994.
 G. Delhumeau
 L’invention du béton Hennebique 1890-1914
@@ -678,7 +546,6 @@ L. Baridon, J.-Ph. Garric, G. Richaud
 dir.,
 Les Leçons de la terre. François Cointeraux (1740-1830) professeur d’architecture rurale
 , Paris, INHA-éd. des Cendres, 2015. Ainsi que la littérature de V. Nègre sur les interactions entre architecture, technique et société du XVIII
-au XX
 siècle. Notons par ailleurs que des prospections matérielles ont été inaugurées, leurs résultats sont attendus :
 Les nouvelles maçonneries et leur revêtement au XIX
 siècle : techniques, usages et enjeux
@@ -699,15 +566,12 @@ Fr. Loyer
 , « Pierrefonds ou le dépassement du conflit »,
 Viollet-le-Duc, centenaire de la mort à Lausanne
 , cat. expo. du Musée historique de l’Ancien-Evêché, Lausanne, 22 juin-30 sept. 1979, Lausanne, éd. du Musée historique de l’Ancien-Evêché, 1979, p. 37-38. Du même : « Pierrefonds : le décor mural »,
-Viollet-le-Duc
 , cat. expo., Paris, Galeries nationales du Grand Palais, 19 fév.-5 mai 1980, Paris, RMN, 1980, p. 327-329.
 M.-Th. Thibierge
 , « Les sculpteurs de Viollet-le-Duc pour la restauration du château de Pierrefonds, 1858-1885 »,
 Bulletin de la Société d’Histoire de l’Art français
 , séance du 10 nov. 1984, 1987, p. 255-268. L.
-Kokanosky
 , « Petite histoire de la restauration du château de Pierrefonds, d’après le journal inédit de Lucjan Wyganowski »,
-Annales Historiques Compiégnoises
 bulletin de la Société d’Histoire Moderne et Contemporaine de Compiègne
 , n° 139-140, 2015, p. 29-40.
 F. Jiawei Jiang
@@ -767,35 +631,24 @@ Le goût de l’archive
 Ch. Nougaret, E. Parinet
 L’édition critique des textes contemporains XIX
 -XXI
-siècle
 , Paris, ENC, coll. « Les Manuels de l’École des chartes », 2015, p. 9.
 A. Farge
 op. cit.
 , 1989, p. 118.
 E.-E. Viollet-le-Duc
-Histoire d’une maison
 , [1873], Paris, Infolio, 2008, p. 149-155.
-Viollet-le-Duc et Pierrefonds
-Partager l’URL
-Intégrer
-Copier
-Facebook
-Email
 Choisir la taille de l’intégration
 Petit (500x375 px)
 Moyen (800x600 px)
 Grand (1024x768 px)
 Collez le code HTML suivant pour intégrer ce contenu sur votre site.
 <iframe src="https://books.openedition.org/septentrion/33651?format=embed" style="padding:5px;border:2px solid #ddd;" height="500" width="375"></iframe>
-Copier
-Viollet-le-Duc et Pierrefonds
 Ce livre est diffusé en accès ouvert freemium. L’accès à la lecture en ligne est disponible. L’accès aux versions PDF et ePub est réservé aux bibliothèques l’ayant acquis.
 Vous pouvez vous connecter à votre bibliothèque à l’adresse suivante :
 https://freemium.openedition.org/oebooks
 Suggérer l’acquisition à votre bibliothèque
 Acheter ce livre aux formats PDF et ePub
 Si vous avez des questions, vous pouvez nous écrire à access[at]openedition.org
-Viollet-le-Duc et Pierrefonds
 Vérifiez si votre bibliothèque a déjà acquis ce livre :
 authentifiez-vous à OpenEdition Freemium for Books
 Vous pouvez suggérer à votre bibliothèque d’acquérir un ou plusieurs livres publiés sur OpenEdition Books. N’hésitez pas à lui indiquer nos coordonnées : access[at]openedition.org
@@ -803,120 +656,50 @@ Vous pouvez également nous indiquer, à l’aide du formulaire suivant, les coo
 Veuillez, s’il vous plaît, remplir tous les champs.
 La syntaxe de l’email est incorrecte.
 Référence numérique du chapitre
-Format
-Chicago
 Timbert, A. (2017). Introduction. In
-Viollet-le-Duc et Pierrefonds
 . Villeneuve d’Ascq: Presses universitaires du Septentrion. https://doi.org/10.4000/books.septentrion.33651
 Timbert, Arnaud. « Introduction ». In
-Viollet-le-Duc et Pierrefonds
 . Villeneuve d’Ascq: Presses universitaires du Septentrion, 2017. doi:10.4000/books.septentrion.33651.
 Timbert, Arnaud. « Introduction ».
-Viollet-le-Duc et Pierrefonds
 , Presses universitaires du Septentrion, 2017, https://doi.org/10.4000/books.septentrion.33651.
 Référence numérique du livre
-Format
-Chicago
 Timbert, A. (2017).
-Viollet-le-Duc et Pierrefonds
 . Villeneuve d’Ascq: Presses universitaires du Septentrion. https://doi.org/10.4000/books.septentrion.33624
 Timbert, Arnaud.
-Viollet-le-Duc et Pierrefonds
 . Villeneuve d’Ascq: Presses universitaires du Septentrion, 2017. doi:10.4000/books.septentrion.33624.
 Timbert, Arnaud.
-Viollet-le-Duc et Pierrefonds
 . Presses universitaires du Septentrion, 2017, https://doi.org/10.4000/books.septentrion.33624.
-Compatible avec Zotero
 Panneau de gestion des cookies
-Fermer
 Panneau de gestion des cookies
 En autorisant ces services tiers, vous acceptez le dépôt et la lecture de cookies et l'utilisation de technologies de suivi nécessaires à leur bon fonctionnement.
-Politique de confidentialité
 Préférences pour tous les services
-Tout accepter
-Tout refuser
-Cookies obligatoires
 Ce site utilise des cookies nécessaires à son bon fonctionnement. Ils ne peuvent pas être désactivés.
-Autoriser
-Interdire
-APIs
 Les APIs permettent de charger des scripts : géolocalisation, moteurs de recherche, traductions, ...
-Openstreetmap Embed
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-Autre
 Services visant à afficher du contenu web.
-Gallica
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-Google Maps
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-Commentaires
 Les gestionnaires de commentaires facilitent le dépôt de vos commentaires et luttent contre le spam.
 Consentement spécifique aux services Google
 Google peut utiliser vos données pour la mesure d'audience, la performance publicitaire ou pour vous proposer des annonces personnalisées.
-Mesure d'audience
 Les services de mesure d'audience permettent de générer des statistiques de fréquentation utiles à l'amélioration du site.
-Régies publicitaires
 Les régies publicitaires permettent de générer des revenus en commercialisant les espaces publicitaires du site.
-Réseaux sociaux
 Les réseaux sociaux permettent d'améliorer la convivialité du site et aident à sa promotion via les partages.
-Support
 Les services de support vous permettent d'entrer en contact avec l'équipe du site et d'aider à son amélioration.
-Vidéos
 Les services de partage de vidéo permettent d'enrichir le site de contenu multimédia et augmentent sa visibilité.
 Canal-U.tv
-interdit
 Ce service ne dépose aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-Dailymotion
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-Internet Archive
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-Vimeo
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
-YouTube
-interdit
 Ce service n'a déposé aucun cookie.
-En savoir plus
 Voir le site officiel
-Autoriser
-Interdire
 Ce site n'utilise aucun cookie nécessitant votre consentement.
-Enregistrer
 Ce site utilise des cookies et vous donne le contrôle sur ceux que vous souhaitez activer
-Tout accepter
-Tout refuser
-Personnaliser
-Politique de confidentialité

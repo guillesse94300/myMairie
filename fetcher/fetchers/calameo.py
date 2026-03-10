@@ -265,14 +265,22 @@ class CalameoFetcher(Fetcher):
             # URL image première page (pour référence)
             img_key = content.get("key", "")
             img_url = f"https://i.calameoassets.com/{img_key}/p1.jpg" if img_key else ""
+            # Nombre de pages
+            nb_pages = 0
+            for field in ("pages", "nb_pages", "length", "nbpages", "total_pages"):
+                v = content.get(field)
+                if v and isinstance(v, (int, float)) and int(v) > 0:
+                    nb_pages = int(v)
+                    break
             meta = {
                 "date": pub_date,
                 "author": author,
                 "image_key": img_key,
                 "cover_url": img_url,
+                "nb_pages": nb_pages,
             }
             # Pas de description texte dans cette API → texte vide
-            print(f"  [calameo] API : titre={title!r}, auteur={author!r}, date={pub_date}")
+            print(f"  [calameo] API : titre={title!r}, auteur={author!r}, date={pub_date}, pages={nb_pages or '?'}")
             return title, "", meta
         except Exception as e:
             print(f"  [calameo] API directe échouée : {e}")
@@ -307,7 +315,8 @@ class CalameoFetcher(Fetcher):
             print(f"  [extract] PDF direct sauvé ({len(pdf_bytes):,} octets)")
 
         # — Screenshots Playwright (sans OCR) —
-        screenshot_files = self._screenshot_pages_raw(url, bundle.dir)
+        screenshot_files = self._screenshot_pages_raw(url, bundle.dir,
+                                                          nb_pages_hint=api_meta.get("nb_pages", 0))
         bundle.screenshot_files = screenshot_files
 
         # — CDN thumbnails (fallback si pas de screenshots) —
@@ -404,7 +413,7 @@ class CalameoFetcher(Fetcher):
     # ── Screenshots sans OCR ───────────────────────────────────────────────────
 
     @staticmethod
-    def _screenshot_pages_raw(url: str, out_dir: "Path") -> list[str]:
+    def _screenshot_pages_raw(url: str, out_dir: "Path", nb_pages_hint: int = 0) -> list[str]:
         """
         Ouvre le viewer Calameo, prend un screenshot par page et les sauvegarde
         en PNG dans out_dir (screenshot_001.png, …).
@@ -451,6 +460,10 @@ class CalameoFetcher(Fetcher):
                             nb_pages = int(m.group(2))
                     except Exception:
                         pass
+                # Fallback final : nombre de pages fourni par l'API
+                if nb_pages <= 1 and nb_pages_hint > 1:
+                    nb_pages = nb_pages_hint
+                    print(f"  [extract] Nombre de pages depuis API : {nb_pages}")
 
                 print(f"  [extract] {nb_pages} page(s), capture PNG...")
 
@@ -658,19 +671,40 @@ def _detect_page_count(page) -> int:
                     window.CALAMEO?.book?.pages,
                     window.calameo?.publication?.pages_count,
                     window.__INITIAL_STATE__?.publication?.pages,
+                    window.book?.pages,
+                    window.book?.nb_pages,
+                    window.book?.total,
+                    window.viewer?.book?.pages,
+                    window.readerData?.book?.pages,
+                    window.App?.book?.pages,
                 ];
                 for (const c of candidates) {
                     if (c && typeof c === 'number' && c > 0) return c;
                 }
                 // Attributs data-*
-                const el = document.querySelector('[data-total-pages],[data-pages]');
+                const el = document.querySelector(
+                    '[data-total-pages],[data-pages],[data-nb-pages],[data-page-count]'
+                );
                 if (el) {
-                    const v = el.dataset.totalPages || el.dataset.pages;
+                    const v = el.dataset.totalPages || el.dataset.pages
+                            || el.dataset.nbPages || el.dataset.pageCount;
                     if (v) return parseInt(v);
                 }
-                // Texte du compteur "Page X / Y" ou "X / Y"
+                // Elements DOM courants du viewer Calameo
+                const domSelectors = [
+                    '.total-pages', '#totalPages', '.page-count',
+                    '.reader-page-count', '#nbPages',
+                ];
+                for (const sel of domSelectors) {
+                    const node = document.querySelector(sel);
+                    if (node) {
+                        const n = parseInt(node.textContent.trim());
+                        if (n > 0) return n;
+                    }
+                }
+                // Texte du compteur "Page X / Y" ou "X / Y" ou "X of Y"
                 const counterText = document.body.innerText;
-                const m = counterText.match(/\\d+\\s*\\/\\s*(\\d+)/);
+                const m = counterText.match(/\\d+\\s*(?:\\/|of|sur)\\s*(\\d+)/i);
                 if (m) return parseInt(m[1]);
                 return null;
             }

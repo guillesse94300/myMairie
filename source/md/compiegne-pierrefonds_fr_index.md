@@ -45,37 +45,38 @@ Découvrez Compiègne Pierrefonds et suivez tous nos évènements.. Fêtes, conc
 Tous nos évènements
 Gratuit
 Guillon Françoise
-07 mars
+10 mars
 Exposition - Foire - Portes ouvertes
 Ils regardent… Quoi ? L’éternité…
 COMPIEGNE
-Les Notes Bleues
-07 mars
-Concert
-METAL ON MARS 2026 – FESTIVAL TRIBUTE
-COMPIEGNE
-Non contractuelle - jacqueline macou / Pixabay
-07 mars à 09h00
-Initiation - atelier
-Atelier d’écriture et méditation
-COMPIEGNE
 Gratuit
-Droits réservés
-07 mars à 09h00
-Sortie Nature
-Hauts-de-France Propres 2026 I Béthisy-Saint-Martin
-BETHISY-SAINT-MARTIN
+Rémi Courgeon
+10 mars à 10h00
+Exposition - Foire - Portes ouvertes
+On est tous des personnages – Rémi Courgeon, illustrateur
+MARGNY-LES-COMPIEGNE
 Gratuit
-Droits réservés
-07 mars à 09h30
-Sortie Nature
-Hauts-de-France Propres 2026 I Saintines
-SAINTINES
+Médiathèque Jean Moulin
+10 mars à 10h00
+Exposition - Foire - Portes ouvertes
+Tactile Tour, une exposition à toucher
+MARGNY-LES-COMPIEGNE
 Gratuit
-Non contractuelle - Christiane / Pixabay
-07 mars à 10h00
-Lecture
-L’heure du conte | Bibliothèque Saint-Corneille
+Jean-Michel Fessol | Amis des Petites Bouilles
+10 mars à 10h00
+Exposition - Foire - Portes ouvertes
+La joie des Petites Bouilles | Les Amis des Petites Bouilles
+PIERREFONDS
+CNAP
+10 mars à 10h00
+Exposition - Foire - Portes ouvertes
+Œuvre spectaculaire Défilé de Wang Du au château de Pierrefonds
+PIERREFONDS
+à partir de 10 €
+Château de Compiègne
+10 mars à 10h00
+Exposition - Foire - Portes ouvertes
+Exposition Bizarreries
 COMPIEGNE
 Éclats d'hiver...
 Profitez d’animations en intérieur pour vous réchauffer et découvrir des activités culturelles, ludiques ou gourmandes. Et pour ceux qui aiment la nature, partez en balade dans la forêt et admirez les paysages hivernaux, entre couleurs de saison et air frais. Un hiver à vivre pleinement, à l’intérieur comme en extérieur.

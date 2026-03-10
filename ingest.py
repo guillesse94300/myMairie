@@ -20,6 +20,8 @@ import warnings
 # Supprimer les warnings non bloquants (pin_memory, HF Hub)
 warnings.filterwarnings("ignore", message=".*pin_memory.*", category=UserWarning)
 warnings.filterwarnings("ignore", message=".*HF_TOKEN.*", category=UserWarning)
+warnings.filterwarnings("ignore", message=".*FontBBox.*")  # pdfplumber font warnings
+warnings.filterwarnings("ignore", message=".*Cannot parse.*")  # pdfplumber font warnings
 import shutil
 import pickle
 import sys
@@ -66,6 +68,7 @@ _OCR_AVAILABLE = _OCR_TESSERACT or _OCR_EASYOCR
 APP_DIR        = Path(__file__).parent
 STATIC_DIR     = APP_DIR / "static"
 JOURNAL_DIR    = APP_DIR / "journal"
+IMAGES_DIR     = APP_DIR / "source" / "images"  # images a indexer par OCR direct
 KNOWLEDGE_DIR  = APP_DIR / "knowledge_sites"  # .md issus de fetch_sites.py (défaut)
 INPUT_DIR      = APP_DIR / "input"            # .md produits par transform.py
 DB_DIR         = APP_DIR / "vector_db"
@@ -73,8 +76,8 @@ MODEL_NAME     = "paraphrase-multilingual-MiniLM-L12-v2"
 CHUNK_SIZE     = 500    # caractères max par chunk (≈100 tokens, dans la limite du modèle MiniLM 128 tokens)
 CHUNK_OVERLAP  = 80     # recouvrement entre chunks (évite de couper tableaux/chiffres)
 
-# OCR des PDFs journal (L'ECHO) : très lent en CPU. Mettre INGEST_OCR_JOURNAL=1 pour l'activer.
-OCR_JOURNAL    = os.environ.get("INGEST_OCR_JOURNAL", "0").strip().lower() in ("1", "true", "yes")
+# OCR des PDFs journal (L'ECHO) : tres lent en CPU. Actif par defaut. INGEST_OCR_JOURNAL=0 pour desactiver.
+OCR_JOURNAL    = os.environ.get("INGEST_OCR_JOURNAL", "1").strip().lower() in ("1", "true", "yes")
 
 # ── Extraction de la date depuis le nom de fichier ─────────────────────────────
 MONTHS_FR = {
@@ -176,6 +179,36 @@ def extract_text_ocr(pdf_path: Path) -> list:
         return []
 
 
+def _ocr_image_file(img_path: Path) -> str:
+    """OCR direct d'un fichier image (PNG, JPG, TIFF, etc.)."""
+    try:
+        from PIL import Image
+        img = Image.open(img_path).convert("RGB")
+    except Exception as e:
+        print(f"  ERREUR ouverture image {img_path.name} : {e}")
+        return ""
+    if _OCR_TESSERACT:
+        try:
+            text = pytesseract.image_to_string(img, lang="fra+eng", config="--oem 3 --psm 6")
+            if text.strip():
+                return text.strip()
+        except Exception:
+            pass
+    if _OCR_EASYOCR:
+        global _easyocr_reader
+        try:
+            import numpy as np
+            if _easyocr_reader is None:
+                import easyocr as _easyocr
+                _easyocr_reader = _easyocr.Reader(["fr", "en"], gpu=False, verbose=False)
+            arr = np.array(img)
+            result = _easyocr_reader.readtext(arr)
+            return " ".join(r[1] for r in result if r[1].strip())
+        except Exception:
+            pass
+    return ""
+
+
 # ── Conversion des tableaux PDF en texte (barèmes, tarifs cantine/périscolaire) ─
 def _table_to_text(table: list) -> str:
     """Convertit un tableau pdfplumber (liste de listes) en texte lisible pour l'indexation."""
@@ -262,7 +295,7 @@ def main(args=None):
 
     _ocr_ok = _check_ocr()
     if not OCR_JOURNAL:
-        print("  OCR des PDFs journal (L'ECHO) : desactive par defaut. INGEST_OCR_JOURNAL=1 pour activer.\n")
+        print("  OCR des PDFs journal : desactive (INGEST_OCR_JOURNAL=0). Supprimez la variable pour reactiver.")
 
     # Copier les PDFs du journal vers static/journal/ pour que Streamlit puisse les servir
     static_journal = STATIC_DIR / "journal"
@@ -334,6 +367,47 @@ def main(args=None):
     if md_files:
         print(f"\n  .md / sites web : {sum(m['year'] == 'web' for m in all_metadatas)} chunks.\n")
 
+    # -- 1b. Images source/images/ (OCR direct) --
+    _IMAGE_EXT = {".png", ".jpg", ".jpeg", ".tiff", ".tif", ".bmp", ".webp"}
+    img_files = []
+    if IMAGES_DIR.exists():
+        img_files = sorted(
+            p for p in IMAGES_DIR.iterdir()
+            if p.is_file() and p.suffix.lower() in _IMAGE_EXT
+        )
+    if img_files:
+        print(f"\n--- Images source/images/ ({len(img_files)} fichier(s)) ---\n")
+        if not _OCR_AVAILABLE:
+            print("  [!] OCR non disponible - images ignorees (pip install easyocr).")
+        else:
+            for img_path in img_files:
+                print(f"  [image] {img_path.name}", end=" ... ")
+                text = _ocr_image_file(img_path)
+                if not text:
+                    print("aucun texte")
+                    skipped.append(img_path.name)
+                    continue
+                chunks = chunk_text(text)
+                if not chunks and len(text) > 80:
+                    chunks = [text]
+                if not chunks:
+                    print("aucun chunk")
+                    skipped.append(img_path.name)
+                    continue
+                print(f"{len(chunks)} chunks")
+                date_iso, year = extract_date(img_path.name)
+                for i, chunk in enumerate(chunks):
+                    all_docs.append(chunk)
+                    all_metadatas.append({
+                        "filename": img_path.name,
+                        "rel_path": f"source/images/{img_path.name}",
+                        "date": date_iso,
+                        "year": year,
+                        "chunk": i,
+                        "total_chunks": len(chunks),
+                    })
+
+
     # ── 2. PDFs (PV, L'ECHO) si demandé ─────────────────────────────────────────
     pdf_files = []
     if STATIC_DIR.exists():
@@ -370,7 +444,7 @@ def main(args=None):
             is_journal = "journal" in str(pdf_path).replace("\\", "/")
             if not pages_text and _OCR_AVAILABLE:
                 if is_journal and not OCR_JOURNAL:
-                    print("ignore (OCR journaux desactive, INGEST_OCR_JOURNAL=1 pour activer)")
+                    print("ignore (OCR journaux desactive, INGEST_OCR_JOURNAL=0 pour desactiver)")
                     skipped.append(pdf_path.name)
                     continue
                 try:

@@ -7,13 +7,8 @@ Source : https://fr.wikipedia.org/wiki/Pierrefonds_(Oise)
 Pierrefonds est une commune française située dans le département de l'Oise dans la région Hauts-de-France.
 Située en lisière est de la forêt de Compiègne, elle est principalement connue pour son château de Pierrefonds, restauré par Viollet-le-Duc.
 
-## Géographie
 Pierrefonds se situe en lisière sud-est de la forêt de Compiègne sur le ru de Berne. La commune se situe à environ 80 km au nord-est de Paris et à 15 km à l'est de Compiègne.
 Le hameau de Palesne, situé au sud, fait partie de la commune de Pierrefonds.
-
-### Communes limitrophes
-
-### Hydrographie
 
 ==== Réseau hydrographique ====
 La commune est située dans le bassin Seine-Normandie. Elle est drainée par le ru de Berne, le ru de la Fontaine Porchers, le ru du Pre Tortu, le cours d'eau 01 du Mont Arcy, divers bras de Berne.
@@ -25,15 +20,10 @@ Un plan d'eau complète le réseau hydrographique : l'étang de Vertefeuilles (0
 Le territoire communal est couvert par le schéma d'aménagement et de gestion des eaux (SAGE) « Sensée ». Ce document de planification concerne un territoire de 789 km2 de superficie, délimité par trois bassins versants en totalité ou en partie (Aisne, Oise et Aronde). Le périmètre a été arrêté le 16 octobre 2001 et le SAGE proprement dit a été approuvé le 8 juin 2009, puis révisé le 27 novembre 2019. La structure porteuse de l'élaboration et de la mise en œuvre est le syndicat mixte Oise-Aronde.
 La qualité des cours d'eau peut être consultée sur un site dédié géré par les agences de l'eau et l'Agence française pour la biodiversité.
 
-### Climat
-
 Plusieurs études ont été menées afin de caractériser les types climatiques auxquels est exposé le territoire national. Les zonages obtenus diffèrent selon les méthodes utilisées, la nature et le nombre des paramètres pris en compte, le maillage territorial des données et la période de référence. En 2010, le climat de la commune était ainsi de type climat océanique dégradé des plaines du Centre et du Nord, selon une étude du Centre national de la recherche scientifique (CNRS) s'appuyant sur une méthode combinant données climatiques et facteurs de milieu (topographie, occupation des sols, etc.) et des données couvrant la période 1971-2000. En 2020, le climat prédominant est classé Cfb, selon la classification de Köppen-Geiger, pour la période 1988-2017, à savoir un climat tempéré à été frais sans saison sèche. Par ailleurs Météo-France publie en 2020 une nouvelle typologie des climats de la France métropolitaine dans laquelle la commune est dans une zone de transition entre le climat océanique et le climat océanique altéré et est dans la région climatique  Nord-est du bassin Parisien, caractérisée par un ensoleillement médiocre, une pluviométrie moyenne régulièrement répartie au cours de l’année et un hiver froid (3 °C). Elle est en outre dans la zone H1a au titre de la réglementation environnementale 2020 des constructions neuves.
 Pour la période 1971-2000, la température annuelle moyenne est de 10,5 °C, avec une amplitude thermique annuelle de 15 °C. Le cumul annuel moyen de précipitations est de 726 mm, avec 11,2 jours de précipitations en janvier et 8,4 jours en juillet. Pour la période 1991-2020, la température moyenne annuelle observée sur la station météorologique de Météo-France la plus proche, sur la commune de Margny-lès-Compiègne à 14 km à vol d'oiseau, est de 11,2 °C et le cumul annuel moyen de précipitations est de 633,5 mm. 
 La température maximale relevée sur cette station est de 41,5 °C, atteinte le 25 juillet 2019 ; la température minimale est de −15 °C, atteinte le 7 janvier 2009.
 
-## Urbanisme
-
-### Typologie
 Au 1er janvier 2024, Pierrefonds est catégorisée bourg rural, selon la nouvelle grille communale de densité à sept niveaux définie par l'Insee en 2022.
 Elle est située hors unité urbaine. Par ailleurs la commune fait partie de l'aire d'attraction de Compiègne, dont elle est une commune de la couronne. Cette aire, qui regroupe 101 communes, est catégorisée dans les aires de 50 000 à moins de 200 000 habitants.
 
@@ -43,19 +33,13 @@ L'occupation des sols de la commune, telle qu'elle ressort de la base de donnée
 ### Voies de communication et transports
 La commune est desservie, en 2023, par les lignes 654, 656, 657, 658, 6302 et 6319 du réseau interurbain de l'Oise.
 
-## Toponymie
-
 Le nom de la localité est attesté sous les formes Petrafogium (vers 995) ; fiscum de Petri fonte (XIe) ; dominus de Petrafonte (XIe) ; Petrofontium (XIe) ; Petrifons (1058) ; Petrefondus (1060) ; Nivelo de Petrafonte (1060) ; de Petraefonte (1061) ; de Petrefonte (1085) ; alodium de Petrefontense castrum (1089) ; Nivelo Petra fontensis dominus (1098) ; Nivelo dominus de Petrafonte (vers 1100) ; Petro de petrefonte (1108) ; Petrofongium (1110) ; Nevelo de Petrefonte (vers 1112) ; Petra fons (1113) ; in castello Petrefonte (1113) ; in Petrefons (1128) ; Petrefontensis (1135) ; de Petrofonte (1140) ; Petrefontis (1143) ; Drogonis de Petrafonte (vers 1150) ; Drogonis de Petra fonte (1153) ; Gobertus de Petrafonte (1168) ; dominus petrefontis (1171) ; Petrofontis (1178) ; alodium de petrefonz (1179) ; Agatha de petrafontis (1183) ; Agatha domina Petrafontis (1192) ; Pierrefons (1210) ; monachos sancti Sulpicii de Petrafonte (1222) ; apud monte de petrafonte (1232) ; in traverso Petraefontis (1243) ; Petrosus fons (1247) ; apud petram fontem (vers 1260) ; Pierrefonz (XIIIe) ; la mesure de Pierre fonz (1269) ; apud Petram fontis (1302) ; Pierreffons (1304) ; Pierrefont (1308) ; prepositure Petrefontis (1309) ; apud Petram fontem in Valesia (1327) ; de maioria Petre fontis (1332) ; la porte de pierrefons (1359) ; Pierrefonts (1470) ; Pierrefont (1470) ; Pierreffons (1480) ; prioratus conventualis de S. Sulpiciis de Petrafonte (XVe) ; Pierrefond (1663) ; Pierrefonds (1840) ; Pierrefonds-les-Bains (1928).
 Le village de Pierrefonds a emprunté son nom (Petri fonte) à la fontaine Saint-Sulpice, dans la crypte de l'église homonyme.
 
-## Histoire
-
-### Antiquité
 Le centre du village se situe non loin de vestiges gallo-romains au mont Berny (quartier de la Queue-de-Saint-Etienne, partagé avec la commune de Saint-Etienne-Roilaye - et non le quartier du Mont Berny à 900 m au nord-est). Ces habitations, rassemblées en occupation dense autour d'un fanum, auraient été construites au carrefour de la voie romaine Soissons-Beauvais par Champlieu (future chaussée Brunehaut) et Soissons-Beauvais par le gué de Compiègne. Le site se trouve à la lisère des marais que recouvrent aujourd'hui la forêt de Compiègne et marque la limite occidentale du Soissonnais que contrôle la peuplade gauloise des Suessions. La forêt de Compiègne, avant l'arrivée des romains, est essentiellement une zone de contact pour les Suessions, Bellovaques et Silvanectes et sert de no man's land pacificateur avant la mise en place de la Pax romana.
 Le sanctuaire de source de "La Folie", sur la commune de Pierrefonds, est également près de la voie romaine. Il a livré des monnaies gauloises et romaines, des statuettes en terre cuite et en bronze, des vases et des ornements divers.
 Dans les environs, au sud-ouest, se trouvent les vici de la Carrière-du-Roi sur Morienval ou Saint-Jean-aux-Bois (7,5 km à pied) et le sanctuaire antique de Champlieu sur Orrouy (12 km à pied).
 
-### Moyen Âge
 Au Xe siècle, l'ancien château aurait été détruit. Le nouveau château est construit plus à l'ouest près de la forêt sur une butte. Le village s'installe à son pied. Le fort devient puissant, protège de nombreux monastères ou villages et lève des impôts féodaux.[réf. nécessaire]
 
 Au XIe siècle, sous Nivelon Ier (mort vers 1072), la seigneurie comprend une partie des forêts de Compiègne (alors nommée forêt de Cuise) et de Retz, Chelles, Couloisy, Croutoy, Haute-Fontaine, Jaulzy, Saint-Étienne, Retheuil, Montigny-Langrain, Taillefontaine, Mortefontaine, etc.[réf. nécessaire]
@@ -70,8 +54,6 @@ Le village fut également connu, au début du XXe siècle, pour sa production de
 ## Politique et administration
 
 ### Liste des maires
-
-### Finances locales
 
 Cette sous-section présente la situation des finances communales de Pierrefonds.
 Pour l'exercice 2013, le compte administratif du budget municipal de Pierrefonds s'établit à 1 395 000 € en dépenses et 1 243 000 € en recettes :
@@ -98,9 +80,6 @@ l'encours de la dette pour une valeur de 70 000 €, soit 33 € par habitant, r
 l'annuité de la dette pour une valeur totale de 11 000 €, soit 5 € par habitant, ratio inférieur de 95 % à la valeur moyenne pour les communes de la même strate (94 € par habitant). Depuis 5 ans, ce ratio fluctue et présente un minimum de 5 € par habitant en 2013 et un maximum de 16 € par habitant en 2012 ;
 la capacité d'autofinancement (CAF) pour une valeur de 156 000 €, soit 73 € par habitant, ratio inférieur de 58 % à la valeur moyenne pour les communes de la même strate (173 € par habitant). Pour la période allant de 2009 à 2013, ce ratio fluctue et présente un minimum de 73 € par habitant en 2013 et un maximum de 131 € par habitant en 2009. La capacité de désendettement est de moins d'un an en 2013. Sur une période de 14 années, ce ratio est constant et faible (inférieur à 4 ans)
 
-## Démographie
-
-### Évolution démographique
 L'évolution du nombre d'habitants est connue à travers les recensements de la population effectués dans la commune depuis 1793. Pour les communes de moins de 10 000 habitants, une enquête de recensement portant sur toute la population est réalisée tous les cinq ans, les populations de référence des années intermédiaires étant quant à elles estimées par interpolation ou extrapolation. Pour la commune, le premier recensement exhaustif entrant dans le cadre du nouveau dispositif a été réalisé en 2006.
 
 En 2023, la commune comptait 1 877 habitants, en évolution de +3,82 % par rapport à 2017 (Oise : +0,65 %, France hors Mayotte : +2,36 %).
@@ -111,19 +90,14 @@ En 2018, le taux de personnes d'un âge inférieur à 30 ans s'élève à 33,6 %
 En 2018, la commune comptait 928 hommes pour 911 femmes, soit un taux de 50,46 % d'hommes, légèrement supérieur au taux départemental (48,89 %).
 Les pyramides des âges de la commune et du département s'établissent comme suit.
 
-## Héraldique
-
 Sa devise est : « Qui veult, peult ».
 
-## Jumelages
  Zwingenberg (Allemagne) depuis 1968
  Pel Maoudé (Mali)
  Pierrefonds-Roxboro (Québec)
 projet de jumelage avec Huahine (Polynésie française, îles Sous-le-Vent). Ce projet est lancé fin 2008 par le sénateur Richard Tuheiava et la maire de Pierrefonds.
 
 ## Lieux et monuments
-
-### Monuments historiques
 
 Pierrefonds compte quatre monuments historiques sur son territoire :
 
@@ -152,22 +126,12 @@ Séverine, écrivain féministe, a vécu et est morte à Pierrefonds.
 Eugène Viollet-le-Duc, architecte, restaurateur du château de Pierrefonds.
 Michel Zévaco, écrivain, auteur de la série de cape et d'épée Les Pardaillan, a habité Pierrefonds.
 
-## Voir aussi
-
-### Bibliographie
 Dangu (l'abbé), « Études sur Pierrefonds », Bulletin de la Société historique de Compiègne, Compiègne, vol. 15,‎ 1913, p. 153-272 (ISSN 0244-6111, lire en ligne)
 Jean-Pierre Boureux et Alexandre Cousin, Pierrefonds et ses environs, Nouvelles éditions Sutton, coll. « Mémoire en images », 2015, 128 p. (ISBN 978-2-813809018)
 François Beauvy, Le Siècle de Pierrefonds, 1832-1914, Trosly-Breuil, Éd. du Trotteur ailé, 2015, 159 p. (ISBN 978 2-917778-23-4)
 
-### Articles connexes
-
-Château de Pierrefonds
 Église Saint-Sulpice de Pierrefonds
-Gare de Pierrefonds
-Grès de Pierrefonds
 Liste des communes de l'Oise
-
-### Liens externes
 
 Site de l'office de tourisme
 Les dossiers de l'Inventaire du patrimoine culturel sur le patrimoine industriel de l'arrondissement de Compiègne
@@ -175,12 +139,6 @@ Les dossiers de l'Inventaire du patrimoine culturel sur le patrimoine industriel
 
 ## Notes et références
 
-### Notes
-
 ### Base de données du ministère du Budget, relative aux comptes des communes
-
-### Cartes
-
-### Références
 
  Portail de l’Oise   Portail des communes de France

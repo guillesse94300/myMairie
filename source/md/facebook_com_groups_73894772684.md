@@ -1,47 +1,47 @@
-# Facebook
+# Ville de Pierrefonds (Oise) | Facebook
 
 Source : https://www.facebook.com/groups/73894772684
 
 ---
 
-Explorez les sujets que
-vous aimez
-Se connecter à Facebook
-Français (France)
-English (US)
-Español
-Türkçe
-Português (Portugal)
-العربية
-Italiano
-Autres langues...
-S’inscrire
-Se connecter
-Messenger
-Facebook Lite
-Vidéo
-Meta Pay
-Boutique Meta
-Meta Quest
-Ray-Ban Meta
-Meta AI
-Instagram
-Threads
-Centre d’information sur les élections
-Politique de confidentialité
-Centre de confidentialité
+Facebook
+Ville de Pierrefonds (Oise)
+Groupe (Public)
+695 membres
+Rejoindre le groupe
 À propos
-Créer une publicité
-Créer une Page
-Développeurs
-Emplois
-Cookies
-Choisir sa publicité
-Conditions générales
-Aide
-Importation des contacts et non-utilisateurs
-Résilier votre contrat ici
-Meta © 2026
+Discussion
+À la une
+Évènements
+Contenu multimédia
+Plus
+À propos
+Discussion
+À la une
+Évènements
+Contenu multimédia
+Ville de Pierrefonds (Oise)
+Rejoindre le groupe
+À la une
+Ignacio Pacheco
+Partagé avec : Groupe public
+On veut arrêter ce voleur. Il vient habituellement à cette heure-ci, pas tous les jours. Si quelqu'un le reconnaît, veuillez contacter la police. Je l'ai encore filmé a…
+En voir plus
+0:00
+0:31
+J’aime
+Commenter
+Partager
+À propos
+\\(0_o)// Bonjour. Si vous êtes accepté et privilégié dans ce groupe, « vous vous engagez à ne faire aucune publicité marchande ». Seules des in…
+En voir plus
+Public
+Tout le monde peut voir qui est dans le groupe et ce qui est publié.
+Visible
+Tout le monde peut trouver ce groupe.
+Pierrefonds, Picardie, France
+Contenu multimédia récent
+Voir tout
 Autoriser l’utilisation des cookies de Facebook sur ce navigateur ?
 Nous utilisons les cookies et des solutions similaires pour fournir et améliorer le contenu sur les
 Produits Meta
