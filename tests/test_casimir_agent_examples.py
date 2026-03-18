@@ -46,7 +46,7 @@ def loaded_db():
     """Charge en une fois la base vectorielle pour l'ensemble de la session de tests."""
     if not VECTOR_DB_PRESENT:
         pytest.skip("Base vectorielle absente. Lancez d'abord `python ingest.py` pour générer vector_db/.")
-    embeddings, documents, metadata = app.load_db()
+    embeddings, documents, metadata, _bm25 = app.load_db()
     return embeddings, documents, metadata
 
 

@@ -39,7 +39,7 @@ QUESTIONS = [
 
 def _collect_answer(question: str) -> str:
     """Exécute la partie RAG+LLM d'app.py pour une question et renvoie la réponse complète."""
-    embeddings, documents, metadata = app.load_db()
+    embeddings, documents, metadata, _bm25 = app.load_db()
     passages = app.search_agent(
         question,
         embeddings,
@@ -70,7 +70,7 @@ def main() -> None:
         print(f"- Question : {q}")
         answer = _collect_answer(q)
         baselines[q] = answer
-        print(f"  → {len(answer)} caractères")
+        print(f"  -> {len(answer)} caracteres")
         # Espace de 5 secondes entre deux appels à Casimir pour éviter de saturer l'API.
         if idx < len(QUESTIONS):
             print("  (pause 5 secondes avant la prochaine question…)")

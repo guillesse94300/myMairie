@@ -521,6 +521,12 @@ _CHUNK_HORIZON = re.compile(
     r"\b(horizon|logiciel|logiciels|renouvellement|villages\s*cloud|DETR)\b",
     re.IGNORECASE
 )
+# Chunk parle explicitement des tarifs de restauration scolaire (cantine)
+_CHUNK_CANTINE_TARIF = re.compile(
+    r"\b(restauration\s+scolaire)\b.{0,80}\b(tarification|tarifs|bar[eè]me)\b|"
+    r"\bRessources\s+annuelles\b.{0,80}\bTARIF\s+RESTAURATION\b",
+    re.IGNORECASE | re.DOTALL
+)
 # Questions sur le château / Viollet-le-Duc / restauration patrimoniale
 _QUERY_CHATEAU = re.compile(
     r"\b(ch[âa]teau|viollet|wyganowski|ouradou|restauration|restaur[eé]|m[eé]di[eé]val|patrimoine|"
@@ -576,6 +582,7 @@ def search_agent(question: str, embeddings, documents, metadata,
 
     query_wants_figures = bool(_QUERY_TARIF_MONTANT.search(question))
     query_wants_voirie = bool(_QUERY_RECENT_DELIB.search(question))  # travaux, voirie, etc.
+    query_about_cantine = bool(re.search(r"\b(cantine|restauration\s+scolaire|restaurant\s+scolaire)\b", question, re.IGNORECASE))
 
     def _score_with_bonus(doc, meta, score):
         # Bonus si la question porte sur tarifs/montants et le passage contient des chiffres
@@ -680,6 +687,47 @@ def search_agent(question: str, embeddings, documents, metadata,
                     if _CHUNK_HAS_NUMBER.search(doc):
                         bonus += 0.04
                     seen[key] = _score_with_bonus(doc, meta, score + bonus)
+
+    # Cantine / restauration scolaire : forcer l'inclusion de chunks "tarification" (évite la réponse vague)
+    if query_about_cantine and (year_filter is None or len(year_filter) == 0):
+        # Recherches exactes ciblées, très efficaces sur les titres de délibérations / tableaux
+        for exact_query in (
+            "Restauration scolaire tarification",
+            "tarification restauration scolaire",
+            "Ressources annuelles TARIF RESTAURATION",
+            "ACCUEIL REPAS TARIF RESTAURATION SCOLAIRE",
+        ):
+            exact_chunks = search(exact_query, embeddings, documents, metadata, n=14, year_filter=None, exact=True, bm25=bm25)
+            for doc, meta, score in exact_chunks:
+                key = (meta.get("filename", ""), meta.get("chunk", 0))
+                if key not in seen:
+                    bonus = 0.10 if str(meta.get("filename", "")).lower().endswith(".pdf") else 0.05
+                    if _CHUNK_HAS_NUMBER.search(doc):
+                        bonus += 0.04
+                    # Légère pénalité si le chunk est manifestement "accueil de loisirs"
+                    if re.search(r"\baccueil\s+de\s+loisirs\b", doc, re.IGNORECASE):
+                        bonus -= 0.06
+                    seen[key] = _score_with_bonus(doc, meta, score + bonus)
+
+        # Secours : parcourir la base pour inclure des passages "Restauration scolaire : tarification ..."
+        added_cantine = 0
+        for doc, meta in zip(documents, metadata):
+            if added_cantine >= 30:
+                break
+            if not str(meta.get("filename", "")).lower().endswith(".pdf"):
+                continue
+            if not _CHUNK_CANTINE_TARIF.search(doc):
+                continue
+            # Éviter de sur-représenter la restauration de l'accueil de loisirs
+            if re.search(r"\baccueil\s+de\s+loisirs\b", doc, re.IGNORECASE) and not re.search(r"\brestauration\s+scolaire\b", doc, re.IGNORECASE):
+                continue
+            if not _CHUNK_HAS_NUMBER.search(doc):
+                continue
+            key = (meta.get("filename", ""), meta.get("chunk", 0))
+            if key in seen:
+                continue
+            seen[key] = (doc, meta, 0.54)
+            added_cantine += 1
 
     # Expansion de contexte : pour chaque chunk trouvé, ajouter les voisins
     # immédiats (±1, ±2) du même fichier — capture les délibérations adjacentes
@@ -789,6 +837,24 @@ def search_agent(question: str, embeddings, documents, metadata,
             return (0 if y == "2025" else 1 if y == "2024" else 2, -(t[2]))
         horizon_first.sort(key=_year_prio)
         merged = horizon_first + others
+    # Pour les questions cantine : placer les chunks "Restauration scolaire : tarification" en tête (évite le bruit)
+    if query_about_cantine:
+        cantine_first = [
+            x for x in merged
+            if _CHUNK_CANTINE_TARIF.search(x[0])
+            and not re.search(r"\brestauration\s+de\s+l['’]accueil\s+de\s+loisirs\b", x[0], re.IGNORECASE)
+        ]
+        others = [x for x in merged if x not in cantine_first]
+        # Mettre les années récentes d'abord (utile pour “aujourd’hui”), le LLM fera la chronologie ensuite
+        def _cantine_prio(t):
+            y = (t[1].get("year") or "").strip()
+            try:
+                yi = int(y)
+            except Exception:
+                yi = 0
+            return (-yi, -(t[2]))
+        cantine_first.sort(key=_cantine_prio)
+        merged = cantine_first + others
     merged = merged[:n]
     return [(doc, meta, min(score, 1.0)) for doc, meta, score in merged]
 
@@ -908,6 +974,13 @@ Sous le Second Empire : station thermale connue sous "Pierrefonds-les-Bains". De
    (2) Cite tout montant, crédit, subvention ou budget trouvé dans les passages (€, HT, TTC) avec sa source [N]. \
    (3) Si le montant exact n'est pas dans les extraits, indique-le clairement et renvoie vers les procès-verbaux complets (mairie, Vie municipale > Conseil municipal). \
    Structure la réponse (titres courts ou paragraphes) pour que les éléments financiers soient visibles ; ne te contente pas d'un seul paragraphe vague.
+4g. Cantine / restauration scolaire – évolution des tarifs : quand la question porte sur l'évolution des tarifs de cantine (restauration scolaire), tu DOIS produire une synthèse chronologique et chiffrée. \
+   Contraintes de forme : \
+   (1) Donne une chronologie par année scolaire (ex. 2017/2018, 2018/2019, …) avec les montants : accueil périscolaire du midi, repas, et total (si ces trois valeurs sont présentes). \
+   (2) Si un barème est reconduit (“maintenir la même tarification que l’an dernier”), explicite ce que cela implique (tarifs inchangés) et rappelle les montants correspondants s'ils figurent dans les extraits. \
+   (3) Si un changement est mentionné (hausse, nouveau marché, inflation, changement de critère revenu fiscal → quotient familial), explique-le brièvement et indique la date / année d’application. \
+   (4) Mets en évidence les changements (ex. “+0,10 € sur le repas”) et termine par une conclusion courte “stable / hausse / changement de critère”. \
+   (5) Cite systématiquement les sources [N] sur chaque ligne/changement ; n'invente jamais un montant absent des extraits.
 5. Tu réponds toujours en français, de façon détaillée et structurée. \
    Pour les questions historiques, patrimoniales ou techniques (château, Viollet-le-Duc, métiers, architecture, restauration…), \
    développe ta réponse en plusieurs paragraphes thématiques : contexte, méthodes, acteurs, anecdotes, chronologie, \
@@ -965,9 +1038,31 @@ def ask_claude_stream(question: str, passages: list):
             horizon_note += " Des passages de 2025 sont présents : détaille-les en priorité (décisions, montants, renouvellement, DETR)."
         horizon_note += "\n\n"
 
+    # Cantine / restauration scolaire : forcer une réponse chronologique chiffrée quand on demande une "évolution"
+    question_about_cantine = bool(
+        re.search(r"\b(cantine|restauration\s+scolaire|restaurant\s+scolaire)\b", question, re.IGNORECASE)
+    )
+    question_about_evolution = bool(
+        re.search(r"\b(évolution|evolution|évolué|evolue|augment|hausse|baisse|revaloris|tarif|bar[eè]me)\b", question, re.IGNORECASE)
+    )
+    passages_mention_cantine = any(
+        re.search(r"\b(cantine|restauration\s+scolaire|restaurant\s+scolaire)\b", doc, re.IGNORECASE)
+        for doc, _, _ in passages
+    )
+    cantine_note = ""
+    if question_about_cantine and question_about_evolution and passages_mention_cantine:
+        cantine_note = (
+            "IMPORTANT : La question porte sur l'évolution des tarifs de la cantine / restauration scolaire. "
+            "Tu DOIS répondre sous forme de chronologie par année scolaire, avec les montants (accueil du midi, repas, total) "
+            "lorsqu'ils figurent dans les extraits, et en indiquant clairement les années où les tarifs sont maintenus/reconduits. "
+            "Mets en évidence les changements (ex. +0,10 €) et cite une source [N] à chaque ligne/changement."
+            "\n\n"
+        )
+
     user_msg = (
         f"Question : {question}\n\n"
         f"{horizon_note}"
+        f"{cantine_note}"
         f"Passages pertinents issus des procès-verbaux :\n\n{context}\n\n"
         "Réponds à la question en te basant exclusivement sur ces passages."
     )
