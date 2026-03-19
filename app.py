@@ -1059,10 +1059,22 @@ def ask_claude_stream(question: str, passages: list):
             "\n\n"
         )
 
+    # Format de réponse par défaut : 2 paragraphes + liens (sauf cas "cantine évolution" qui exige une chronologie)
+    format_note = ""
+    if not (question_about_cantine and question_about_evolution and passages_mention_cantine):
+        format_note = (
+            "FORMAT DE RÉPONSE :\n"
+            "- Écris un résumé en exactement 2 paragraphes (séparés par une ligne vide).\n"
+            "- Puis ajoute une section \"Liens pour continuer\" avec 3 à 6 puces.\n"
+            "- Chaque puce doit citer une source [N] déjà utilisée dans le texte, idéalement les plus récentes (2025 puis 2024...).\n"
+            "- Ne mets aucun autre titre (pas de \"Réponse\", pas de sections supplémentaires).\n\n"
+        )
+
     user_msg = (
         f"Question : {question}\n\n"
         f"{horizon_note}"
         f"{cantine_note}"
+        f"{format_note}"
         f"Passages pertinents issus des procès-verbaux :\n\n{context}\n\n"
         "Réponds à la question en te basant exclusivement sur ces passages."
     )
@@ -1097,10 +1109,16 @@ def _liens_sources(text: str, passages: list) -> str:
     for i, (_, meta, _) in enumerate(passages, 1):
         fname = meta.get("filename", "")
         source_url = meta.get("source_url", "")
-        if source_url and _safe_source_url(source_url):
-            url, icon = _safe_source_url(source_url), "🌐"
+        rel_path = (meta.get("rel_path") or "").strip()
+        safe_source = _safe_source_url(source_url) if source_url else None
+        # Priorité : lien externe si présent (web)
+        if safe_source:
+            url, icon = safe_source, "🌐"
+        # Sinon : si on a un PDF local servi via GitHub raw, le rendre cliquable
+        elif rel_path.lower().endswith(".pdf") or str(fname).lower().endswith(".pdf"):
+            url, icon = _safe_pdf_url(rel_path), "📄"
         else:
-            # Documents locaux (.md extraits de PDF) : pas d'URL servable → pas de lien
+            # Document local non servable (ex. .md issu de transform) : pas de lien
             url, icon = "#", "📝"
         id_map[str(i)] = (fname, url, icon)
         if fname:
@@ -1132,25 +1150,60 @@ def _liens_sources(text: str, passages: list) -> str:
 
 
 def _bloc_references(text: str, passages: list) -> str:
-    """Construit le bloc « Références » en fin de réponse : uniquement les sources citées dans le texte."""
+    """Construit un bloc « Liens pour continuer » (sources citées, dédupliquées)."""
     if not passages:
         return ""
     # Extraire les numéros [N] ou [N](url) mentionnés dans le texte
     nums = sorted({int(m) for m in re.findall(r"\[(\d+)\]", text) if 1 <= int(m) <= len(passages)})
     if not nums:
         return ""
-    lines = ["**Références**", ""]
+    lines = ["**Liens pour continuer**", ""]
+    seen_labels: set[str] = set()
+    entries: list[tuple[int, str]] = []
+
+    def _year_value(meta: dict) -> int:
+        y = str(meta.get("year", "")).strip()
+        if y.isdigit():
+            return int(y)
+        return 0
+
     for i in nums:
         _, meta, _ = passages[i - 1]
-        fname = meta.get("filename", "")
-        source_url = meta.get("source_url", "")
-        label = (fname or meta.get("rel_path", "") or "").replace(".pdf", "").replace(".md", "").replace("[Web] ", "")
-        if source_url and _safe_source_url(source_url):
-            url = _safe_source_url(source_url)
-            lines.append(f"Passage {i} : [{label}]({url})")
-        else:
-            # Document local (PV, L'ECHO...) : pas de lien, juste le nom
-            lines.append(f"Passage {i} : 📝 {label}")
+        fname = (meta.get("filename", "") or "").strip()
+        source_url = (meta.get("source_url", "") or "").strip()
+        rel_path = (meta.get("rel_path", "") or "").strip()
+
+        label_raw = fname or rel_path or f"Passage {i}"
+        label = label_raw.replace("[Web] ", "").strip()
+
+        # Nettoyage léger des extensions pour l'affichage
+        for ext in (".pdf", ".md"):
+            if label.lower().endswith(ext):
+                label = label[: -len(ext)]
+                break
+
+        if label in seen_labels:
+            continue
+        seen_labels.add(label)
+
+        safe_source = _safe_source_url(source_url) if source_url else None
+        year_num = _year_value(meta)
+        if safe_source:
+            entries.append((year_num, f"- 🌐 [{label}]({safe_source})"))
+            continue
+        if rel_path.lower().endswith(".pdf") or fname.lower().endswith(".pdf"):
+            pdf_url = _safe_pdf_url(rel_path)
+            if pdf_url != "#":
+                entries.append((year_num, f"- 📄 [{label}]({pdf_url})"))
+            else:
+                entries.append((year_num, f"- 📄 {label}"))
+            continue
+        entries.append((year_num, f"- 📝 {label}"))
+
+    # Trier les liens du plus récent au plus ancien, puis ordre alpha stable.
+    entries.sort(key=lambda t: (-t[0], t[1].lower()))
+    for _, line in entries:
+        lines.append(line)
     return "\n".join(lines)
 
 
